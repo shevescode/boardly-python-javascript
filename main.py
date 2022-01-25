@@ -1,14 +1,18 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request, redirect, session
 from dotenv import load_dotenv
-
-
+from datetime import timedelta, datetime
 from util import json_response
+import bcrypt
+import data_manager
 import mimetypes
 import queires
 
 mimetypes.add_type('application/javascript', '.js')
 app = Flask(__name__)
+app.secret_key = "super secret key"
+app.permanent_session_lifetime = timedelta(days=5)
 load_dotenv()
+
 
 @app.route("/")
 def index():
