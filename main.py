@@ -41,6 +41,15 @@ def get_cards_for_board(board_id: int):
     return queires.get_cards_for_board(board_id)
 
 
+@app.route("/api/boards/new", methods=["PUT"])
+@json_response
+def create_new_board():
+    """
+    Newly created board
+    """
+    return queires.create_new_board()
+
+
 def main():
     app.run(debug=True)
 
