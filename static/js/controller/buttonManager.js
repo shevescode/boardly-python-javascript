@@ -4,10 +4,10 @@ import { domManager } from "../view/domManager.js";
 import { cardsManager } from "./cardsManager.js";
 import { boardsManager } from "./boardsManager.js";
 
-export let addBoardBtnManager = {
+export let buttonManager = {
   createAddBoardButton: async function () {
-    const addBoardBtnBuilder = htmlFactory(htmlTemplates.addBoardBtn);
-    const content = addBoardBtnBuilder();
+    const addBoardBtnBuilder = htmlFactory(htmlTemplates.button);
+    const content = addBoardBtnBuilder('+New Board', 'btn-primary', 'add-board');
     domManager.insertFirstChild("#root", content);
     domManager.addEventListener(
       ".add-board",

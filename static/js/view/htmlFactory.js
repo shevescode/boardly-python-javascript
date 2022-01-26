@@ -1,13 +1,13 @@
 export const htmlTemplates = {
-    addBoardBtn: 0,
+    button: 0,
     board: 1,
     card: 2
 }
 
 export function htmlFactory(template) {
     switch (template) {
-        case htmlTemplates.addBoardBtn:
-            return addBoardButtonBuilder
+        case htmlTemplates.button:
+            return buttonBuilder
         case htmlTemplates.board:
             return boardBuilder
         case htmlTemplates.card:
@@ -56,11 +56,15 @@ function cardBuilder(card) {
     return card_div;
 }
 
-function addBoardButtonBuilder() {
+function buttonBuilder(name, button_style, button_class) {
+    let div_row_tag = document.createElement('div');
     let button_tag = document.createElement('button');
-    button_tag.innerText = '+New Board'
-    button_tag.classList.add('btn', 'btn-primary', 'add-board');
+    button_tag.innerText = name;
+    button_tag.classList.add('btn', button_style, button_class);
     button_tag.setAttribute('type', 'button');
-    return button_tag;
-}
 
+    div_row_tag.classList.add('row');
+    div_row_tag.appendChild(button_tag);
+
+    return div_row_tag;
+}

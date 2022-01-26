@@ -1,8 +1,8 @@
 import { boardsManager } from "./controller/boardsManager.js";
-import { addBoardBtnManager } from "./controller/addBoardBtnManager.js";
+import { buttonManager } from "./controller/buttonManager.js";
 
 function init() {
-  addBoardBtnManager.createAddBoardButton();
+  buttonManager.createAddBoardButton();
   boardsManager.loadBoards();
 }
 

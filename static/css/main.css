@@ -1,11 +1,8 @@
+@import "css_reset.css";
 #boards {
     background-color: green;
 }
 
 .row {
     padding-top: 2rem;
-}
-
-.board-collapse{
-    padding: 0;
 }
