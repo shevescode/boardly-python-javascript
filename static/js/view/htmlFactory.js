@@ -3,7 +3,7 @@ export const htmlTemplates = {
     board: 1,
     card: 2,
     textField: 3,
-    // column: 4
+    column: 4
 }
 
 export const buttonTypes = {
@@ -21,8 +21,8 @@ export function htmlFactory(template) {
             return cardBuilder
         case htmlTemplates.textField:
             return textFieldBuilder
-        // case htmlTemplates.column:
-        //     return columnBuilder
+        case htmlTemplates.column:
+            return columnBuilder
         default:
             console.error("Undefined template: " + template)
             return () => { return "" }
@@ -97,12 +97,12 @@ function textFieldBuilder(defaultText, formWidth, textWidth) {
 
     return formTag;
 }
-//
-// function columnBuilder(column) {
-//     let column_div = document.createElement('div');
-//     column_div.classList.add('column');
-//     column_div.setAttribute('data-column-id', column.id);
-//     column_div.innerText = column.title;
-//     return column_div;
-// }
+
+function columnBuilder(column) {
+    let column_div = document.createElement('div');
+    column_div.setAttribute('data-column-id', column.id);
+    column_div.classList.add('col-3', 'text-center', 'status')
+    column_div.innerText = column.title;
+    return column_div;
+}
 

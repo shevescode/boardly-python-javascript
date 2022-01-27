@@ -9,13 +9,7 @@ export let cardsManager = {
       const cardBuilder = htmlFactory(htmlTemplates.card);
       const content = cardBuilder(card);
       domManager.addChild(`#collapse${parent.dataset.boardId}`, content);
-      domManager.addEventListener(
-        `.card[data-card-id="${card.id}"]`,
-        "click",
-        deleteButtonHandler
-      );
     }
   },
 };
 
-function deleteButtonHandler(clickEvent) {}

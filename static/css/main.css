@@ -5,6 +5,7 @@
 
 .board-collapse{
     padding: 0;
+    width: 100%;
 }
 
 #boards {
@@ -13,4 +14,8 @@
 
 .newBoardTitleForm {
     padding: 0px;
+}
+
+.col-3.status {
+    float:left;
 }
