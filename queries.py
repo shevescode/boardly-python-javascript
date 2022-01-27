@@ -30,7 +30,21 @@ def get_boards():
         """
     )
 
+#
+# def get_statuses_for_board():
+#     """
+#     Gather all statuses
+#     :return:
+#     """
+#     return data_manager.execute_select(
+#         """
+#         SELECT * FROM statuses
+#         ;
+#         """
+#     )
 
+
+# wstawić innerjoin status id
 def get_cards_for_board(board_id):
     matching_cards = data_manager.execute_select(
         """
