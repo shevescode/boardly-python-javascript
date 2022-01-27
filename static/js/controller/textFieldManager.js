@@ -3,7 +3,7 @@ import { htmlFactory, htmlTemplates } from "../view/htmlFactory.js";
 import { domManager } from "../view/domManager.js";
 import { cardsManager } from "./cardsManager.js";
 import { boardsManager } from "./boardsManager.js";
-import { buttonManager } from "./buttonManager";
+import { buttonsManager } from "./buttonsManager.js";
 
 export let textFieldManager = {
   createChangeTitleTextField: async function (parent) {
@@ -29,12 +29,12 @@ export let textFieldManager = {
 };
 
 function setBoardTitle(event){
-  let eventTarget = event.currentTarget
-  let parent = eventTarget.parent
-  let newTitle = eventTarget.children[0].children[0].value
+  let target = event.currentTarget
+  let parent = target.parentElement
+  let newTitle = target.children[0].children[0].value
   boardsManager.createNewBoard(newTitle)
-  parent.removeChild(eventTarget)
-  buttonManager.createAddBoardButton()
+  parent.removeChild(target)
+  buttonsManager.createAddBoardButton()
 }
 
 function changeBoardTitle(event){

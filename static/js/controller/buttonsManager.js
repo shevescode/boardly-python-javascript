@@ -5,7 +5,7 @@ import { cardsManager } from "./cardsManager.js";
 import { boardsManager } from "./boardsManager.js";
 import { textFieldManager } from "./textFieldManager.js";
 
-export let buttonManager = {
+export let buttonsManager = {
   createAddBoardButton: async function () {
     const btnBuilder = htmlFactory(htmlTemplates.button);
     const content = btnBuilder('+New Board', 'btn-primary', 'add-board');
@@ -23,6 +23,4 @@ function replaceTargetWithTextField(clickEvent) {
   let parent = target.parentElement;
   parent.removeChild(target);
   textFieldManager.createSetTitleTextField(parent);
-  parent.removeChild(target);
-  buttonManager.createAddBoardButton();
 }
