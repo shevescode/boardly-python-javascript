@@ -8,7 +8,7 @@ export let boardsManager = {
     const boards = await dataHandler.getBoards();
     for (let board of boards) {
       const boardBuilder = htmlFactory(htmlTemplates.board);
-      const content = boardBuilder(board);
+      const content = boardBuilder(board, 12);
       domManager.addChild("#root", content);
       domManager.addEventListener(
         `#data-${board.id}.board-title`,
@@ -21,7 +21,7 @@ export let boardsManager = {
     const payload = {'title': title}
     const board = await dataHandler.createNewBoard(payload);
     const boardBuilder = htmlFactory(htmlTemplates.board);
-    const content = boardBuilder(board[0]);
+    const content = boardBuilder(board[0], 12);
     domManager.insertSecondChild("#root", content);
     domManager.addEventListener(
       `#data-${board[0].id}.board-title`,
