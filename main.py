@@ -5,7 +5,7 @@ from util import json_response
 import bcrypt
 import data_manager
 import mimetypes
-import queires
+import queries
 
 mimetypes.add_type('application/javascript', '.js')
 app = Flask(__name__)
@@ -28,7 +28,7 @@ def get_boards():
     """
     All the boards
     """
-    return queires.get_boards()
+    return queries.get_boards()
 
 
 @app.route("/api/boards/<int:board_id>/cards/")
@@ -38,16 +38,17 @@ def get_cards_for_board(board_id: int):
     All cards that belongs to a board
     :param board_id: id of the parent board
     """
-    return queires.get_cards_for_board(board_id)
+    return queries.get_cards_for_board(board_id)
 
 
-@app.route("/api/boards/new", methods=["PUT"])
+@app.route("/api/boards/new", methods=["POST"])
 @json_response
 def create_new_board():
     """
-    Newly created board
+    New board creation
     """
-    return queires.create_new_board()
+    title = request.json['title']
+    return queries.create_new_board(title)
 
 
 def main():

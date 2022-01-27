@@ -1,8 +1,16 @@
 @import "css_reset.css";
+.row {
+    padding-top: 2rem;
+}
+
+.board-collapse{
+    padding: 0;
+}
+
 #boards {
     background-color: green;
 }
 
-.row {
-    padding-top: 2rem;
+.newBoardTitleForm {
+    padding: 0px;
 }

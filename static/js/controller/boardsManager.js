@@ -11,19 +11,20 @@ export let boardsManager = {
       const content = boardBuilder(board);
       domManager.addChild("#root", content);
       domManager.addEventListener(
-        `.board-title[data-board-id="${board.id}"]`,
+        `#data-${board.id}.board-title`,
         "click",
         showHideButtonHandler
       );
     }
   },
-  createNewBoard: async function () {
-    const board = await dataHandler.createNewBoard();
+  createNewBoard: async function (title) {
+    const payload = {'title': title}
+    const board = await dataHandler.createNewBoard(payload);
     const boardBuilder = htmlFactory(htmlTemplates.board);
     const content = boardBuilder(board[0]);
     domManager.insertSecondChild("#root", content);
     domManager.addEventListener(
-      `.board-title[data-board-id="${board[0].id}"]`,
+      `#data-${board[0].id}.board-title`,
       "click",
       showHideButtonHandler
     );
@@ -32,7 +33,6 @@ export let boardsManager = {
 
 function showHideButtonHandler(clickEvent) {
   const currentTarget = clickEvent.currentTarget
-  const boardId = currentTarget.dataset.boardId;
-  cardsManager.loadCards(boardId);
+  cardsManager.loadCards(currentTarget);
   currentTarget.removeEventListener('click', showHideButtonHandler)
 }

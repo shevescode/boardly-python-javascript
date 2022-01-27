@@ -3,20 +3,26 @@ import { htmlFactory, htmlTemplates } from "../view/htmlFactory.js";
 import { domManager } from "../view/domManager.js";
 import { cardsManager } from "./cardsManager.js";
 import { boardsManager } from "./boardsManager.js";
+import { textFieldManager } from "./textFieldManager.js";
 
 export let buttonManager = {
   createAddBoardButton: async function () {
-    const addBoardBtnBuilder = htmlFactory(htmlTemplates.button);
-    const content = addBoardBtnBuilder('+New Board', 'btn-primary', 'add-board');
-    domManager.insertFirstChild("#root", content);
+    const btnBuilder = htmlFactory(htmlTemplates.button);
+    const content = btnBuilder('+New Board', 'btn-primary', 'add-board');
+    domManager.addChild("#data-0.row", content);
     domManager.addEventListener(
       ".add-board",
       "click",
-      newBoardAction
+      replaceTargetWithTextField
     );
   },
 };
 
-function newBoardAction(clickEvent) {
-  boardsManager.createNewBoard()
+function replaceTargetWithTextField(clickEvent) {
+  let target = clickEvent.currentTarget;
+  let parent = target.parentElement;
+  parent.removeChild(target);
+  textFieldManager.createSetTitleTextField(parent);
+  parent.removeChild(target);
+  buttonManager.createAddBoardButton();
 }

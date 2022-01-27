@@ -1,7 +1,8 @@
 export const htmlTemplates = {
     button: 0,
     board: 1,
-    card: 2
+    card: 2,
+    textField: 3
 }
 
 export function htmlFactory(template) {
@@ -12,6 +13,8 @@ export function htmlFactory(template) {
             return boardBuilder
         case htmlTemplates.card:
             return cardBuilder
+        case htmlTemplates.textField:
+            return textFieldBuilder
         default:
             console.error("Undefined template: " + template)
             return () => { return "" }
@@ -26,7 +29,8 @@ function boardBuilder(board) {
     button_tag.innerText = board.title;
     button_tag.classList.add('btn', 'btn-primary', 'board-title');
     button_tag.setAttribute('type', 'button');
-    button_tag.setAttribute('data-board-id', board.id);
+    button_tag.id = `data-${board.id}`
+    button_tag.setAttribute('data-board-id', `${board.id}`)
     button_tag.setAttribute('data-bs-toggle',"collapse");
     button_tag.setAttribute('data-bs-target',`#collapse${board.id}`);
     button_tag.setAttribute('aria-expanded', "false");
@@ -37,7 +41,7 @@ function boardBuilder(board) {
     div_board_tag.setAttribute('data-board-id', board.id);
 
     div_row_tag.classList.add('row');
-    div_row_tag.setAttribute('data-row-id', board.id);
+    div_row_tag.id = `data-${board.id}`
     div_row_tag.appendChild(button_tag);
     div_row_tag.appendChild(div_board_tag);
 
@@ -57,14 +61,34 @@ function cardBuilder(card) {
 }
 
 function buttonBuilder(name, button_style, button_class) {
-    let div_row_tag = document.createElement('div');
     let button_tag = document.createElement('button');
     button_tag.innerText = name;
     button_tag.classList.add('btn', button_style, button_class);
     button_tag.setAttribute('type', 'button');
 
-    div_row_tag.classList.add('row');
-    div_row_tag.appendChild(button_tag);
+    return button_tag;
+}
 
-    return div_row_tag;
+function textFieldBuilder(defaultText, parent) {
+    let formTag = document.createElement('form');
+    let divTag = document.createElement('div')
+    let inputTag = document.createElement('input');
+    formTag.id = 'changeTitleForm'
+    formTag.classList.add('newBoardTitleForm')
+    formTag.setAttribute('action', "")
+    formTag.setAttribute('onsubmit', `return false`)
+    divTag.classList.add('form-group');
+    inputTag.classList.add('form-control');
+    inputTag.setAttribute('type', 'text');
+    inputTag.setAttribute('placeholder', defaultText);
+    inputTag.id = 'newBoardTitle';
+
+    formTag.appendChild(divTag);
+    divTag.appendChild(inputTag);
+
+    return formTag;
+}
+
+function submitForm(parent){
+  console.log(parent)
 }

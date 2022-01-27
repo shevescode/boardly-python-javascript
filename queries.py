@@ -43,14 +43,14 @@ def get_cards_for_board(board_id):
     return matching_cards
 
 
-def create_new_board():
+def create_new_board(title):
     new_board_id = data_manager.execute_insert(
         """
         INSERT INTO boards (title)
-        VALUES ('New Board')
+        VALUES (%(title)s)
         RETURNING id
         """
-    )
+        , {"title": title})
 
     new_board = data_manager.execute_select(
         """
