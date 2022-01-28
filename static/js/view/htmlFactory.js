@@ -36,8 +36,8 @@ function boardBuilder(board, width) {
     button_tag.setAttribute('type', 'button');
     button_tag.id = `data-${board.id}`
     button_tag.setAttribute('data-board-id', `${board.id}`)
-    button_tag.setAttribute('data-toggle',"collapse");
-    button_tag.setAttribute('data-target',`#collapse${board.id}`);
+    button_tag.setAttribute('data-bs-toggle',"collapse");
+    button_tag.setAttribute('data-bs-target',`#collapse${board.id}`);
     button_tag.setAttribute('aria-expanded', "false");
     button_tag.setAttribute('aria-controls',`collapse${board.id}`);
 
