@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, session
+from flask import Flask, render_template, url_for, request, redirect, session, jsonify, make_response
 from dotenv import load_dotenv
 from datetime import timedelta, datetime
 from util import json_response
@@ -48,7 +48,7 @@ def create_new_board():
     New board creation
     """
     title = request.json['title']
-    return queries.create_new_board(title)
+    return queries.create_new_board(title), 200
 
 
 def main():

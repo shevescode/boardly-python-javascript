@@ -52,12 +52,4 @@ def create_new_board(title):
         """
         , {"title": title})
 
-    new_board = data_manager.execute_select(
-        """
-        SELECT * FROM boards
-        WHERE id = %(new_board_id)s
-        """
-        , {"new_board_id": new_board_id}
-    )
-
-    return new_board
+    return {'id': new_board_id, 'title': title}
