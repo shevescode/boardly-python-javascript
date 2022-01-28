@@ -46,7 +46,6 @@ async function apiPost(url, payload) {
   });
   if (response.status === 200) {
     let data = response.json();
-    console.log(data)
     return data;
   }
 }

@@ -13,7 +13,7 @@ export let boardsManager = {
       domManager.addEventListener(
         `#data-${board.id}.board-title`,
         "click",
-        showHideButtonHandler
+        loadBoardDataToDOM
       );
     }
   },
@@ -26,13 +26,13 @@ export let boardsManager = {
     domManager.addEventListener(
       `#data-${board[0].id}.board-title`,
       "click",
-      showHideButtonHandler
+      loadBoardDataToDOM
     );
   },
 };
 
-function showHideButtonHandler(clickEvent) {
+function loadBoardDataToDOM(clickEvent) {
   const currentTarget = clickEvent.currentTarget
   cardsManager.loadCards(currentTarget);
-  currentTarget.removeEventListener('click', showHideButtonHandler)
+  currentTarget.removeEventListener('click', loadBoardDataToDOM)
 }
