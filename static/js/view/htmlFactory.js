@@ -8,8 +8,9 @@ export const htmlTemplates = {
 export const buttonTypes = {
     newBoardBtn: "+Add New Board",
     submitBtn: "Submit",
-    boardSettingsBtn: "Settings",
-    showBoardBtn: "Show board"
+    settingsBtn: "Settings",
+    showBoardBtn: "Show board",
+    boardTitleBtnGroup: "Board Title Group"
 }
 
 export function htmlFactory(template) {
@@ -30,33 +31,21 @@ export function htmlFactory(template) {
 
 function boardBuilder(boardData) {
     const boardContainer = document.createElement('div');
-    const buttonWrapper = document.createElement('div');
     const boardContent = document.createElement('div');
 
-    const showBoardButton = buttonBuilder(buttonTypes.showBoardBtn,
-                                        'btn-secondary',
-                                        'board-title',
+    const titleBtnGroup = buttonBuilder(buttonTypes.boardTitleBtnGroup,
+                                        'secondary',
+                                        'none',
                                         boardData.id,
                                         boardData.title)
-
-    const settingsButton = buttonBuilder(buttonTypes.boardSettingsBtn,
-                                        'btn-secondary',
-                                        'icon-size-medium',
-                                        boardData.id)
 
     boardContent.id = `collapse${boardData.id}`;
     boardContent.classList.add("collapse", "board-collapse");
     boardContent.setAttribute('data-board-id', boardData.id);
 
-    buttonWrapper.classList.add("btn-group", 'd-flex', 'bg-secondary');
-    buttonWrapper.setAttribute('data-board-id', boardData.id);
-    buttonWrapper.setAttribute( 'role',"group")
-    buttonWrapper.appendChild(showBoardButton);
-    buttonWrapper.appendChild(settingsButton);
-
     boardContainer.id = `board-container-${boardData.id}`
-    boardContainer.classList.add('border-secondary', 'board-container', 'my-5')
-    boardContainer.appendChild(buttonWrapper);
+    boardContainer.classList.add('bg-secondary', 'border-secondary', 'board-container', 'my-5')
+    boardContainer.appendChild(titleBtnGroup);
     boardContainer.appendChild(boardContent);
 
     return boardContainer;
@@ -76,6 +65,7 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
 
     switch (type) {
         case buttonTypes.newBoardBtn:
+            button.id = 'add-new-board-button';
             button.innerText = buttonTypes.newBoardBtn;
             button.setAttribute('type', 'button');
             button.classList.add('col-12');
@@ -87,13 +77,45 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             button.setAttribute('type', 'submit');
             return button;
 
-        case buttonTypes.boardSettingsBtn:
+        case buttonTypes.settingsBtn:
+            const dropDownWrapper = document.createElement('div');
+            const dropDownMenu = document.createElement('ul');
+            const menuListItem1 = document.createElement('li');
+            const menuListItem2 = document.createElement('li');
+            const listActionRename = document.createElement('a');
+            const listActionDelete = document.createElement('a');
             const icon = document.createElement('i');
-            button.id = `board-settings-${parentId}`
-            button.classList.add('bi', 'bi-gear-fill');
-            button.setAttribute('data-parent-id', parentId);
+
+            icon.classList.add('bi', 'bi-gear-fill');
+            button.id = `settings-${parentId}`
+            button.classList.add('dropdown-toggle', 'caret-off')
+            button.setAttribute('type', 'button');
+            button.setAttribute('data-target-id', parentId);
+            button.setAttribute('data-bs-toggle','dropdown')
+            button.setAttribute('aria-expanded', 'false')
             button.appendChild(icon);
-            return button
+
+            listActionRename.classList.add("dropdown-item");
+            listActionRename.href = "#";
+            listActionRename.innerHTML = "Rename";
+
+            listActionDelete.classList.add("dropdown-item");
+            listActionDelete.href = "#";
+            listActionDelete.innerHTML = "Delete";
+
+            menuListItem1.appendChild(listActionRename);
+            menuListItem2.appendChild(listActionDelete);
+
+            dropDownMenu.classList.add('dropdown-menu', 'bg-warning');
+            dropDownMenu.setAttribute('aria-labelledby', `settings-${parentId}`);
+            dropDownMenu.appendChild(menuListItem1);
+            dropDownMenu.appendChild(menuListItem2);
+
+            dropDownWrapper.classList.add('dropdown');
+            dropDownWrapper.appendChild(button);
+            dropDownWrapper.appendChild(dropDownMenu);
+
+            return dropDownWrapper
 
         case buttonTypes.showBoardBtn:
             button.innerHTML = name;
@@ -106,6 +128,26 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             button.setAttribute('aria-expanded', "false");
             button.setAttribute('aria-controls',`collapse${parentId}`);
             return button
+
+        case buttonTypes.boardTitleBtnGroup:
+            const showBoardButton = buttonBuilder(buttonTypes.showBoardBtn,
+                                                'btn-secondary',
+                                                'board-title',
+                                                parentId,
+                                                name)
+
+            const settingsButton = buttonBuilder(buttonTypes.settingsBtn,
+                                                'btn-secondary',
+                                                'btn-size-medium',
+                                                `board-title-${parentId}`)
+
+            const btnGroup = document.createElement('div');
+            btnGroup.classList.add("btn-group", 'd-flex', 'bg-secondary');
+            btnGroup.setAttribute('data-board-id', parentId);
+            btnGroup.setAttribute( 'role',"group")
+            btnGroup.appendChild(showBoardButton);
+            btnGroup.appendChild(settingsButton);
+            return btnGroup;
     }
 }
 

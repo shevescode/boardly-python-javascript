@@ -8,7 +8,7 @@ import { buttonsManager } from "./buttonsManager.js";
 export let formManager = {
   createChangeTitleTextField: async function (parent) {
     const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
-    const content = rowFormBuilder('Enter Board Title...', 'btn-secondary', parent);
+    const content = rowFormBuilder('Enter Board Title...', 'btn-warning', parent);
     domManager.addChild(`#${parent.id}`, content);
     domManager.addEventListener(
       "#changeTitleForm",
@@ -18,7 +18,7 @@ export let formManager = {
   },
   createSetTitleForm: async function (parent) {
     const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
-    const content = rowFormBuilder('Enter Board Title...', 'btn-primary', parent);
+    const content = rowFormBuilder('Enter Board Title...', 'btn-warning', parent);
     domManager.addChild(`#${parent.id}`, content);
     domManager.addEventListener(
       "#changeTitleForm",

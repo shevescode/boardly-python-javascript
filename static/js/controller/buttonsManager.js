@@ -8,7 +8,7 @@ import { formManager } from "./formManager.js";
 export let buttonsManager = {
   createAddBoardButton: async function () {
     const btnBuilder = htmlFactory(htmlTemplates.button);
-    const content = btnBuilder(buttonTypes.newBoardBtn, 'btn-primary', 'add-board');
+    const content = btnBuilder(buttonTypes.newBoardBtn, 'btn-warning', 'add-board');
     domManager.addChild("#new-board-button-container", content);
     domManager.addEventListener(
       ".add-board",

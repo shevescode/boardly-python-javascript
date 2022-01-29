@@ -17,18 +17,18 @@
 
         <script type="module" src="{{ url_for('static', filename='js/main.js') }}" defer></script>
     </head>
-    <body>
-        <header class="py-3 bg-dark text-white">
+    <body class="bg-dark">
+        <header class="py-3 bg-secondary text-white">
             <div class="container-fluid">
                 <div class="d-flex align-items-center justify-content-between mx-5">
-                    <a href="/" class="brand-logo">PRO HUMAN</a>
+                    <a href="/" class="brand-logo text-light">PRO HUMAN</a>
                     <div class="text-end">
                         {% block menu %}
                             {% if logged %}
-                                <button class="btn btn-primary">Log Out</button>
+                                <button class="btn btn-warning">Log Out</button>
                             {% else %}
                                 <button class="btn btn-outline-light me-2">Log In</button>
-                                <button class="btn btn-primary">Sign Up</button>
+                                <button class="btn btn-warning">Sign Up</button>
                             {% endif %}
                         {% endblock %}
                     </div>
