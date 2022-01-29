@@ -48,7 +48,7 @@ def create_new_board():
     New board creation
     """
     title = request.json['title']
-    return queries.create_new_board(title), 200
+    return queries.create_new_board(title)
 
 
 def main():

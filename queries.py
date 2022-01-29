@@ -1,5 +1,7 @@
 import data_manager
 
+_DEFAULT_COLUMNS = "{1, 2, 3, 4}"
+
 
 def get_card_status(status_id):
     """
@@ -26,6 +28,7 @@ def get_boards():
     return data_manager.execute_select(
         """
         SELECT * FROM boards
+        ORDER BY id DESC 
         ;
         """
     )
@@ -46,10 +49,15 @@ def get_cards_for_board(board_id):
 def create_new_board(title):
     new_board_id = data_manager.execute_insert(
         """
-        INSERT INTO boards (title)
-        VALUES (%(title)s)
+        INSERT INTO boards (title, statuses)
+        VALUES (%(title)s, %(def_cols)s)
         RETURNING id
         """
-        , {"title": title})
+        , {"title": title, "def_cols": _DEFAULT_COLUMNS})
 
-    return {'id': new_board_id, 'title': title}
+    return data_manager.execute_select(
+        """
+        SELECT * FROM boards
+        WHERE id = %(new_board_id)s
+        """
+        , {"new_board_id": new_board_id})

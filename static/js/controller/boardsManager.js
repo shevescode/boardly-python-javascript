@@ -5,13 +5,13 @@ import { cardsManager } from "./cardsManager.js";
 
 export let boardsManager = {
   loadBoards: async function () {
-    const boards = await dataHandler.getBoards();
-    for (let board of boards) {
+    const boardsData = await dataHandler.getBoards();
+    for (let boardData of boardsData) {
       const boardBuilder = htmlFactory(htmlTemplates.board);
-      const content = boardBuilder(board, 12);
+      const content = boardBuilder(boardData);
       domManager.addChild("#root", content);
       domManager.addEventListener(
-        `#data-${board.id}.board-title`,
+        `#board-title-${boardData.id}.board-title`,
         "click",
         loadBoardDataToDOM
       );
@@ -19,12 +19,12 @@ export let boardsManager = {
   },
   createNewBoard: async function (title) {
     const payload = {'title': title}
-    const board = await dataHandler.createNewBoard(payload);
+    const boardData = await dataHandler.createNewBoard(payload);
     const boardBuilder = htmlFactory(htmlTemplates.board);
-    const content = boardBuilder(board[0], 12);
-    domManager.insertSecondChild("#root", content);
+    const content = boardBuilder(boardData[0]);
+    domManager.insertFirstChild("#root", content);
     domManager.addEventListener(
-      `#data-${board[0].id}.board-title`,
+      `#board-title-${boardData[0].id}.board-title`,
       "click",
       loadBoardDataToDOM
     );

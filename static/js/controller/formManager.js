@@ -5,10 +5,10 @@ import { cardsManager } from "./cardsManager.js";
 import { boardsManager } from "./boardsManager.js";
 import { buttonsManager } from "./buttonsManager.js";
 
-export let textFieldManager = {
+export let formManager = {
   createChangeTitleTextField: async function (parent) {
-    const textFieldBuilder = htmlFactory(htmlTemplates.textField);
-    const content = textFieldBuilder('Enter Board Title...', 5);
+    const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
+    const content = rowFormBuilder('Enter Board Title...', 'btn-secondary', parent);
     domManager.addChild(`#${parent.id}`, content);
     domManager.addEventListener(
       "#changeTitleForm",
@@ -16,11 +16,10 @@ export let textFieldManager = {
       changeBoardTitle
     );
   },
-  createSetTitleTextField: async function (parent) {
-    const textFieldBuilder = htmlFactory(htmlTemplates.textField);
-    const content = textFieldBuilder('Enter Board Title...', 12, 11);
+  createSetTitleForm: async function (parent) {
+    const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
+    const content = rowFormBuilder('Enter Board Title...', 'btn-primary', parent);
     domManager.addChild(`#${parent.id}`, content);
-    buttonsManager.createSubmitButton("#changeTitleForm", 1)
     domManager.addEventListener(
       "#changeTitleForm",
       "submit",
@@ -32,7 +31,7 @@ export let textFieldManager = {
 function setBoardTitle(event){
   let target = event.currentTarget
   let parent = target.parentElement
-  let newTitle = target.children[0].value
+  let newTitle = target.children[0].children[0].value
   boardsManager.createNewBoard(newTitle, 12)
   parent.removeChild(target)
   buttonsManager.createAddBoardButton()

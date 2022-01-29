@@ -2,12 +2,14 @@ export const htmlTemplates = {
     button: 0,
     board: 1,
     card: 2,
-    textField: 3
+    rowForm: 3
 }
 
 export const buttonTypes = {
-    newBoardBtn: "+New Board",
-    submitBtn: "Submit"
+    newBoardBtn: "+Add New Board",
+    submitBtn: "Submit",
+    boardSettingsBtn: "Settings",
+    showBoardBtn: "Show board"
 }
 
 export function htmlFactory(template) {
@@ -18,83 +20,117 @@ export function htmlFactory(template) {
             return boardBuilder
         case htmlTemplates.card:
             return cardBuilder
-        case htmlTemplates.textField:
-            return textFieldBuilder
+        case htmlTemplates.rowForm:
+            return rowFormBuilder
         default:
             console.error("Undefined template: " + template)
             return () => { return "" }
     }
 }
 
-function boardBuilder(board, width) {
-    let button_tag = document.createElement('button');
-    let div_board_tag = document.createElement('div');
-    let div_row_tag = document.createElement('div');
+function boardBuilder(boardData) {
+    const boardContainer = document.createElement('div');
+    const buttonWrapper = document.createElement('div');
+    const boardContent = document.createElement('div');
 
-    button_tag.innerText = board.title;
-    button_tag.classList.add('btn', 'btn-primary', 'board-title', `col-${width}`);
-    button_tag.setAttribute('type', 'button');
-    button_tag.id = `data-${board.id}`
-    button_tag.setAttribute('data-board-id', `${board.id}`)
-    button_tag.setAttribute('data-bs-toggle',"collapse");
-    button_tag.setAttribute('data-bs-target',`#collapse${board.id}`);
-    button_tag.setAttribute('aria-expanded', "false");
-    button_tag.setAttribute('aria-controls',`collapse${board.id}`);
+    const showBoardButton = buttonBuilder(buttonTypes.showBoardBtn,
+                                        'btn-secondary',
+                                        'board-title',
+                                        boardData.id,
+                                        boardData.title)
 
-    div_board_tag.classList.add("collapse", "board-collapse");
-    div_board_tag.id = `collapse${board.id}`;
-    div_board_tag.setAttribute('data-board-id', board.id);
+    const settingsButton = buttonBuilder(buttonTypes.boardSettingsBtn,
+                                        'btn-secondary',
+                                        'icon-size-medium',
+                                        boardData.id)
 
-    div_row_tag.classList.add('row');
-    div_row_tag.id = `data-${board.id}`
-    div_row_tag.appendChild(button_tag);
-    div_row_tag.appendChild(div_board_tag);
+    boardContent.id = `collapse${boardData.id}`;
+    boardContent.classList.add("collapse", "board-collapse");
+    boardContent.setAttribute('data-board-id', boardData.id);
 
-    return div_row_tag;
+    buttonWrapper.classList.add("btn-group", 'd-flex', 'bg-secondary');
+    buttonWrapper.setAttribute('data-board-id', boardData.id);
+    buttonWrapper.setAttribute( 'role',"group")
+    buttonWrapper.appendChild(showBoardButton);
+    buttonWrapper.appendChild(settingsButton);
+
+    boardContainer.id = `board-container-${boardData.id}`
+    boardContainer.classList.add('border-secondary', 'board-container', 'my-5')
+    boardContainer.appendChild(buttonWrapper);
+    boardContainer.appendChild(boardContent);
+
+    return boardContainer;
 }
 
 function cardBuilder(card) {
-    let card_div = document.createElement('div');
+    const card_div = document.createElement('div');
     card_div.classList.add('card');
     card_div.setAttribute('data-card-id', card.id);
     card_div.innerText = card.title;
     return card_div;
 }
 
-function buttonBuilder(name, button_style, button_class) {
-    let button_tag = document.createElement('button');
-    button_tag.innerText = name;
-    button_tag.classList.add('btn', button_style, button_class);
+function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
+    const button = document.createElement('button');
+    button.classList.add('btn', buttonStyle, buttonClass);
 
-    switch (name) {
+    switch (type) {
         case buttonTypes.newBoardBtn:
-            button_tag.setAttribute('type', 'button');
-            button_tag.classList.add('col-12')
-            return button_tag;
+            button.innerText = buttonTypes.newBoardBtn;
+            button.setAttribute('type', 'button');
+            button.classList.add('col-12');
+            return button;
+
         case buttonTypes.submitBtn:
-            button_tag.classList.add('col-1')
-            button_tag.setAttribute('type', 'submit');
-            return button_tag;
+            button.innerText = buttonTypes.submitBtn;
+            button.setAttribute('data-parent-id', parentId);
+            button.setAttribute('type', 'submit');
+            return button;
+
+        case buttonTypes.boardSettingsBtn:
+            const icon = document.createElement('i');
+            button.id = `board-settings-${parentId}`
+            button.classList.add('bi', 'bi-gear-fill');
+            button.setAttribute('data-parent-id', parentId);
+            button.appendChild(icon);
+            return button
+
+        case buttonTypes.showBoardBtn:
+            button.innerHTML = name;
+            button.id = `board-title-${parentId}`;
+            button.classList.add('btn-block');
+            button.setAttribute('type', 'button');
+            button.setAttribute('data-board-id', parentId);
+            button.setAttribute('data-bs-toggle',"collapse");
+            button.setAttribute('data-bs-target',`#collapse${parentId}`);
+            button.setAttribute('aria-expanded', "false");
+            button.setAttribute('aria-controls',`collapse${parentId}`);
+            return button
     }
 }
 
-function textFieldBuilder(defaultText, formWidth, textWidth) {
-    let formTag = document.createElement('form');
-    let inputTag = document.createElement('input');
-    formTag.id = 'changeTitleForm'
-    formTag.classList.add('newBoardTitleForm', 'form-inline', `col-${formWidth}`)
-    formTag.setAttribute('action', "")
-    formTag.setAttribute('onsubmit', `return false`)
-    inputTag.classList.add('form-control', `col-${textWidth}`);
-    inputTag.setAttribute('type', 'text');
-    inputTag.setAttribute('placeholder', defaultText);
-    inputTag.id = 'newBoardTitle';
+function rowFormBuilder(defaultText, btnStyle, parent) {
+    const form = document.createElement('form');
+    const inputWrapper = document.createElement('div');
+    const input = document.createElement('input');
+    const submitBtn = buttonBuilder(buttonTypes.submitBtn,
+                                    `${btnStyle}`,
+                                    'submit-row-form-button',
+                                    parent.id);
+    input.id = 'newBoardTitle';
+    input.classList.add('form-control');
+    input.setAttribute('type', 'text');
+    input.setAttribute('placeholder', defaultText);
 
-    formTag.appendChild(inputTag);
+    form.id = 'changeTitleForm';
+    form.classList.add('newBoardTitleForm');
+    form.setAttribute('action', "");
+    form.setAttribute('onsubmit', `return false`);
 
-    return formTag;
-}
+    inputWrapper.classList.add('input-group');
+    inputWrapper.appendChild(input);
+    inputWrapper.appendChild(submitBtn);
+    form.appendChild(inputWrapper);
 
-function submitForm(parent){
-  console.log(parent)
+    return form;
 }
