@@ -6,10 +6,10 @@ import { boardsManager } from "./boardsManager.js";
 import { buttonsManager } from "./buttonsManager.js";
 
 export let formManager = {
-  createChangeTitleTextField: async function (parent) {
+  createChangeTitleForm: async function (crntTitle, parent) {
     const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
-    const content = rowFormBuilder('Enter Board Title...', 'btn-warning', parent);
-    domManager.addChild(`#${parent.id}`, content);
+    const content = rowFormBuilder(`${crntTitle}`, 'btn-warning', parent);
+    domManager.insertFirstChild(`#${parent.id}`, content);
     domManager.addEventListener(
       "#changeTitleForm",
       "submit",

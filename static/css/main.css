@@ -10,6 +10,10 @@
     border-radius: 8px;
 }
 
+#new-board-button-container{
+    width: 60%;
+}
+
 #add-new-board-button{
     border-radius: 8px;
 }

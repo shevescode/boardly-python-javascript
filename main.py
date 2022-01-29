@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, session, jsonify, make_response
+from flask import Flask, render_template, url_for, request, redirect, session, jsonify, make_response, Response
 from dotenv import load_dotenv
 from datetime import timedelta, datetime
 from util import json_response
@@ -42,13 +42,16 @@ def get_cards_for_board(board_id: int):
 
 
 @app.route("/api/boards/new", methods=["POST"])
-@json_response
 def create_new_board():
     """
     New board creation
     """
     title = request.json['title']
-    return queries.create_new_board(title)
+
+    if title != "":
+        return jsonify(queries.create_new_board(title))
+    else:
+        return Response(status=499)
 
 
 def main():

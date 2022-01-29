@@ -47,6 +47,9 @@ async function apiPost(url, payload) {
   if (response.status === 200) {
     let data = response.json();
     return data;
+  } else if (response.status === 499){
+    console.error('Server received empty title!')
+    return 'error'
   }
 }
 

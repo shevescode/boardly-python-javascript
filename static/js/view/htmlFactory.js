@@ -95,11 +95,15 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             button.setAttribute('aria-expanded', 'false')
             button.appendChild(icon);
 
+            listActionRename.id = `rename-${parentId}`
             listActionRename.classList.add("dropdown-item");
+            listActionRename.setAttribute('data-target-id', parentId)
             listActionRename.href = "#";
             listActionRename.innerHTML = "Rename";
 
+            listActionDelete.id = `delete-${parentId}`
             listActionDelete.classList.add("dropdown-item");
+            listActionDelete.setAttribute('data-target-id', parentId)
             listActionDelete.href = "#";
             listActionDelete.innerHTML = "Delete";
 
