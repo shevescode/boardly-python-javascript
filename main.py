@@ -48,10 +48,25 @@ def create_new_board():
     """
     title = request.json['title']
 
-    if title != "":
-        return jsonify(queries.create_new_board(title))
-    else:
+    if title == "":
         return Response(status=499)
+    else:
+        return jsonify(queries.create_new_board(title))
+
+
+@app.route("/api/boards/updateTitle", methods=["PUT"])
+def update_board_title():
+    """
+    Updates board title
+    """
+    title = request.json['title']
+    board_id = request.json['id']
+
+    if title == "":
+        return Response(status=499)
+    else:
+        queries.update_board_title(title, board_id)
+        return Response(response=b'{"ok": "ok"}', status=200)
 
 
 def main():

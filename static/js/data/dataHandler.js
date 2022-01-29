@@ -26,6 +26,10 @@ export let dataHandler = {
   createNewCard: async function (cardTitle, boardId, statusId) {
     // creates new card, saves it and calls the callback function with its data
   },
+  changeBoardTitle: async function (payload) {
+    const response = await apiPut(`/api/boards/updateTitle`, payload)
+    return response
+  }
 };
 
 async function apiGet(url) {
@@ -45,8 +49,7 @@ async function apiPost(url, payload) {
     headers: {'Content-Type': 'application/json'}
   });
   if (response.status === 200) {
-    let data = response.json();
-    return data;
+    return response.json();
   } else if (response.status === 499){
     console.error('Server received empty title!')
     return 'error'
@@ -62,7 +65,9 @@ async function apiPut(url, payload) {
     headers: {'Content-Type': 'application/json'}
   });
   if (response.status === 200) {
-    let data = response.json();
-    return data;
+    return response.json();
+  } else if (response.status === 499){
+    console.error('Server received empty title!')
+    return 'error'
   }
 }

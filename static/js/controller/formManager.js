@@ -29,14 +29,19 @@ export let formManager = {
 };
 
 function setBoardTitle(event){
-  let target = event.currentTarget
-  let parent = target.parentElement
-  let newTitle = target.children[0].children[0].value
-  boardsManager.createNewBoard(newTitle, 12)
+  const target = event.currentTarget
+  const parent = target.parentElement
+  const newTitle = target.children[0].children[0].value
+  boardsManager.createNewBoard(newTitle)
   parent.removeChild(target)
   buttonsManager.createAddBoardButton()
 }
 
 function changeBoardTitle(event){
-  //TODO
+  const target = event.currentTarget;
+  const parent = target.parentElement;
+  const oldTitle = document.querySelector(`#new-title-${parent.id}`).placeholder;
+  const newTitle = target.children[0].children[0].value;
+  parent.removeChild(target)
+  boardsManager.changeBoardTitle(newTitle, oldTitle, parent)
 }

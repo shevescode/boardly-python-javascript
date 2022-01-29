@@ -47,6 +47,7 @@ function boardBuilder(boardData) {
     boardContainer.classList.add('bg-secondary', 'border-secondary', 'board-container', 'my-5')
     boardContainer.appendChild(titleBtnGroup);
     boardContainer.appendChild(boardContent);
+    boardContainer.setAttribute('data-board-id', boardData.id);
 
     return boardContainer;
 }
@@ -152,6 +153,10 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             btnGroup.appendChild(showBoardButton);
             btnGroup.appendChild(settingsButton);
             return btnGroup;
+
+        default:
+            console.error("Undefined button: " + type)
+            return () => { return "" }
     }
 }
 
@@ -163,7 +168,7 @@ function rowFormBuilder(defaultText, btnStyle, parent) {
                                     `${btnStyle}`,
                                     'submit-row-form-button',
                                     parent.id);
-    input.id = 'newBoardTitle';
+    input.id = `new-title-${parent.id}`;
     input.classList.add('form-control');
     input.setAttribute('type', 'text');
     input.setAttribute('placeholder', defaultText);
@@ -179,4 +184,24 @@ function rowFormBuilder(defaultText, btnStyle, parent) {
     form.appendChild(inputWrapper);
 
     return form;
+}
+
+function boardColumnPlaceholderBuilder(){
+    const column = document.createElement('div');
+    const columnBody = document.createElement('div');
+    const columnTitle = document.createElement('h5');
+    const columnCardContainer = document.createElement('div')
+
+    columnTitle.classList.add('card-title', 'placeholder-glow');
+
+    columnBody.classList.add('card-body');
+    columnBody.appendChild(columnTitle)
+    columnBody.appendChild(columnCardContainer)
+
+    column.classList.add('card', 'text-dark', 'bg-light', 'mx-3');
+    column.setAttribute('aria-hidden', 'true');
+}
+
+function boardCardPlaceholderBuilder(){
+
 }

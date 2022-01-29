@@ -61,3 +61,13 @@ def create_new_board(title):
         WHERE id = %(new_board_id)s
         """
         , {"new_board_id": new_board_id})
+
+
+def update_board_title(title, id):
+    data_manager.execute_update(
+        """
+        UPDATE boards
+        SET title = (%(title)s)
+        WHERE id=%(id)s
+        """
+        , {"title": title, "id": id})
