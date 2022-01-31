@@ -1,6 +1,9 @@
+from flask import jsonify
+
 import data_manager
 
 _DEFAULT_COLUMNS = "{1, 2, 3, 4}"
+_DEFAULT_COLUMNS_ARRAY = [1,2,3,4]
 
 
 def get_boards():
@@ -67,6 +70,41 @@ def update_board_title(title, board_id):
         WHERE id=%(id)s
         """
         , {"title": title, "id": board_id})
+
+
+def update_column_title(title, board_id, column_id):
+    if int(column_id) in _DEFAULT_COLUMNS_ARRAY:
+        new_id = data_manager.execute_insert(
+            """
+            INSERT INTO statuses (title)
+            VALUES (%(title)s)
+            RETURNING id
+            """
+            , {"title": title})
+
+        board_columns = data_manager.execute_update(
+            """
+            UPDATE boards
+            SET statuses = array_replace(statuses, %(column_id)s, %(new_id)s)
+            WHERE id=%(board_id)s
+            RETURNING statuses
+            """
+            , {"column_id": column_id, "new_id": new_id, "board_id": board_id}, fetchone=True)['statuses']
+
+        position = board_columns.index(new_id)
+        data = {'id': new_id, 'position': position}
+        return jsonify(data)
+
+    else:
+        data_manager.execute_update(
+            """
+            UPDATE statuses
+            SET title = (%(title)s)
+            WHERE id=%(column_id)s
+            """
+            , {"title": title, "column_id": column_id})
+
+        return {"ok":"ok"}
 
 
 def get_board_column_titles(board_column_order):

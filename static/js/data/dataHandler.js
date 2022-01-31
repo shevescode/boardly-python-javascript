@@ -32,7 +32,11 @@ export let dataHandler = {
     // creates new card, saves it and calls the callback function with its data
   },
   changeBoardTitle: async function (payload) {
-    const response = await apiPut(`/api/boards/updateTitle`, payload)
+    const response = await apiPut(`/api/board/updateTitle`, payload)
+    return response
+  },
+  changeColumnTitle: async function (payload) {
+    const response = await apiPut(`/api/column/updateTitle`, payload)
     return response
   }
 };

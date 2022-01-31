@@ -79,7 +79,7 @@ def create_new_column():
         return jsonify(queries.create_new_column(title, board_id))
 
 
-@app.route("/api/boards/updateTitle", methods=["PUT"])
+@app.route("/api/board/updateTitle", methods=["PUT"])
 def update_board_title():
     """
     Updates board title
@@ -92,6 +92,22 @@ def update_board_title():
     else:
         queries.update_board_title(title, board_id)
         return Response(response=b'{"ok": "ok"}', status=200)
+
+
+@app.route("/api/column/updateTitle", methods=["PUT"])
+def update_column_title():
+    """
+    Updates board title
+    """
+    column_id = request.json['column_id']
+    board_id = request.json['board_id']
+    title = request.json['title']
+
+    if title == "":
+        return Response(status=499)
+    else:
+        data = queries.update_column_title(title, board_id, column_id)
+        return data
 
 
 def main():

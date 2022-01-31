@@ -5,13 +5,15 @@ import {buttonsManager} from "./buttonsManager.js";
 import {deleteElement, renameElement} from "./boardsManager.js";
 
 export let columnsManager = {
-    loadColumn: function (columnId, boardId, columnTitle, columnContainer, selectedMode) {
+    loadColumn: function (columnId, boardId, columnTitle, columnContainer, selectedMode, position) {
         const columnBuilder = htmlFactory(htmlTemplates.column)
         const loadedColumn = columnBuilder(columnTypes.loadedColumn, columnId, boardId, columnTitle);
         if (selectedMode === mode.appendLast) {
             columnContainer.appendChild(loadedColumn);
         } else if (selectedMode === mode.insertBeforeLast) {
             columnContainer.insertBefore(loadedColumn, columnContainer.children[columnContainer.children.length - 1]);
+        } else if (selectedMode === mode.insertAtPosition) {
+            columnContainer.insertBefore(loadedColumn, columnContainer.children[position]);
         }
         domManager.addEventListener(
             `#rename-board-${boardId}-column-${columnId}-title`,
@@ -38,31 +40,31 @@ export let columnsManager = {
     },
 
     changeColumnTitle: async function (newTitle, oldTitle, parent, target) {
-        const payload = {'id': parent.dataset.boardId, 'title': newTitle}
-        const boardData = await dataHandler.changeBoardTitle(payload);
+        const boardId = parent.dataset.boardId;
+        const columnId = parent.dataset.columnId;
+        const payload = {'column_id': columnId, 'board_id': boardId, 'title': newTitle}
+        const boardData = await dataHandler.changeColumnTitle(payload);
         const btnBuilder = htmlFactory(htmlTemplates.button)
-        parent.removeChild(target)
-        let content = null
+
+        parent.removeChild(target);
+        const colTittleGroup = btnBuilder(buttonTypes.columnTitleBtnGroup, 'btn-antracite',
+            'btn-size-medium', [boardId, columnId])
+        console.log(boardData)
         if (boardData === 'error') {
-            content = btnBuilder(buttonTypes.boardTitleBtnGroup, 'secondary', 'none', parent.dataset.boardId, oldTitle);
+            colTittleGroup.children[0].innerHTML = oldTitle;
+            parent.appendChild(colTittleGroup); // TODO insert first when add new card button is implemented
+
+        } else if (boardData['ok'] === 'ok'){
+            console.log(boardData)
+            colTittleGroup.children[0].innerHTML = newTitle;
+            parent.appendChild(colTittleGroup); // TODO insert first when add new card button is implemented
+
         } else {
-            content = btnBuilder(buttonTypes.boardTitleBtnGroup, 'secondary', 'none', parent.dataset.boardId, newTitle);
+            console.log(boardData)
+            const columnContainer = parent.parentElement.parentElement
+            columnContainer.removeChild(parent.parentElement)
+            this.loadColumn(boardData['id'], boardId, newTitle, columnContainer,
+                            mode.insertAtPosition, boardData['position'])
         }
-        domManager.insertFirstChild(`#${parent.id}`, content);
-        domManager.addEventListener(
-            `#board-title-${parent.dataset.boardId}`,
-            "click",
-            loadBoardDataToDOM
-        );
-        domManager.addEventListener(
-            `#rename-board-title-${parent.dataset.boardId}`,
-            "click",
-            renameElement
-        );
-        domManager.addEventListener(
-            `#delete-board-title-${parent.dataset.boardId}`,
-            "click",
-            deleteElement
-        );
     },
 }

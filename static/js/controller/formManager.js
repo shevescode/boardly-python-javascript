@@ -29,9 +29,11 @@ export let formManager = {
     );
   },
   createChangeColumnTitleForm: async function (crntTitle, titleClass, parent) {
+    const boardId = parent.dataset.boardId;
+    const columnId = parent.dataset.columnId;
     const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
     const content = rowFormBuilder(`${crntTitle}`, 'btn-warning', titleClass, parent);
-    domManager.insertFirstChild(`#${parent.id}`, content);
+    domManager.insertFirstChild(`#board-${boardId}-column-${columnId}-body`, content);
     domManager.addEventListener(
       `#change-${titleClass}-form-${parent.id}`,
       "submit",

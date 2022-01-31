@@ -35,5 +35,6 @@ export let domManager = {
 
 export const mode = {
     appendLast: 'append',
-    insertBeforeLast: 'insert before last'
+    insertBeforeLast: 'insert before last',
+    insertAtPosition: 'insert at position'
 }

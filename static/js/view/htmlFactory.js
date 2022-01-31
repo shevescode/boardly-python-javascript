@@ -242,7 +242,7 @@ function rowFormBuilder(defaultText, btnStyle, elementClass, parent) {
     return form;
 }
 
-function columnBuilder(type, statusColumnId, boardId, name) {
+function columnBuilder(type, columnId, boardId, name) {
     switch (type) {
         case columnTypes.templateColumn:
             const column = document.createElement('div');
@@ -250,25 +250,25 @@ function columnBuilder(type, statusColumnId, boardId, name) {
             const colTittleGroup = buttonBuilder(buttonTypes.columnTitleBtnGroup,
                                     'btn-antracite',
                                     'btn-size-medium',
-                                    [boardId, statusColumnId])
+                                    [boardId, columnId])
 
-            columnBody.id = `status-column-${statusColumnId}-body`
+            columnBody.id = `board-${boardId}-column-${columnId}-body`
             columnBody.classList.add('card-body', 'column-body', 'px-2', 'py-2', "overflow-auto");
             columnBody.setAttribute('data-board-id', boardId);
-            columnBody.setAttribute('data-status-column-id', statusColumnId)
+            columnBody.setAttribute('data-column-id', columnId)
             columnBody.appendChild(colTittleGroup);
 
-            column.id = `status-column-${statusColumnId}`
+            column.id = `board-${boardId}-column-${columnId}`
             column.classList.add('card', 'text-light', 'bg-dark', 'bg-antracite', 'mx-1', 'my-1', 'status-column');
             column.setAttribute('aria-hidden', 'false');
             column.setAttribute('data-board-id', boardId);
-            column.setAttribute('data-status-column-id', statusColumnId)
+            column.setAttribute('data-column-id', columnId)
             column.appendChild(columnBody)
 
             return column;
 
         case columnTypes.placeholderColumn:
-            const placeholderColumn = columnBuilder(columnTypes.templateColumn, statusColumnId, boardId)
+            const placeholderColumn = columnBuilder(columnTypes.templateColumn, columnId, boardId)
             const titleWrapper = placeholderColumn.children[0].children[0].children[0]
             const settingsButton = placeholderColumn.children[0].children[0].children[1].children[0]
             const titlePlaceholder1 = document.createElement('span')
@@ -286,7 +286,7 @@ function columnBuilder(type, statusColumnId, boardId, name) {
             return placeholderColumn;
 
         case columnTypes.loadedColumn:
-            const loadedColumn = columnBuilder(columnTypes.templateColumn, statusColumnId, boardId);
+            const loadedColumn = columnBuilder(columnTypes.templateColumn, columnId, boardId);
             const loadedTitleWrapper = loadedColumn.children[0].children[0].children[0];
 
             loadedTitleWrapper.innerHTML = name;
