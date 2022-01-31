@@ -35,7 +35,7 @@ export let formManager = {
     domManager.addEventListener(
       `#change-${titleClass}-form-${parent.id}`,
       "submit",
-      changeBoardTitle
+      changeColumnTitle
     );
   },
   createSetColumnTitleForm: async function (titleClass, parent) {
@@ -74,4 +74,12 @@ function setColumnTitle(event){
   const container = parent.parentElement
   const newTitle = target.children[0].children[0].value
   columnsManager.createNewColumn(newTitle, parent, container)
+}
+
+function changeColumnTitle(event){
+  const target = event.currentTarget;
+  const parent = target.parentElement;
+  const oldTitle = document.querySelector(`#new-title-${parent.id}`).placeholder;
+  const newTitle = target.children[0].children[0].value;
+  columnsManager.changeColumnTitle(newTitle, oldTitle, parent, target)
 }
