@@ -65,6 +65,20 @@ def create_new_board():
         return jsonify(queries.create_new_board(title))
 
 
+@app.route("/api/columns/new", methods=["POST"])
+def create_new_column():
+    """
+    New board creation
+    """
+    title = request.json['title']
+    board_id = request.json['board_id']
+
+    if title == "":
+        return Response(status=499)
+    else:
+        return jsonify(queries.create_new_column(title, board_id))
+
+
 @app.route("/api/boards/updateTitle", methods=["PUT"])
 def update_board_title():
     """

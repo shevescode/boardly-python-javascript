@@ -4,6 +4,7 @@ import { domManager } from "../view/domManager.js";
 import { cardsManager } from "./cardsManager.js";
 import {formManager} from "./formManager.js";
 import {buttonsManager} from "./buttonsManager.js";
+import {columnsManager} from "./columnsManager.js";
 
 export let boardsManager = {
   loadBoards: async function () {
@@ -88,7 +89,6 @@ export let boardsManager = {
     const columnOrder = boardData[0];
     const columns = boardData[1];
     const cards = boardData[2];
-    const columnBuilder = htmlFactory(htmlTemplates.column)
     const boardColumnContainer = targetParent.children[1].children[0];
 
     currentTarget.removeEventListener('click', loadBoardDataToDOM)
@@ -103,8 +103,7 @@ export let boardsManager = {
           columnTitle = columns[j]['title'];
         }
       }
-      const loadedColumn = columnBuilder(columnTypes.loadedColumn, columnId, boardId, columnTitle);
-      boardColumnContainer.appendChild(loadedColumn);
+      columnsManager.loadColumn(columnId, boardId, columnTitle, boardColumnContainer)
       //TODO - append loaded column (use column builder)
       //TODO load cards to corresponding column
     }
@@ -130,7 +129,7 @@ function renameElement(clickEvent){
   const renamedElementParent = renamedElement.parentElement.parentElement
 
   renamedElementParent.removeChild(renamedElement.parentElement);
-  formManager.createChangeTitleForm(currentTitle, renamedElementParent);
+  formManager.createChangeBoardTitleForm(currentTitle, renamedElement.dataset.elementType, renamedElementParent);
 }
 
 function deleteElement(clikEvent){

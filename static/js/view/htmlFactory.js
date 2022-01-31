@@ -47,7 +47,7 @@ function boardBuilder(boardData) {
 
     const titleBtnGroup = buttonBuilder(buttonTypes.boardTitleBtnGroup,
                                         'secondary',
-                                        'none',
+                                        'board-title',
                                         boardData.id,
                                         boardData.title)
 
@@ -83,16 +83,22 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
         case buttonTypes.newBoardBtn:
             button.id = 'add-new-board-button';
             button.innerText = buttonTypes.newBoardBtn;
+            button.setAttribute('data-element-type', 'board-title')
             button.setAttribute('type', 'button');
             button.classList.add('col-12', 'board-title');
             return button;
 
         case buttonTypes.newColumnBtn:
+            const addColBtnWrapper = document.createElement('div');
+            addColBtnWrapper.id = `add-board-${parentId}-column`
+            addColBtnWrapper.classList.add('card', 'text-light', 'bg-dark', 'bg-antracite', 'mx-1', 'my-1', 'add-column-btn');
+            addColBtnWrapper.appendChild(button);
+            addColBtnWrapper.setAttribute('data-create-content', "true")
             button.id = `add-new-board-${parentId}-column-button`;
             button.innerText = buttonTypes.newColumnBtn;
-            button.classList.add('mx-1', 'my-1');
+            button.setAttribute('data-element-type', 'column-title')
             button.setAttribute('type', 'button');
-            return button;
+            return addColBtnWrapper;
 
         case buttonTypes.submitBtn:
             button.innerText = buttonTypes.submitBtn;
@@ -154,6 +160,7 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             button.setAttribute('data-bs-target',`#collapse${parentId}`);
             button.setAttribute('aria-expanded', "false");
             button.setAttribute('aria-controls',`collapse${parentId}`);
+            button.setAttribute('data-element-type', buttonClass)
             return button
 
         case buttonTypes.boardTitleBtnGroup:
@@ -188,6 +195,7 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             titleWrapper.classList.add('card-text', 'column-title', 'h5', 'flex-grow-1', 'hstack', 'mb-0');
             titleWrapper.setAttribute('data-board-id', parentId[0]);
             titleWrapper.setAttribute('data-status-column-id', parentId[1])
+            titleWrapper.setAttribute('data-element-type', 'column-title')
 
             colTittleGroup.classList.add("btn-group", 'd-flex');
             colTittleGroup.setAttribute('data-board-id', parentId[0]);
@@ -213,19 +221,18 @@ function rowFormBuilder(defaultText, btnStyle, elementClass, parent) {
                                     'submit-row-form-button',
                                     parent.id);
 
-    console.log(parent.id)
     input.id = `new-title-${parent.id}`;
     input.classList.add('form-control', elementClass);
     input.setAttribute('type', 'text');
     input.setAttribute('placeholder', defaultText);
-    if (parent.id !== 'new-board-button-container'){
-        input.setAttribute('value', defaultText);
-        form.id = `change-title-form-${parent.id}`;
+    if (parent.dataset.createContent === 'true'){
+        form.id = `set-${elementClass}-form-${parent.id}`;
     } else {
-        form.id = 'change-title-form';
+        input.setAttribute('value', defaultText);
+        form.id = `change-${elementClass}-form-${parent.id}`;
     }
 
-    form.classList.add('newBoardTitleForm');
+    form.classList.add(`new-${elementClass}-form`);
     form.setAttribute('action', "");
     form.setAttribute('onsubmit', `return false`);
 

@@ -2,28 +2,51 @@ import { dataHandler } from "../data/dataHandler.js";
 import { htmlFactory, htmlTemplates } from "../view/htmlFactory.js";
 import { domManager } from "../view/domManager.js";
 import { cardsManager } from "./cardsManager.js";
+import { columnsManager } from "./columnsManager.js";
 import { boardsManager } from "./boardsManager.js";
 import { buttonsManager } from "./buttonsManager.js";
 
 export let formManager = {
-  createChangeTitleForm: async function (crntTitle, parent) {
+  createChangeBoardTitleForm: async function (crntTitle, titleClass, parent) {
     const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
-    const content = rowFormBuilder(`${crntTitle}`, 'btn-warning', 'board-title', parent);
+    const content = rowFormBuilder(`${crntTitle}`, 'btn-warning', titleClass, parent);
     domManager.insertFirstChild(`#${parent.id}`, content);
     domManager.addEventListener(
-      `#change-title-form-${parent.id}`,
+      `#change-${titleClass}-form-${parent.id}`,
       "submit",
       changeBoardTitle
     );
   },
-  createSetTitleForm: async function (parent) {
+  createSetBoardTitleForm: async function (titleClass, parent) {
     const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
-    const content = rowFormBuilder('Enter Board Title...', 'btn-warning', 'board-title', parent);
+    const content = rowFormBuilder('Enter Title...', 'btn-warning', titleClass, parent);
     domManager.addChild(`#${parent.id}`, content);
+    console.log(parent)
     domManager.addEventListener(
-      "#change-title-form",
+      `#set-${titleClass}-form-${parent.id}`,
       "submit",
       setBoardTitle
+    );
+  },
+  createChangeColumnTitleForm: async function (crntTitle, titleClass, parent) {
+    const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
+    const content = rowFormBuilder(`${crntTitle}`, 'btn-warning', titleClass, parent);
+    domManager.insertFirstChild(`#${parent.id}`, content);
+    domManager.addEventListener(
+      `#change-${titleClass}-form-${parent.id}`,
+      "submit",
+      changeBoardTitle
+    );
+  },
+  createSetColumnTitleForm: async function (titleClass, parent) {
+    const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
+    const content = rowFormBuilder('Enter Title...', 'btn-warning', titleClass, parent);
+    domManager.addChild(`#${parent.id}`, content);
+    console.log(parent)
+    domManager.addEventListener(
+      `#set-${titleClass}-form-${parent.id}`,
+      "submit",
+      setColumnTitle
     );
   },
 };
@@ -43,4 +66,12 @@ function changeBoardTitle(event){
   const oldTitle = document.querySelector(`#new-title-${parent.id}`).placeholder;
   const newTitle = target.children[0].children[0].value;
   boardsManager.changeBoardTitle(newTitle, oldTitle, parent, target)
+}
+
+function setColumnTitle(event){
+  const target = event.currentTarget
+  const parent = target.parentElement
+  const container = parent.parentElement
+  const newTitle = target.children[0].children[0].value
+  columnsManager.createNewColumn(newTitle, parent, container)
 }

@@ -34,6 +34,31 @@ def create_new_board(title):
         , {"new_board_id": new_board_id})
 
 
+def create_new_column(title, board_id):
+    new_column_id = data_manager.execute_insert(
+        """
+        INSERT INTO statuses (title)
+        VALUES (%(title)s)
+        RETURNING id
+        """
+        , {"title": title})
+
+    data_manager.execute_update(
+        """
+        UPDATE boards
+        SET statuses = array_append(statuses, %(new_column_id)s)
+        WHERE id=%(board_id)s
+        """
+        , {"new_column_id": new_column_id, "board_id": board_id})
+
+    return data_manager.execute_select(
+        """
+        SELECT * FROM statuses
+        WHERE id = %(new_column_id)s
+        """
+        , {"new_column_id": new_column_id})
+
+
 def update_board_title(title, board_id):
     data_manager.execute_update(
         """

@@ -13,7 +13,7 @@ export let buttonsManager = {
     domManager.addEventListener(
       ".add-board",
       "click",
-      replaceTargetTitleForm
+      replaceBoardTitleForm
     );
   },
   createAddColumnButton: function (boardId) {
@@ -23,19 +23,21 @@ export let buttonsManager = {
     domManager.addEventListener(
       `#add-new-board-${boardId}-column-button`,
       "click",
-      addNewColumnAction
+      replaceColumnTitleForm
     );
   }
 };
 
-function replaceTargetTitleForm(clickEvent) {
+function replaceBoardTitleForm(clickEvent) {
   const target = clickEvent.currentTarget;
   const parent = target.parentElement;
   parent.removeChild(target);
-  formManager.createSetTitleForm(parent);
+  formManager.createSetBoardTitleForm(target.dataset.elementType, parent);
 }
 
-function addNewColumnAction(clickEvent) {
+function replaceColumnTitleForm(clickEvent) {
   const target = clickEvent.currentTarget;
   const parent = target.parentElement;
+  parent.removeChild(target);
+  formManager.createSetColumnTitleForm(target.dataset.elementType, parent);
 }
