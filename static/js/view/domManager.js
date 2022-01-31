@@ -32,3 +32,8 @@ export let domManager = {
     }
   },
 };
+
+export const mode = {
+    appendLast: 'append',
+    insertBeforeLast: 'insert before last'
+}

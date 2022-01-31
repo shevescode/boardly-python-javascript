@@ -42,8 +42,7 @@ async function apiGet(url) {
     method: "GET",
   });
   if (response.status === 200) {
-    let data = response.json();
-    return data;
+    return response.json();
   }
 }
 

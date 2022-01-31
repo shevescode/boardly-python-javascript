@@ -64,7 +64,6 @@ function boardBuilder(boardData) {
         boardColumnContainer.appendChild(columnBuilder(columnTypes.placeholderColumn, statusColumnId, boardData.id));
     }
 
-
     boardContainer.id = `board-container-${boardData.id}`
     boardContainer.classList.add('bg-secondary', 'border-secondary', 'board-container', 'my-5')
     boardContainer.appendChild(titleBtnGroup);
@@ -73,7 +72,6 @@ function boardBuilder(boardData) {
 
     return boardContainer;
 }
-
 
 function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
     const button = document.createElement('button');
@@ -296,7 +294,6 @@ function columnBuilder(type, statusColumnId, boardId, name) {
             return loadedColumn;
     }
 }
-
 
 function cardBuilder(){
 

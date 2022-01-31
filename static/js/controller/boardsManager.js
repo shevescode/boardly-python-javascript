@@ -1,6 +1,6 @@
 import { dataHandler } from "../data/dataHandler.js";
 import {buttonTypes, columnTypes, htmlFactory, htmlTemplates} from "../view/htmlFactory.js";
-import { domManager } from "../view/domManager.js";
+import { domManager, mode } from "../view/domManager.js";
 import { cardsManager } from "./cardsManager.js";
 import {formManager} from "./formManager.js";
 import {buttonsManager} from "./buttonsManager.js";
@@ -103,7 +103,7 @@ export let boardsManager = {
           columnTitle = columns[j]['title'];
         }
       }
-      columnsManager.loadColumn(columnId, boardId, columnTitle, boardColumnContainer)
+      columnsManager.loadColumn(columnId, boardId, columnTitle, boardColumnContainer, mode.appendLast)
       //TODO - append loaded column (use column builder)
       //TODO load cards to corresponding column
     }
@@ -116,6 +116,7 @@ function loadBoardDataToDOM(clickEvent) {
   const targetParent = clickEvent.currentTarget.parentElement.parentElement
   if (targetParent.dataset.loaded !== 'true') {
     boardsManager.loadBoardData(currentTarget, targetParent);
+    currentTarget.removeEventListener('click', loadBoardDataToDOM)
   } else {
     currentTarget.removeEventListener('click', loadBoardDataToDOM)
   }
