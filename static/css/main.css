@@ -18,6 +18,7 @@
 }
 
 .board-column-container {
+    align-items: flex-start;
     height: 80vh
 }
 
@@ -29,12 +30,13 @@
     max-height: 80vh;
 }
 
-.column-title {
-    padding-left: 1rem;
+.add-column-btn {
+    min-width: 20rem;
+    width: 20rem;
 }
 
-.column-body {
-
+.column-title {
+    padding-left: 1rem;
 }
 
 .btn-antracite {

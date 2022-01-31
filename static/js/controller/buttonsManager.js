@@ -16,6 +16,16 @@ export let buttonsManager = {
       replaceTargetTitleForm
     );
   },
+  createAddColumnButton: function (boardId) {
+    const btnBuilder = htmlFactory(htmlTemplates.button);
+    const content = btnBuilder(buttonTypes.newColumnBtn, 'btn-antracite', 'add-column-btn', boardId);
+    domManager.addChild(`#board-${boardId}-column-container`, content)
+    domManager.addEventListener(
+      `#add-new-board-${boardId}-column-button`,
+      "click",
+      addNewColumnAction
+    );
+  }
 };
 
 function replaceTargetTitleForm(clickEvent) {
@@ -23,4 +33,8 @@ function replaceTargetTitleForm(clickEvent) {
   let parent = target.parentElement;
   parent.removeChild(target);
   formManager.createSetTitleForm(parent);
+}
+
+function addNewColumnAction(clickEvent) {
+
 }

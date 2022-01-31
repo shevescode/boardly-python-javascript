@@ -3,6 +3,7 @@ import {buttonTypes, columnTypes, htmlFactory, htmlTemplates} from "../view/html
 import { domManager } from "../view/domManager.js";
 import { cardsManager } from "./cardsManager.js";
 import {formManager} from "./formManager.js";
+import {buttonsManager} from "./buttonsManager.js";
 
 export let boardsManager = {
   loadBoards: async function () {
@@ -83,7 +84,6 @@ export let boardsManager = {
     targetParent.setAttribute('data-loaded', 'true')
     boardColumnContainer.innerHTML = "";
 
-    console.log(columns)
     for (let i in columnOrder){
       let columnTitle = ''
       const columnId = columnOrder[i]
@@ -97,6 +97,7 @@ export let boardsManager = {
       //TODO - append loaded column (use column builder)
       //TODO load cards to corresponding column
     }
+    buttonsManager.createAddColumnButton(boardId)
   }
 };
 

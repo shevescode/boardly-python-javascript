@@ -8,6 +8,7 @@ export const htmlTemplates = {
 
 export const buttonTypes = {
     newBoardBtn: "+Add New Board",
+    newColumnBtn: "+Add New Column",
     submitBtn: "Submit",
     settingsBtn: "Settings",
     showBoardBtn: "Show board",
@@ -50,7 +51,8 @@ function boardBuilder(boardData) {
                                         boardData.id,
                                         boardData.title)
 
-    boardColumnContainer.classList.add("d-flex", "overflow-auto", 'board-column-container')
+    boardColumnContainer.id = `board-${boardData.id}-column-container`
+    boardColumnContainer.classList.add('hstack', 'overflow-auto', 'board-column-container')
 
     boardContent.id = `collapse${boardData.id}`;
     boardContent.classList.add("collapse", "board-collapse");
@@ -83,6 +85,13 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             button.innerText = buttonTypes.newBoardBtn;
             button.setAttribute('type', 'button');
             button.classList.add('col-12');
+            return button;
+
+        case buttonTypes.newColumnBtn:
+            button.id = `add-new-board-${parentId}-column-button`;
+            button.innerText = buttonTypes.newColumnBtn;
+            button.classList.add('mx-1', 'my-1');
+            button.setAttribute('type', 'button');
             return button;
 
         case buttonTypes.submitBtn:
