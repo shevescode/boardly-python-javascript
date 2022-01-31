@@ -29,12 +29,13 @@ export let buttonsManager = {
 };
 
 function replaceTargetTitleForm(clickEvent) {
-  let target = clickEvent.currentTarget;
-  let parent = target.parentElement;
+  const target = clickEvent.currentTarget;
+  const parent = target.parentElement;
   parent.removeChild(target);
   formManager.createSetTitleForm(parent);
 }
 
 function addNewColumnAction(clickEvent) {
-
+  const target = clickEvent.currentTarget;
+  const parent = target.parentElement;
 }

@@ -43,11 +43,22 @@ export let boardsManager = {
         "click",
         loadBoardDataToDOM
     );
+    domManager.addEventListener(
+      `#rename-board-title-${boardData[0].id}`,
+      "click",
+      renameElement
+    );
+    domManager.addEventListener(
+      `#delete-board-title-${boardData[0].id}`,
+      "click",
+      deleteElement
+    );
   },
-  changeBoardTitle: async function (newTitle, oldTitle, parent) {
+  changeBoardTitle: async function (newTitle, oldTitle, parent, target) {
     const payload = {'id': parent.dataset.boardId, 'title': newTitle}
     const boardData = await dataHandler.changeBoardTitle(payload);
     const btnBuilder = htmlFactory(htmlTemplates.button)
+    parent.removeChild(target)
     let content = null
     if (boardData === 'error') {
       content = btnBuilder(buttonTypes.boardTitleBtnGroup, 'secondary', 'none', parent.dataset.boardId, oldTitle);

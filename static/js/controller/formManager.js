@@ -8,20 +8,20 @@ import { buttonsManager } from "./buttonsManager.js";
 export let formManager = {
   createChangeTitleForm: async function (crntTitle, parent) {
     const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
-    const content = rowFormBuilder(`${crntTitle}`, 'btn-warning', parent);
+    const content = rowFormBuilder(`${crntTitle}`, 'btn-warning', 'board-title', parent);
     domManager.insertFirstChild(`#${parent.id}`, content);
     domManager.addEventListener(
-      "#changeTitleForm",
+      `#change-title-form-${parent.id}`,
       "submit",
       changeBoardTitle
     );
   },
   createSetTitleForm: async function (parent) {
     const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
-    const content = rowFormBuilder('Enter Board Title...', 'btn-warning', parent);
+    const content = rowFormBuilder('Enter Board Title...', 'btn-warning', 'board-title', parent);
     domManager.addChild(`#${parent.id}`, content);
     domManager.addEventListener(
-      "#changeTitleForm",
+      "#change-title-form",
       "submit",
       setBoardTitle
     );
@@ -42,6 +42,5 @@ function changeBoardTitle(event){
   const parent = target.parentElement;
   const oldTitle = document.querySelector(`#new-title-${parent.id}`).placeholder;
   const newTitle = target.children[0].children[0].value;
-  parent.removeChild(target)
-  boardsManager.changeBoardTitle(newTitle, oldTitle, parent)
+  boardsManager.changeBoardTitle(newTitle, oldTitle, parent, target)
 }

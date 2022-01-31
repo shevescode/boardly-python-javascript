@@ -84,7 +84,7 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             button.id = 'add-new-board-button';
             button.innerText = buttonTypes.newBoardBtn;
             button.setAttribute('type', 'button');
-            button.classList.add('col-12');
+            button.classList.add('col-12', 'board-title');
             return button;
 
         case buttonTypes.newColumnBtn:
@@ -204,7 +204,7 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
     }
 }
 
-function rowFormBuilder(defaultText, btnStyle, parent) {
+function rowFormBuilder(defaultText, btnStyle, elementClass, parent) {
     const form = document.createElement('form');
     const inputWrapper = document.createElement('div');
     const input = document.createElement('input');
@@ -212,13 +212,19 @@ function rowFormBuilder(defaultText, btnStyle, parent) {
                                     `${btnStyle}`,
                                     'submit-row-form-button',
                                     parent.id);
+
+    console.log(parent.id)
     input.id = `new-title-${parent.id}`;
-    input.classList.add('form-control');
+    input.classList.add('form-control', elementClass);
     input.setAttribute('type', 'text');
     input.setAttribute('placeholder', defaultText);
-    input.setAttribute('value', defaultText);
+    if (parent.id !== 'new-board-button-container'){
+        input.setAttribute('value', defaultText);
+        form.id = `change-title-form-${parent.id}`;
+    } else {
+        form.id = 'change-title-form';
+    }
 
-    form.id = 'changeTitleForm';
     form.classList.add('newBoardTitleForm');
     form.setAttribute('action', "");
     form.setAttribute('onsubmit', `return false`);

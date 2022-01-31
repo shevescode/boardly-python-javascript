@@ -49,7 +49,6 @@ def get_board_data(board_id: int):
     :param board_id: id of the parent board
     """
     board_data = queries.get_board_data(board_id)
-    print(board_data)
     return jsonify(board_data)
 
 
