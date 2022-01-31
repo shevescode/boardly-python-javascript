@@ -31,6 +31,7 @@ def get_boards():
     return queries.get_boards()
 
 
+# TODO - remove this?
 @app.route("/api/boards/<int:board_id>/cards/")
 @json_response
 def get_cards_for_board(board_id: int):
@@ -39,6 +40,17 @@ def get_cards_for_board(board_id: int):
     :param board_id: id of the parent board
     """
     return queries.get_cards_for_board(board_id)
+
+
+@app.route("/api/boards/<int:board_id>/data/")
+def get_board_data(board_id: int):
+    """
+    Get all columns, column order and cards
+    :param board_id: id of the parent board
+    """
+    board_data = queries.get_board_data(board_id)
+    print(board_data)
+    return jsonify(board_data)
 
 
 @app.route("/api/boards/new", methods=["POST"])

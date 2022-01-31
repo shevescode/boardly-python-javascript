@@ -1,8 +1,9 @@
 export const htmlTemplates = {
     button: 0,
     board: 1,
-    card: 2,
-    rowForm: 3
+    column: 2,
+    card: 3,
+    rowForm: 4
 }
 
 export const buttonTypes = {
@@ -10,13 +11,14 @@ export const buttonTypes = {
     submitBtn: "Submit",
     settingsBtn: "Settings",
     showBoardBtn: "Show board",
-    boardTitleBtnGroup: "Board Title Group"
+    boardTitleBtnGroup: "Board Title Group",
+    columnTitleBtnGroup: "Column Title Group"
 }
 
 export const columnTypes = {
     templateColumn: "Column template",
-    loadedColumn: "Column with data",
-    placeholderColumn: "Column with placeholders"
+    placeholderColumn: "Column with placeholders",
+    loadedColumn: "Column with data"
 }
 
 export function htmlFactory(template) {
@@ -25,6 +27,8 @@ export function htmlFactory(template) {
             return buttonBuilder
         case htmlTemplates.board:
             return boardBuilder
+        case htmlTemplates.column:
+            return columnBuilder
         case htmlTemplates.card:
             return cardBuilder
         case htmlTemplates.rowForm:
@@ -68,13 +72,6 @@ function boardBuilder(boardData) {
     return boardContainer;
 }
 
-function cardBuilder(card) {
-    const card_div = document.createElement('div');
-    card_div.classList.add('card');
-    card_div.setAttribute('data-card-id', card.id);
-    card_div.innerText = card.title;
-    return card_div;
-}
 
 function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
     const button = document.createElement('button');
@@ -132,7 +129,7 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             dropDownMenu.appendChild(menuListItem1);
             dropDownMenu.appendChild(menuListItem2);
 
-            dropDownWrapper.classList.add('dropdown');
+            dropDownWrapper.classList.add('d-flex', 'dropdown', 'align-content-center');
             dropDownWrapper.appendChild(button);
             dropDownWrapper.appendChild(dropDownMenu);
 
@@ -169,6 +166,28 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             btnGroup.appendChild(showBoardButton);
             btnGroup.appendChild(settingsButton);
             return btnGroup;
+
+        case buttonTypes.columnTitleBtnGroup:
+            const colTittleGroup = document.createElement('div')
+            const titleWrapper = document.createElement('div')
+            const colSettingsButton = buttonBuilder(buttonTypes.settingsBtn,
+                                    'btn-antracite',
+                                    'btn-size-medium',
+                                    `board-${parentId[0]}-column-${parentId[1]}-title`)
+
+            titleWrapper.id = `board-${parentId[0]}-column-${parentId[1]}-title`
+            titleWrapper.classList.add('card-text', 'column-title', 'h5', 'flex-grow-1', 'hstack', 'mb-0');
+            titleWrapper.setAttribute('data-board-id', parentId[0]);
+            titleWrapper.setAttribute('data-status-column-id', parentId[1])
+
+            colTittleGroup.classList.add("btn-group", 'd-flex');
+            colTittleGroup.setAttribute('data-board-id', parentId[0]);
+            colTittleGroup.setAttribute('data-status-column-id', parentId[1])
+            colTittleGroup.setAttribute('role', "group")
+            colTittleGroup.appendChild(titleWrapper);
+            colTittleGroup.appendChild(colSettingsButton);
+
+            return colTittleGroup
 
         default:
             console.error("Undefined button: " + type)
@@ -208,26 +227,16 @@ function columnBuilder(type, statusColumnId, boardId, name) {
         case columnTypes.templateColumn:
             const column = document.createElement('div');
             const columnBody = document.createElement('div');
-            const tittleGroup = document.createElement('div')
-
-            const settingsButton = buttonBuilder(buttonTypes.settingsBtn,
+            const colTittleGroup = buttonBuilder(buttonTypes.columnTitleBtnGroup,
                                     'btn-antracite',
-                                    'btn-size-small',
-                                    `board-${boardId}-column-${statusColumnId}-title`)
-
-            settingsButton.children[0].classList.add('disabled')
-
-            tittleGroup.classList.add("btn-group", 'd-flex');
-            tittleGroup.setAttribute('data-board-id', boardId);
-            tittleGroup.setAttribute('data-status-column-id', statusColumnId)
-            tittleGroup.setAttribute('role', "group")
-            tittleGroup.appendChild(settingsButton);
+                                    'btn-size-medium',
+                                    [boardId, statusColumnId])
 
             columnBody.id = `status-column-${statusColumnId}-body`
             columnBody.classList.add('card-body', 'column-body', 'px-2', 'py-2', "overflow-auto");
             columnBody.setAttribute('data-board-id', boardId);
             columnBody.setAttribute('data-status-column-id', statusColumnId)
-            columnBody.appendChild(tittleGroup);
+            columnBody.appendChild(colTittleGroup);
 
             column.id = `status-column-${statusColumnId}`
             column.classList.add('card', 'text-light', 'bg-dark', 'bg-antracite', 'mx-1', 'my-1', 'status-column');
@@ -239,32 +248,34 @@ function columnBuilder(type, statusColumnId, boardId, name) {
             return column;
 
         case columnTypes.placeholderColumn:
-            const templateColumn = columnBuilder(columnTypes.templateColumn, statusColumnId, boardId)
-            const titleWrapper = document.createElement('div')
+            const placeholderColumn = columnBuilder(columnTypes.templateColumn, statusColumnId, boardId)
+            const titleWrapper = placeholderColumn.children[0].children[0].children[0]
+            const settingsButton = placeholderColumn.children[0].children[0].children[1].children[0]
             const titlePlaceholder1 = document.createElement('span')
             const titlePlaceholder2 = document.createElement('span')
 
             titlePlaceholder1.classList.add('placeholder', 'col-6');
             titlePlaceholder2.classList.add('placeholder', 'col-3');
 
-            titleWrapper.id = `board-${boardId}-column-${statusColumnId}-title`
-            titleWrapper.classList.add('card-text', 'column-title', 'placeholder-wave', 'h5', 'flex-grow-1', 'hstack', 'mb-0');
-            titleWrapper.setAttribute('data-board-id', boardId);
-            titleWrapper.setAttribute('data-status-column-id', statusColumnId)
+            settingsButton.classList.add('disabled')
+            titleWrapper.classList.add('placeholder-wave')
             titleWrapper.appendChild(titlePlaceholder1)
             titleWrapper.append("\u00A0");
             titleWrapper.appendChild(titlePlaceholder2)
 
-            templateColumn.children[0].children[0].insertBefore(titleWrapper, templateColumn.children[0].children[0].children[0])
+            return placeholderColumn;
 
-            return templateColumn;
+        case columnTypes.loadedColumn:
+            const loadedColumn = columnBuilder(columnTypes.templateColumn, statusColumnId, boardId);
+            const loadedTitleWrapper = loadedColumn.children[0].children[0].children[0];
+
+            loadedTitleWrapper.innerHTML = name;
+
+            return loadedColumn;
     }
 }
 
-function boardColumnPlaceholderBuilder(statusColumnId){
 
-}
-
-function boardCardPlaceholderBuilder(){
+function cardBuilder(){
 
 }

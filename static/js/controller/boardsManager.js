@@ -1,5 +1,5 @@
 import { dataHandler } from "../data/dataHandler.js";
-import {buttonTypes, htmlFactory, htmlTemplates} from "../view/htmlFactory.js";
+import {buttonTypes, columnTypes, htmlFactory, htmlTemplates} from "../view/htmlFactory.js";
 import { domManager } from "../view/domManager.js";
 import { cardsManager } from "./cardsManager.js";
 import {formManager} from "./formManager.js";
@@ -69,17 +69,45 @@ export let boardsManager = {
       "click",
       deleteElement
     );
+  },
+  loadBoardData: async function (currentTarget, targetParent) {
+    const boardId = currentTarget.dataset.boardId;
+    const boardData = await dataHandler.getBoardDataById(boardId);
+    const columnOrder = boardData[0];
+    const columns = boardData[1];
+    const cards = boardData[2];
+    const columnBuilder = htmlFactory(htmlTemplates.column)
+    const boardColumnContainer = targetParent.children[1].children[0];
+
+    currentTarget.removeEventListener('click', loadBoardDataToDOM)
+    targetParent.setAttribute('data-loaded', 'true')
+    boardColumnContainer.innerHTML = "";
+
+    console.log(columns)
+    for (let i in columnOrder){
+      let columnTitle = ''
+      const columnId = columnOrder[i]
+      for (let j in columns){
+        if (columns[j]['id'] === columnId) {
+          columnTitle = columns[j]['title'];
+        }
+      }
+      const loadedColumn = columnBuilder(columnTypes.loadedColumn, columnId, boardId, columnTitle);
+      boardColumnContainer.appendChild(loadedColumn);
+      //TODO - append loaded column (use column builder)
+      //TODO load cards to corresponding column
+    }
   }
 };
 
 function loadBoardDataToDOM(clickEvent) {
   const currentTarget = clickEvent.currentTarget
-  const targetParent = clickEvent.currentTarget
+  const targetParent = clickEvent.currentTarget.parentElement.parentElement
   if (targetParent.dataset.loaded !== 'true') {
-    targetParent.setAttribute('data-loaded', 'true')
-    cardsManager.loadCards(currentTarget);
+    boardsManager.loadBoardData(currentTarget, targetParent);
+  } else {
+    currentTarget.removeEventListener('click', loadBoardDataToDOM)
   }
-  currentTarget.removeEventListener('click', loadBoardDataToDOM)
 }
 
 function renameElement(clickEvent){

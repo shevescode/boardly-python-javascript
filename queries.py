@@ -3,23 +3,6 @@ import data_manager
 _DEFAULT_COLUMNS = "{1, 2, 3, 4}"
 
 
-def get_card_status(status_id):
-    """
-    Find the first status matching the given id
-    :param status_id:
-    :return: str
-    """
-    status = data_manager.execute_select(
-        """
-        SELECT * FROM statuses s
-        WHERE s.id = %(status_id)s
-        ;
-        """
-        , {"status_id": status_id})
-
-    return status
-
-
 def get_boards():
     """
     Gather all boards
@@ -32,18 +15,6 @@ def get_boards():
         ;
         """
     )
-
-
-def get_cards_for_board(board_id):
-    matching_cards = data_manager.execute_select(
-        """
-        SELECT * FROM cards
-        WHERE cards.board_id = %(board_id)s
-        ;
-        """
-        , {"board_id": board_id})
-
-    return matching_cards
 
 
 def create_new_board(title):
@@ -63,11 +34,50 @@ def create_new_board(title):
         , {"new_board_id": new_board_id})
 
 
-def update_board_title(title, id):
+def update_board_title(title, board_id):
     data_manager.execute_update(
         """
         UPDATE boards
         SET title = (%(title)s)
         WHERE id=%(id)s
         """
-        , {"title": title, "id": id})
+        , {"title": title, "id": board_id})
+
+
+def get_board_column_titles(board_column_order):
+    return data_manager.execute_select(
+        """
+        SELECT *
+        FROM statuses
+        WHERE id = ANY(%(board_column_order)s::int[])
+        """
+        , {"board_column_order": board_column_order})
+
+
+def get_board_column_order(board_id):
+    return data_manager.execute_select(
+        """
+        SELECT statuses 
+        FROM boards WHERE id = %(board_id)s
+        """
+        , {"board_id": board_id})
+
+
+def get_cards_for_board(board_id):
+    matching_cards = data_manager.execute_select(
+        """
+        SELECT * FROM cards
+        WHERE cards.board_id = %(board_id)s
+        ;
+        """
+        , {"board_id": board_id})
+
+    return matching_cards
+
+
+def get_board_data(board_id):
+    board_column_ids = get_board_column_order(board_id)[0]['statuses']
+    board_column_titles = get_board_column_titles(board_column_ids)
+    board_cards = get_cards_for_board(board_id)
+
+    return [board_column_ids, board_column_titles, board_cards]
