@@ -106,7 +106,22 @@ export let boardsManager = {
                 }
             }
             columnsManager.loadColumn(columnId, boardId, columnTitle, boardColumnContainer, mode.appendLast)
+            const cardsContainer = boardColumnContainer.children[i].children[0].children[1]
 
+            for (let card of cards){
+                if (card['status_id'] === columnId){
+                    cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
+                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
+                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
+                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
+                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
+                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
+                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
+                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
+                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
+                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
+                }
+            }
             //TODO load cards to corresponding column
         }
         buttonsManager.createAddColumnButton(boardId)
