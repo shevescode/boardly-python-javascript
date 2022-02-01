@@ -3,7 +3,7 @@ from util import convert_to_dict_list
 import data_manager
 
 _DEFAULT_COLUMNS = "{1, 2, 3, 4}"
-_DEFAULT_COLUMNS_ARRAY = [1,2,3,4]
+_DEFAULT_COLUMNS_ARRAY = [1, 2, 3, 4]
 
 
 def get_boards():
@@ -118,7 +118,7 @@ def update_column_title(title, board_id, column_id):
             """
             , {"title": title, "column_id": column_id})
 
-        return {"ok":"ok"}
+        return {"ok": "ok"}
 
 
 def get_board_column_titles(board_column_order):
@@ -170,4 +170,13 @@ def delete_column(board_id, column_id):
         WHERE board_id=%(board_id)s AND status_id=%(column_id)s;
         """
         , {"board_id": board_id, "column_id": column_id})
+    if not (int(column_id) in _DEFAULT_COLUMNS_ARRAY):
+
+        data_manager.execute_update(
+            """
+            DELETE FROM statuses
+            WHERE id=%(column_id)s;
+            """
+            , {"board_id": board_id, "column_id": column_id})
+
 
