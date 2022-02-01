@@ -72,10 +72,14 @@ function boardBuilder(boardData) {
         const columnPlaceholder = columnBuilder(columnTypes.placeholderColumn, statusColumnId, boardData.id);
         const cardPlaceholder1 = cardBuilder(cardTypes.placeholderCard, 1, statusColumnId, boardData.id);
         const cardPlaceholder2 = cardBuilder(cardTypes.placeholderCard, 2, statusColumnId, boardData.id);
+        const addNewCardButton = buttonBuilder(buttonTypes.newCardBtn, 'btn-antracite',
+                                    'add-card-btn', [boardData.id, statusColumnId]);
 
         boardColumnContainer.appendChild(columnPlaceholder);
         boardColumnContainer.children[i].children[0].children[1].appendChild(cardPlaceholder1);
         boardColumnContainer.children[i].children[0].children[1].appendChild(cardPlaceholder2);
+        boardColumnContainer.children[i].children[0].appendChild(addNewCardButton);
+        addNewCardButton.children[0].classList.add('disabled');
     }
 
     boardContainer.id = `board-container-${boardData.id}`
@@ -118,7 +122,7 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             addCardBtnWrapper.classList.add('card', 'text-light', 'bg-dark', 'bg-antracite', 'mx-1', 'my-1', 'add-card-btn');
             addCardBtnWrapper.appendChild(button);
             addCardBtnWrapper.setAttribute('data-create-content', "true")
-            button.id = `add-new-board-${parentId[0]}-column-${parentId[1]}-card-button`;
+            button.id = `board-${parentId[0]}-column-${parentId[1]}-add-new-card-button`;
             button.innerText = buttonTypes.newCardBtn;
             button.setAttribute('data-element-type', 'card-title')
             button.setAttribute('type', 'button');
@@ -298,14 +302,11 @@ function columnBuilder(type, columnId, boardId, name) {
         case columnTypes.templateColumn:
             const column = document.createElement('div');
             const columnBody = document.createElement('div');
-            const addCardBtn = buttonBuilder(buttonTypes.newCardBtn, 'btn-antracite',
-                                    'add-card-btn', [boardId, columnId]);
             const cardsContainer = document.createElement('div');
             const colTittleGroup = buttonBuilder(buttonTypes.columnTitleBtnGroup,
                                     'btn-antracite',
                                     'btn-size-medium',
                                     [boardId, columnId])
-
 
             cardsContainer.id = `board-${boardId}-column-${columnId}-card-container`;
             cardsContainer.classList.add('cards-container','overflow-auto');
@@ -318,7 +319,6 @@ function columnBuilder(type, columnId, boardId, name) {
             columnBody.setAttribute('data-column-id', columnId);
             columnBody.appendChild(colTittleGroup);
             columnBody.appendChild(cardsContainer);
-            columnBody.appendChild(addCardBtn);
 
             column.id = `board-${boardId}-column-${columnId}`;
             column.classList.add('card', 'text-light', 'bg-dark', 'bg-antracite', 'mx-1', 'my-1', 'status-column', 'shadow', 'rounded');
@@ -335,8 +335,6 @@ function columnBuilder(type, columnId, boardId, name) {
             const settingsButton = placeholderColumn.children[0].children[0].children[1].children[0]
             const titlePlaceholder1 = document.createElement('span')
             const titlePlaceholder2 = document.createElement('span')
-
-            placeholderColumn.children[0].children[2].children[0].classList.add('disabled');
 
             titlePlaceholder1.classList.add('placeholder', 'col-6');
             titlePlaceholder2.classList.add('placeholder', 'col-3');
