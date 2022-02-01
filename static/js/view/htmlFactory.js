@@ -13,13 +13,20 @@ export const buttonTypes = {
     settingsBtn: "Settings",
     showBoardBtn: "Show board",
     boardTitleBtnGroup: "Board Title Group",
-    columnTitleBtnGroup: "Column Title Group"
+    columnTitleBtnGroup: "Column Title Group",
+    cardTitleBtnGroup: "Card Title Group"
 }
 
 export const columnTypes = {
     templateColumn: "Column template",
     placeholderColumn: "Column with placeholders",
     loadedColumn: "Column with data"
+}
+
+export const cardTypes = {
+    templateCard: "Card template",
+    placeholderCard: "Card placeholder",
+    loadedCard: "Card with data"
 }
 
 export function htmlFactory(template) {
@@ -59,9 +66,16 @@ function boardBuilder(boardData) {
     boardContent.setAttribute('data-board-id', boardData.id);
     boardContent.appendChild(boardColumnContainer);
 
+    console.log(boardColumnContainer)
+
     for (const i in boardData['statuses']){
-        const statusColumnId = boardData['statuses'][i]
-        boardColumnContainer.appendChild(columnBuilder(columnTypes.placeholderColumn, statusColumnId, boardData.id));
+        const statusColumnId = boardData['statuses'][i];
+        const columnPlaceholder = columnBuilder(columnTypes.placeholderColumn, statusColumnId, boardData.id);
+        const cardPlaceholder1 = cardBuilder(cardTypes.placeholderCard, 1, statusColumnId, boardData.id);
+        const cardPlaceholder2 = cardBuilder(cardTypes.placeholderCard, 2, statusColumnId, boardData.id);
+        boardColumnContainer.appendChild(columnPlaceholder);
+        boardColumnContainer.children[i].children[0].appendChild(cardPlaceholder1);
+        boardColumnContainer.children[i].children[0].appendChild(cardPlaceholder2);
     }
 
     boardContainer.id = `board-container-${boardData.id}`
@@ -204,6 +218,31 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
 
             return colTittleGroup
 
+        case buttonTypes.cardTitleBtnGroup:
+            const cardTittleGroup = document.createElement('div')
+            const cardTitleWrapper = document.createElement('div')
+            const cardSettingsButton = buttonBuilder(buttonTypes.settingsBtn,
+                                    'btn-light',
+                                    'btn-size-small',
+                                    `board-${parentId[0]}-column-${parentId[1]}-card-${parentId[2]}-title`)
+
+            cardTitleWrapper.id = `board-${parentId[0]}-column-${parentId[1]}-card-${parentId[2]}-title`;
+            cardTitleWrapper.classList.add('card-text', 'card-title', 'flex-grow-1', 'hstack', 'mb-0');
+            cardTitleWrapper.setAttribute('data-board-id', parentId[0]);
+            cardTitleWrapper.setAttribute('data-column-id', parentId[1])
+            cardTitleWrapper.setAttribute('data-card-id', parentId[1])
+            cardTitleWrapper.setAttribute('data-element-type', 'card-title')
+
+            cardTittleGroup.classList.add("btn-group", 'd-flex');
+            cardTittleGroup.setAttribute('data-board-id', parentId[0]);
+            cardTittleGroup.setAttribute('data-column-id', parentId[1]);
+            cardTittleGroup.setAttribute('data-card-id', parentId[1])
+            cardTittleGroup.setAttribute('role', "group")
+            cardTittleGroup.appendChild(cardTitleWrapper);
+            cardTittleGroup.appendChild(cardSettingsButton);
+
+            return cardTittleGroup
+
         default:
             console.error("Undefined button: " + type)
             return () => { return "" }
@@ -295,6 +334,57 @@ function columnBuilder(type, columnId, boardId, name) {
     }
 }
 
-function cardBuilder(){
+function cardBuilder(type, cardId, columnId, boardId, name) {
+    switch (type) {
+        case cardTypes.templateCard:
+            const card = document.createElement('div');
+            const cardBody = document.createElement('div');
+            const cardTittleGroup = buttonBuilder(buttonTypes.cardTitleBtnGroup,
+                                    'btn-light',
+                                    'btn-size-small',
+                                    [boardId, columnId])
 
+            cardBody.id = `board-${boardId}-column-${columnId}-card-${cardId}-body`
+            cardBody.classList.add('card-body', 'px-2', 'py-2');
+            cardBody.setAttribute('data-board-id', boardId);
+            cardBody.setAttribute('data-column-id', columnId)
+            cardBody.setAttribute('data-card-id', cardId)
+            cardBody.appendChild(cardTittleGroup);
+
+            card.id = `board-${boardId}-column-${columnId}-card-${cardId}`
+            card.classList.add('card', 'text-dark', 'bg-light', 'mx-1', 'my-1', 'card-element');
+            card.setAttribute('aria-hidden', 'false');
+            card.setAttribute('data-board-id', boardId);
+            card.setAttribute('data-column-id', columnId)
+            card.setAttribute('data-card-id', cardId)
+            card.appendChild(cardBody)
+
+            return card;
+
+        case cardTypes.placeholderCard:
+            const placeholderCard = cardBuilder(cardTypes.templateCard, cardId, columnId, boardId)
+            const titleWrapper = placeholderCard.children[0].children[0].children[0]
+            const settingsButton = placeholderCard.children[0].children[0].children[1].children[0]
+            const titlePlaceholder1 = document.createElement('span')
+            const titlePlaceholder2 = document.createElement('span')
+
+            titlePlaceholder1.classList.add('placeholder', 'col-6');
+            titlePlaceholder2.classList.add('placeholder', 'col-3');
+
+            settingsButton.classList.add('disabled')
+            titleWrapper.classList.add('placeholder-wave')
+            titleWrapper.appendChild(titlePlaceholder1)
+            titleWrapper.append("\u00A0");
+            titleWrapper.appendChild(titlePlaceholder2)
+
+            return placeholderCard;
+
+        case cardTypes.loadedCard:
+            const loadedCard = cardBuilder(cardTypes.templateCard, cardId, columnId, boardId);
+            const loadedTitleWrapper = loadedCard.children[0].children[0].children[0];
+
+            loadedTitleWrapper.innerHTML = name;
+
+            return loadedCard;
+    }
 }
