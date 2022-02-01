@@ -146,5 +146,9 @@ export function renameElement(clickEvent) {
 }
 
 export function deleteElement(clickEvent) {
-
+    const currentTarget = clickEvent.currentTarget
+    const targetId = currentTarget.dataset.targetId
+    const selectedElement = document.querySelector(`#${targetId}`)
+    const parentElement = selectedElement.parentElement.parentElement.parentElement
+    columnsManager.deleteColumn(parentElement)
 }

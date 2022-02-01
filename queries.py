@@ -158,3 +158,16 @@ def get_board_data(board_id):
     board_cards = get_cards_for_board(board_id)
 
     return [board_column_ids, board_column_titles, board_cards]
+
+
+def delete_column(board_id, column_id):
+    data_manager.execute_update(
+        """
+        UPDATE boards
+        SET statuses = array_remove(statuses, %(column_id)s)
+        WHERE id=%(board_id)s;
+        DELETE FROM cards
+        WHERE board_id=%(board_id)s AND status_id=%(column_id)s;
+        """
+        , {"board_id": board_id, "column_id": column_id})
+

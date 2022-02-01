@@ -65,6 +65,17 @@ export let columnsManager = {
             }
         }
     },
+
+    deleteColumn: async function (parent) {
+        const boardId = parent.dataset.boardId;
+        const columnId = parent.dataset.columnId;
+        const payload = {'column_id': columnId, 'board_id': boardId}
+        await dataHandler.deleteColumn(payload);
+
+        parent.remove();
+
+
+        }
 }
 
 
