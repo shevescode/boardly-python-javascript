@@ -53,7 +53,6 @@ export let columnsManager = {
             addColumnSettingsButtonEventListeners(boardId, columnId)
 
         } else {
-            console.log(boardData)
             const columnContainer = parent.parentElement.parentElement
             const cards = boardData['cards']
             columnContainer.removeChild(parent.parentElement)
