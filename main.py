@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, session, jsonify, make_response
+from flask import Flask, render_template, url_for, request, redirect, session, jsonify, make_response, Response
 from dotenv import load_dotenv
 from datetime import timedelta, datetime
 from util import json_response
@@ -31,6 +31,7 @@ def get_boards():
     return queries.get_boards()
 
 
+# TODO - remove this?
 @app.route("/api/boards/<int:board_id>/cards/")
 @json_response
 def get_cards_for_board(board_id: int):
@@ -41,14 +42,72 @@ def get_cards_for_board(board_id: int):
     return queries.get_cards_for_board(board_id)
 
 
+@app.route("/api/boards/<int:board_id>/data/")
+def get_board_data(board_id: int):
+    """
+    Get all columns, column order and cards
+    :param board_id: id of the parent board
+    """
+    board_data = queries.get_board_data(board_id)
+    return jsonify(board_data)
+
+
 @app.route("/api/boards/new", methods=["POST"])
-@json_response
 def create_new_board():
     """
     New board creation
     """
     title = request.json['title']
-    return queries.create_new_board(title), 200
+
+    if title == "":
+        return Response(status=499)
+    else:
+        return jsonify(queries.create_new_board(title))
+
+
+@app.route("/api/columns/new", methods=["POST"])
+def create_new_column():
+    """
+    New board creation
+    """
+    title = request.json['title']
+    board_id = request.json['board_id']
+
+    if title == "":
+        return Response(status=499)
+    else:
+        return jsonify(queries.create_new_column(title, board_id))
+
+
+@app.route("/api/board/updateTitle", methods=["PUT"])
+def update_board_title():
+    """
+    Updates board title
+    """
+    title = request.json['title']
+    board_id = request.json['id']
+
+    if title == "":
+        return Response(status=499)
+    else:
+        queries.update_board_title(title, board_id)
+        return Response(response=b'{"ok": "ok"}', status=200)
+
+
+@app.route("/api/column/updateTitle", methods=["PUT"])
+def update_column_title():
+    """
+    Updates board title
+    """
+    column_id = request.json['column_id']
+    board_id = request.json['board_id']
+    title = request.json['title']
+
+    if title == "":
+        return Response(status=499)
+    else:
+        data = queries.update_column_title(title, board_id, column_id)
+        return data
 
 
 def main():

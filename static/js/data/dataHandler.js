@@ -3,14 +3,15 @@ export let dataHandler = {
     const response = await apiGet("/api/boards");
     return response;
   },
-  getBoard: async function (boardId) {
-    // the board is retrieved and then the callback function is called with the board
-  },
   getStatuses: async function () {
     // the statuses are retrieved and then the callback function is called with the statuses
   },
   getStatus: async function (statusId) {
     // the status is retrieved and then the callback function is called with the status
+  },
+  getBoardDataById: async function (boardId) {
+    const response = await apiGet(`/api/boards/${boardId}/data/`);
+    return response;
   },
   getCardsByBoardId: async function (boardId) {
     const response = await apiGet(`/api/boards/${boardId}/cards/`);
@@ -23,9 +24,21 @@ export let dataHandler = {
     const response = await apiPost(`/api/boards/new`, payload);
     return response;
   },
+  createNewColumn: async function (payload){
+    const response = await apiPost(`/api/columns/new`, payload);
+    return response;
+  },
   createNewCard: async function (cardTitle, boardId, statusId) {
     // creates new card, saves it and calls the callback function with its data
   },
+  changeBoardTitle: async function (payload) {
+    const response = await apiPut(`/api/board/updateTitle`, payload)
+    return response
+  },
+  changeColumnTitle: async function (payload) {
+    const response = await apiPut(`/api/column/updateTitle`, payload)
+    return response
+  }
 };
 
 async function apiGet(url) {
@@ -33,8 +46,7 @@ async function apiGet(url) {
     method: "GET",
   });
   if (response.status === 200) {
-    let data = response.json();
-    return data;
+    return response.json();
   }
 }
 
@@ -45,8 +57,10 @@ async function apiPost(url, payload) {
     headers: {'Content-Type': 'application/json'}
   });
   if (response.status === 200) {
-    let data = response.json();
-    return data;
+    return response.json();
+  } else if (response.status === 499){
+    console.error('Server received empty title!')
+    return 'error'
   }
 }
 
@@ -59,7 +73,9 @@ async function apiPut(url, payload) {
     headers: {'Content-Type': 'application/json'}
   });
   if (response.status === 200) {
-    let data = response.json();
-    return data;
+    return response.json();
+  } else if (response.status === 499){
+    console.error('Server received empty title!')
+    return 'error'
   }
 }
