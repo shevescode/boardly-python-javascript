@@ -111,18 +111,8 @@ export let boardsManager = {
             for (let card of cards){
                 if (card['status_id'] === columnId){
                     cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
-                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
-                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
-                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
-                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
-                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
-                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
-                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
-                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
-                    // cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
                 }
             }
-            //TODO load cards to corresponding column
         }
         buttonsManager.createAddColumnButton(boardId)
     }

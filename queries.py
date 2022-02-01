@@ -1,5 +1,5 @@
 from flask import jsonify
-
+from util import convert_to_dict_list
 import data_manager
 
 _DEFAULT_COLUMNS = "{1, 2, 3, 4}"
@@ -91,16 +91,22 @@ def update_column_title(title, board_id, column_id):
             """
             , {"column_id": column_id, "new_id": new_id, "board_id": board_id}, fetchone=True)['statuses']
 
-        data_manager.execute_update(
+        updated_cards = data_manager.execute_update(
             """
+            WITH updated AS (
             UPDATE cards
             SET status_id = %(new_id)s
             WHERE board_id=%(board_id)s AND status_id = %(column_id)s
+            RETURNING *)
+            SELECT * 
+            FROM updated 
+            ORDER BY card_order   
             """
-            , {"column_id": column_id, "new_id": new_id, "board_id": board_id})
+            , {"column_id": column_id, "new_id": new_id, "board_id": board_id}, fetchall=True)
 
+        cards = convert_to_dict_list(updated_cards)
         position = board_columns.index(new_id)
-        data = {'id': new_id, 'position': position}
+        data = {'column_id': new_id, 'position': position, 'cards': cards}
         return jsonify(data)
 
     else:

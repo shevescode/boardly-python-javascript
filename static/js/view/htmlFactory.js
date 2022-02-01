@@ -242,13 +242,13 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             cardTitleWrapper.classList.add('card-text', 'card-title', 'flex-grow-1', 'hstack', 'mb-0');
             cardTitleWrapper.setAttribute('data-board-id', parentId[0]);
             cardTitleWrapper.setAttribute('data-column-id', parentId[1])
-            cardTitleWrapper.setAttribute('data-card-id', parentId[1])
+            cardTitleWrapper.setAttribute('data-card-id', parentId[2])
             cardTitleWrapper.setAttribute('data-element-type', 'card-title')
 
             cardTittleGroup.classList.add("btn-group", 'd-flex');
             cardTittleGroup.setAttribute('data-board-id', parentId[0]);
             cardTittleGroup.setAttribute('data-column-id', parentId[1]);
-            cardTittleGroup.setAttribute('data-card-id', parentId[1])
+            cardTittleGroup.setAttribute('data-card-id', parentId[2])
             cardTittleGroup.setAttribute('role', "group")
             cardTittleGroup.appendChild(cardTitleWrapper);
             cardTittleGroup.appendChild(cardSettingsButton);
@@ -367,7 +367,7 @@ function cardBuilder(type, cardId, columnId, boardId, name) {
             const cardTittleGroup = buttonBuilder(buttonTypes.cardTitleBtnGroup,
                                     'btn-light',
                                     'btn-size-small',
-                                    [boardId, columnId])
+                                    [boardId, columnId, cardId])
 
             cardBody.id = `board-${boardId}-column-${columnId}-card-${cardId}-body`
             cardBody.classList.add('card-body', 'px-2', 'py-2');

@@ -66,9 +66,11 @@ def execute_insert(statement, variables=None):
             return cursor.fetchone()['id']
 
 
-def execute_update(statement, variables=None, fetchone=False):
+def execute_update(statement, variables=None, fetchone=False, fetchall=False):
     with establish_connection() as conn:
         with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
             cursor.execute(statement, variables)
             if fetchone:
                 return cursor.fetchone()
+            elif fetchall:
+                return cursor.fetchall()

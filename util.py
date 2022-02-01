@@ -14,3 +14,13 @@ def json_response(func):
 
     return decorated_function
 
+
+def convert_to_dict_list(real_dict_array: list) -> list:
+    new_list = []
+    for element in real_dict_array:
+        new_dict = {}
+        for key in element:
+            new_dict[key] = element[key]
+        new_list.append(new_dict)
+
+    return new_list
