@@ -9,6 +9,7 @@ export const htmlTemplates = {
 export const buttonTypes = {
     newBoardBtn: "+Add New Board",
     newColumnBtn: "+Add New Column",
+    newCardBtn: "+Add New Card",
     submitBtn: "Submit",
     settingsBtn: "Settings",
     showBoardBtn: "Show board",
@@ -73,9 +74,13 @@ function boardBuilder(boardData) {
         const columnPlaceholder = columnBuilder(columnTypes.placeholderColumn, statusColumnId, boardData.id);
         const cardPlaceholder1 = cardBuilder(cardTypes.placeholderCard, 1, statusColumnId, boardData.id);
         const cardPlaceholder2 = cardBuilder(cardTypes.placeholderCard, 2, statusColumnId, boardData.id);
+        const addCardButton = buttonBuilder(buttonTypes.newCardBtn, 'btn-antracite',
+                                    'add-card-btn', [boardData.id, statusColumnId]);
+        addCardButton.children[0].classList.add('disabled');
         boardColumnContainer.appendChild(columnPlaceholder);
         boardColumnContainer.children[i].children[0].appendChild(cardPlaceholder1);
         boardColumnContainer.children[i].children[0].appendChild(cardPlaceholder2);
+        boardColumnContainer.children[i].children[0].appendChild(addCardButton);
     }
 
     boardContainer.id = `board-container-${boardData.id}`
@@ -112,6 +117,18 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             button.setAttribute('type', 'button');
             return addColBtnWrapper;
 
+        case buttonTypes.newCardBtn:
+            const addCardBtnWrapper = document.createElement('div');
+            addCardBtnWrapper.id = `add-board-${parentId[0]}-column-${parentId[1]}-card`
+            addCardBtnWrapper.classList.add('card', 'text-light', 'bg-dark', 'bg-antracite', 'mx-1', 'my-1', 'add-card-btn');
+            addCardBtnWrapper.appendChild(button);
+            addCardBtnWrapper.setAttribute('data-create-content', "true")
+            button.id = `add-new-board-${parentId[0]}-column-${parentId[1]}-card-button`;
+            button.innerText = buttonTypes.newCardBtn;
+            button.setAttribute('data-element-type', 'card-title')
+            button.setAttribute('type', 'button');
+            return addCardBtnWrapper;
+
         case buttonTypes.submitBtn:
             button.innerText = buttonTypes.submitBtn;
             button.setAttribute('data-parent-id', parentId);
@@ -127,7 +144,7 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             const listActionDelete = document.createElement('a');
             const icon = document.createElement('i');
 
-            icon.classList.add('bi', 'bi-gear-fill');
+            icon.classList.add('bi', 'bi-gear-fill', buttonClass);
             button.id = `settings-${parentId}`
             button.classList.add('dropdown-toggle', 'caret-off')
             button.setAttribute('type', 'button');
