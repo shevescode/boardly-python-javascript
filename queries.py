@@ -91,6 +91,14 @@ def update_column_title(title, board_id, column_id):
             """
             , {"column_id": column_id, "new_id": new_id, "board_id": board_id}, fetchone=True)['statuses']
 
+        data_manager.execute_update(
+            """
+            UPDATE cards
+            SET status_id = %(new_id)s
+            WHERE board_id=%(board_id)s AND status_id = %(column_id)s
+            """
+            , {"column_id": column_id, "new_id": new_id, "board_id": board_id})
+
         position = board_columns.index(new_id)
         data = {'id': new_id, 'position': position}
         return jsonify(data)
@@ -131,7 +139,7 @@ def get_cards_for_board(board_id):
         """
         SELECT * FROM cards
         WHERE cards.board_id = %(board_id)s
-        ;
+        ORDER BY card_order
         """
         , {"board_id": board_id})
 

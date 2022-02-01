@@ -16,7 +16,12 @@
 }
 
 .column-title {
+    font-size: 1.15rem;
     padding-left: 1rem;
+}
+
+.card-title {
+    padding-left: 0.5rem;
 }
 
 .board-container {
@@ -37,6 +42,7 @@
 }
 
 .add-column-btn {
+    font-size: 1.15rem;
     min-width: 20rem;
     width: 20rem;
 }

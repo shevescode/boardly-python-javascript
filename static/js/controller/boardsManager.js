@@ -91,6 +91,8 @@ export let boardsManager = {
         const cards = boardData[2];
         const boardColumnContainer = targetParent.children[1].children[0];
 
+        console.log(cards)
+
         currentTarget.removeEventListener('click', loadBoardDataToDOM)
         targetParent.setAttribute('data-loaded', 'true')
         boardColumnContainer.innerHTML = "";

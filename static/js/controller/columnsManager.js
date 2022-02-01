@@ -49,15 +49,14 @@ export let columnsManager = {
         parent.removeChild(target);
         const colTittleGroup = btnBuilder(buttonTypes.columnTitleBtnGroup, 'btn-antracite',
             'btn-size-medium', [boardId, columnId])
-        console.log(boardData)
+
         if (boardData === 'error') {
             colTittleGroup.children[0].innerHTML = oldTitle;
-            parent.appendChild(colTittleGroup); // TODO insert first when add new card button is implemented
+            parent.insertBefore(colTittleGroup, parent.children[0]);
 
         } else if (boardData['ok'] === 'ok'){
-            console.log(boardData)
             colTittleGroup.children[0].innerHTML = newTitle;
-            parent.appendChild(colTittleGroup); // TODO insert first when add new card button is implemented
+            parent.insertBefore(colTittleGroup, parent.children[0]);
 
         } else {
             console.log(boardData)
