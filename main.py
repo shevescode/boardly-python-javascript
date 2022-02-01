@@ -43,13 +43,13 @@ def get_cards_for_board(board_id: int):
 
 
 @app.route("/api/boards/<int:board_id>/data/")
+@json_response
 def get_board_data(board_id: int):
     """
     Get all columns, column order and cards
     :param board_id: id of the parent board
     """
-    board_data = queries.get_board_data(board_id)
-    return jsonify(board_data)
+    return queries.get_board_data(board_id)
 
 
 @app.route("/api/boards/new", methods=["POST"])
@@ -108,6 +108,18 @@ def update_column_title():
     else:
         data = queries.update_column_title(title, board_id, column_id)
         return data
+
+
+@app.route("/api/column/deleteColumn", methods=["PUT"])
+def delete_column():
+    """
+    Removes column from board
+    """
+    column_id = request.json['column_id']
+    board_id = request.json['board_id']
+
+    queries.delete_column(board_id, column_id)
+    return Response(response=b'{"ok": "ok"}', status=200)
 
 
 def main():
