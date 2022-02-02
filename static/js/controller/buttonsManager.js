@@ -25,6 +25,16 @@ export let buttonsManager = {
       "click",
       replaceColumnTitleForm
     );
+  },
+  createAddCardButton: function (boardId, columnId) {
+    const btnBuilder = htmlFactory(htmlTemplates.button);
+    const content = btnBuilder(buttonTypes.newCardBtn, 'btn-antracite', 'add-card-btn', [boardId, columnId]);
+    domManager.addChild(`#board-${boardId}-column-${columnId}-body`, content)
+    domManager.addEventListener(
+      `#board-${boardId}-column-${columnId}-add-new-card-button`,
+      "click",
+      replaceCardTitleForm
+    );
   }
 };
 
@@ -40,4 +50,11 @@ function replaceColumnTitleForm(clickEvent) {
   const parent = target.parentElement;
   parent.removeChild(target);
   formManager.createSetColumnTitleForm(target.dataset.elementType, parent);
+}
+
+function replaceCardTitleForm(clickEvent) {
+  const target = clickEvent.currentTarget;
+  const parent = target.parentElement;
+  parent.removeChild(target);
+  formManager.createSetCardTitleForm(target.dataset.elementType, parent);
 }

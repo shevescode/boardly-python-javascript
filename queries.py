@@ -62,6 +62,29 @@ def create_new_column(title, board_id):
         , {"new_column_id": new_column_id})
 
 
+def create_new_card(title, board_id, column_id):
+    last_card_index = data_manager.execute_select(
+        """
+        SELECT card_order
+        FROM cards
+        WHERE board_id = %(board_id)s AND status_id = %(column_id)s
+        ORDER BY card_order DESC 
+        LIMIT 1
+        """
+        , {"board_id": board_id, "column_id": column_id}, False)['card_order'] + 1
+
+    new_card_id = data_manager.execute_insert(
+        """
+        INSERT INTO cards (title, board_id, status_id, card_order)
+        VALUES (%(title)s, %(board_id)s, %(column_id)s, %(card_order)s)
+        RETURNING id
+        """
+        , {"title": title, "board_id": board_id, "column_id": column_id, "card_order": last_card_index})
+
+    return {"id": new_card_id, "board_id": board_id, "status_id": column_id, "title": title,
+            "card_order": last_card_index}
+
+
 def update_board_title(title, board_id):
     data_manager.execute_update(
         """
@@ -178,5 +201,4 @@ def delete_column(board_id, column_id):
             WHERE id=%(column_id)s;
             """
             , {"board_id": board_id, "column_id": column_id})
-
 

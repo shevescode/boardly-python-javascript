@@ -21,7 +21,6 @@ export let formManager = {
     const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
     const content = rowFormBuilder('Enter Title...', 'btn-warning', titleClass, parent);
     domManager.addChild(`#${parent.id}`, content);
-    console.log(parent)
     domManager.addEventListener(
       `#set-${titleClass}-form-${parent.id}`,
       "submit",
@@ -44,13 +43,24 @@ export let formManager = {
     const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
     const content = rowFormBuilder('Enter Title...', 'btn-warning', titleClass, parent);
     domManager.addChild(`#${parent.id}`, content);
-    console.log(parent)
     domManager.addEventListener(
       `#set-${titleClass}-form-${parent.id}`,
       "submit",
       setColumnTitle
     );
   },
+  createSetCardTitleForm: async function (titleClass, parent) {
+    const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
+    const content = rowFormBuilder('Enter card name...', 'btn-warning', titleClass, parent);
+    const boardId = parent.parentElement.dataset.boardId
+    const columnId = parent.parentElement.dataset.columnId
+    domManager.addChild(`#${parent.id}`, content);
+    domManager.addEventListener(
+      `#set-card-title-form-add-board-${boardId}-column-${columnId}-card`,
+      "submit",
+      setCardTitle
+    );
+  }
 };
 
 function setBoardTitle(event){
@@ -84,4 +94,12 @@ function changeColumnTitle(event){
   const oldTitle = document.querySelector(`#new-title-${parent.id}`).placeholder;
   const newTitle = target.children[0].children[0].value;
   columnsManager.changeColumnTitle(newTitle, oldTitle, parent, target)
+}
+
+function setCardTitle(event){
+  const target = event.currentTarget
+  const parent = target.parentElement
+  const container = parent.parentElement.children[1]
+  const newTitle = target.children[0].children[0].value
+  cardsManager.createNewCard(newTitle, parent, container)
 }

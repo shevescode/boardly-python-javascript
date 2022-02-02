@@ -17,7 +17,9 @@ export let columnsManager = {
             columnContainer.insertBefore(loadedColumn, columnContainer.children[position]);
         }
         addColumnSettingsButtonEventListeners(boardId, columnId)
+        buttonsManager.createAddCardButton(boardId, columnId)
     },
+
     createNewColumn: async function (title, formContainer, columnContainer) {
         const boardId = columnContainer.parentElement.dataset.boardId
         const payload = {'title': title, 'board_id': boardId}
@@ -28,7 +30,6 @@ export let columnsManager = {
             return;
         }
         this.loadColumn(boardData[0].id, boardId, boardData[0].title, columnContainer, mode.insertBeforeLast)
-
     },
 
     changeColumnTitle: async function (newTitle, oldTitle, parent, target) {
@@ -72,8 +73,6 @@ export let columnsManager = {
         await dataHandler.deleteColumn(payload);
 
         parent.remove();
-
-
         }
 }
 
