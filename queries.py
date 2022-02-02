@@ -71,7 +71,12 @@ def create_new_card(title, board_id, column_id):
         ORDER BY card_order DESC 
         LIMIT 1
         """
-        , {"board_id": board_id, "column_id": column_id}, False)['card_order'] + 1
+        , {"board_id": board_id, "column_id": column_id}, False)
+
+    if last_card_index:
+        last_card_index = last_card_index['card_order']
+    else:
+        last_card_index = 0
 
     new_card_id = data_manager.execute_insert(
         """
@@ -79,7 +84,7 @@ def create_new_card(title, board_id, column_id):
         VALUES (%(title)s, %(board_id)s, %(column_id)s, %(card_order)s)
         RETURNING id
         """
-        , {"title": title, "board_id": board_id, "column_id": column_id, "card_order": last_card_index})
+        , {"title": title, "board_id": board_id, "column_id": column_id, "card_order": last_card_index + 1})
 
     return {"id": new_card_id, "board_id": board_id, "status_id": column_id, "title": title,
             "card_order": last_card_index}
