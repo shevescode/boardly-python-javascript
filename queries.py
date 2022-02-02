@@ -193,3 +193,12 @@ def delete_column(board_id, column_id):
         WHERE board_id=%(board_id)s AND status_id=%(column_id)s;
         """
         , {"board_id": board_id, "column_id": column_id})
+    if not (int(column_id) in _DEFAULT_COLUMNS_ARRAY):
+
+        data_manager.execute_update(
+            """
+            DELETE FROM statuses
+            WHERE id=%(column_id)s;
+            """
+            , {"board_id": board_id, "column_id": column_id})
+
