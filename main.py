@@ -122,6 +122,18 @@ def delete_column():
     return Response(response=b'{"ok": "ok"}', status=200)
 
 
+@app.route("/api/board/deleteBoard", methods=["PUT"])
+def delete_board():
+    """
+    Removes board
+    """
+
+    board_id = request.json['board_id']
+
+    queries.delete_board(board_id)
+    return Response(response=b'{"ok": "ok"}', status=200)
+
+
 def main():
     app.run(debug=True)
 

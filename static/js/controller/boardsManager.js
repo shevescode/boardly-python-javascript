@@ -147,6 +147,22 @@ export function deleteElement(clickEvent) {
     const currentTarget = clickEvent.currentTarget
     const targetId = currentTarget.dataset.targetId
     const selectedElement = document.querySelector(`#${targetId}`)
-    const parentElement = selectedElement.parentElement.parentElement.parentElement
-    columnsManager.deleteColumn(parentElement)
+    const parentElement = selectedElement.parentElement.parentElement
+    const elementType = selectedElement.dataset.elementType;
+
+    if (elementType === "board-title") {
+        deleteBoard(parentElement)
+    } else if (elementType === "column-title") {
+        columnsManager.deleteColumn(parentElement.parentElement);
+    }
+}
+
+async function deleteBoard(parent) {
+        const boardId = parent.dataset.boardId;
+
+        const payload = {'board_id': boardId}
+        await dataHandler.deleteBoard(payload);
+
+        parent.remove();
+
 }

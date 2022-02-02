@@ -85,3 +85,4 @@ function changeColumnTitle(event){
   const newTitle = target.children[0].children[0].value;
   columnsManager.changeColumnTitle(newTitle, oldTitle, parent, target)
 }
+
