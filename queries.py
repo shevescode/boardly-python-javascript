@@ -202,3 +202,30 @@ def delete_column(board_id, column_id):
             """
             , {"board_id": board_id, "column_id": column_id})
 
+
+def delete_board(board_id):
+    column_ids = data_manager.execute_select(
+        """
+        SELECT statuses FROM boards
+        WHERE id = %(board_id)s;
+        """
+        , {"board_id": board_id})
+    print(column_ids)
+    data_manager.execute_update(
+        """
+        DELETE FROM cards
+        WHERE board_id=%(board_id)s;
+        DELETE FROM boards
+        WHERE id = %(board_id)s;
+        """
+        , {"board_id": board_id})
+
+    for i in column_ids[0]['statuses']:
+        if not (int(i) in _DEFAULT_COLUMNS_ARRAY):
+            data_manager.execute_update(
+                """
+                DELETE FROM statuses
+                WHERE id = %(i)s;
+                """
+                , {"i": i})
+
