@@ -1,14 +1,9 @@
 import {dataHandler} from "../data/dataHandler.js";
-import {htmlFactory, htmlTemplates, buttonTypes} from "../view/htmlFactory.js";
+import {htmlTemplates, buttonTypes, htmlFactory} from "../view/htmlFactory.js";
 import {domManager} from "../view/domManager.js";
 import {cardsManager} from "./cardsManager.js";
 import {boardsManager, loadBoardDataToDOM} from "./boardsManager.js";
-import {
-    formManager,
-    replaceBoardNameWithForm,
-    replaceColumnNameWithForm,
-    replaceCardNameWithForm
-} from "./formManager.js";
+import {formManager, replaceBoardNameWithForm, replaceColumnNameWithForm, replaceCardNameWithForm } from "./formManager.js";
 import {columnsManager} from "./columnsManager.js";
 
 export let buttonsManager = {
@@ -61,7 +56,7 @@ export let buttonsManager = {
         domManager.insertFirstChild(`#board-${boardId}-column-${columnId}-container`, content)
         addColumnNameBtnGroupEventListeners(boardId, columnId);
         if (placeholder) {
-            setPlaceholderContent(content);
+            this.setPlaceholderContent(content);
         }
     },
     createCardNameButtonGroup: function (boardId, columnId, cardId, placeholder = false) {
@@ -70,8 +65,12 @@ export let buttonsManager = {
         domManager.addChild(`#board-${boardId}-column-${columnId}-card-${cardId}-container`, content)
         addCardNameBtnGroupEventListeners(boardId, columnId, cardId);
         if (placeholder) {
-            setPlaceholderContent(content);
+            this.setPlaceholderContent(content);
         }
+    },
+    setPlaceholderContent: function (content) {
+        const placeholderBuilder = htmlFactory(htmlTemplates.placeholder)
+        domManager.addChild(`#${content.children[0].id}`, placeholderBuilder())
     }
 };
 
@@ -117,11 +116,6 @@ function addCardNameBtnGroupEventListeners(boardId, columnId, cardId) {
         "click",
         deleteElement
     );
-}
-
-function setPlaceholderContent(content) {
-    const placeholderBuilder = htmlFactory(htmlTemplates.placeholder)
-    domManager.addChild(`#${content.children[0].id}`, placeholderBuilder())
 }
 
 function renameElement(clickEvent) {
