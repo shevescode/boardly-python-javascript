@@ -11,16 +11,16 @@
     border-radius: 0 0.25rem 0.25rem 0;
 }
 
-.board-title {
+.board-name {
     font-size: 1.25rem;
 }
 
-.column-title {
+.column-name {
     font-size: 1rem;
     padding-left: 1rem;
 }
 
-.card-title {
+.card-name {
     font-size: 0.95rem;
     padding-left: 0.5rem;
     margin-bottom: 0;
@@ -42,9 +42,9 @@
     min-height: 10rem;
 }
 
-.status-column {
-    width: 20rem;
+.column-container {
     min-width: 20rem;
+    max-width: 20rem;
     max-height: 77vh;
 }
 

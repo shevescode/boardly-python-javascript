@@ -32,11 +32,11 @@ export let dataHandler = {
         const response = await apiPost(`/api/card/new`, payload);
         return response;
     },
-    changeBoardTitle: async function (payload) {
+    changeBoardName: async function (payload) {
         const response = await apiPut(`/api/board/updateTitle`, payload)
         return response
     },
-    changeColumnTitle: async function (payload) {
+    changeColumnName: async function (payload) {
         const response = await apiPut(`/api/column/updateTitle`, payload)
         return response
     },
