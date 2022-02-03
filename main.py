@@ -163,6 +163,17 @@ def delete_column():
     return Response(response=b'{"ok": "ok"}', status=200)
 
 
+@app.route("/api/card/deleteCard", methods=["DELETE"])
+def delete_card():
+    """
+    Removes card from column
+    """
+    card_id = request.json['card_id']
+
+    queries.delete_card(card_id)
+    return Response(response=b'{"ok": "ok"}', status=200)
+
+
 def main():
     app.run(debug=True)
 

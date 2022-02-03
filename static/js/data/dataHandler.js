@@ -51,6 +51,10 @@ export let dataHandler = {
     deleteColumn: async function (payload) {
         const response = await apiPut(`/api/column/deleteColumn`, payload)
         return response
+    },
+    deleteCard: async function (payload) {
+        const response = await apiDelete(`/api/card/deleteCard`, payload)
+        return response
     }
 };
 

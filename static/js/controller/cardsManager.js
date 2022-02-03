@@ -45,7 +45,7 @@ export let cardsManager = {
         const payload = {'title': newName, 'card_id': cardId}
         const boardData = await dataHandler.changeCardName(payload);
 
-        parent.removeChild(targetForm);
+        domManager.removeElement(`#${targetForm.id}`);
         buttonsManager.createCardNameButtonGroup(boardId, columnId, cardId)
 
         if (boardData === 'error') {
@@ -54,8 +54,10 @@ export let cardsManager = {
             domManager.setInnerHTML(`#board-${boardId}-column-${columnId}-card-${cardId}-name`, newName);
         }
     },
-    deleteCard: function (name, formContainer, cardContainer) {
-        // TODO need implementation
+    deleteCard: async function (cardId, boardId, columnId) {
+        const payload = {'card_id': cardId}
+        await dataHandler.deleteCard(payload);
+        domManager.removeElement(`#board-${boardId}-column-${columnId}-card-${cardId}-container`)
     }
 };
 
