@@ -67,7 +67,7 @@ async function apiPost(url, payload) {
     });
     if (response.status === 200) {
         return response.json();
-    } else if (response.status === 499) {
+    } else if (response.status === 422) {
         console.error('Server received empty title!')
         return 'error'
     }
@@ -81,8 +81,8 @@ async function apiDelete(url, payload) {
     });
     if (response.status === 200) {
         return response.json();
-    } else if (response.status === 498) {
-        return 'error: board not found in database'
+    } else if (response.status === 422) {
+        return 'error: item not in database'
     }
 }
 
@@ -94,7 +94,7 @@ async function apiPut(url, payload) {
     });
     if (response.status === 200) {
         return response.json();
-    } else if (response.status === 499) {
+    } else if (response.status === 422) {
         console.error('Server received empty title!')
         return 'error'
     }
