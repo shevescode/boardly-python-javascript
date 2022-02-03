@@ -1,5 +1,5 @@
 import {dataHandler} from "../data/dataHandler.js";
-import {buttonTypes, columnTypes, htmlFactory, htmlTemplates} from "../view/htmlFactory.js";
+import {buttonTypes, htmlFactory, htmlTemplates} from "../view/htmlFactory.js";
 import {domManager, mode} from "../view/domManager.js";
 import {cardsManager} from "./cardsManager.js";
 import {formManager} from "./formManager.js";
@@ -11,142 +11,73 @@ export let boardsManager = {
         const boardsData = await dataHandler.getBoards();
         for (let boardData of boardsData) {
             const boardBuilder = htmlFactory(htmlTemplates.board);
-            const content = boardBuilder(boardData);
+            const content = boardBuilder(boardData.id);
             domManager.addChild("#root", content);
-            domManager.addEventListener(
-                `#board-title-${boardData.id}`,
-                "click",
-                loadBoardDataToDOM
-            );
-            domManager.addEventListener(
-                `#rename-board-title-${boardData.id}`,
-                "click",
-                renameElement
-            );
-            domManager.addEventListener(
-                `#delete-board-title-${boardData.id}`,
-                "click",
-                deleteElement
-            );
+            buttonsManager.createBoardNameButtonGroup(boardData.id, boardData.title)
+            columnsManager.createPlaceholderColumns(boardData)
         }
     },
-    createNewBoard: async function (title) {
-        const payload = {'title': title}
+    loadBoardContent: async function (eventTarget) {
+        const boardId = eventTarget.dataset.boardId;
+        const boardData = await dataHandler.getBoardDataById(boardId);
+        const columnOrder = boardData[0];
+        const columns = boardData[1];
+        const cards = boardData[2];
+        domManager.setDataLoaded(`#board-${boardId}-column-container`);
+        domManager.purgeContainer(`#board-${boardId}-column-container`);
+        for (const columnId of columnOrder) {
+            for (let column of columns) {
+                if (column['id'] === columnId) {
+                    const columnName = column['title'];
+                    columnsManager.loadColumnContent(boardId, columnId, columnName, mode.appendLast)
+                    break;
+                }
+            }
+        }
+        for (const card of cards){
+            const columnId = card['status_id']
+            const cardId = card['id']
+            const cardName = card['title']
+            cardsManager.loadCardContent(boardId, columnId, cardId, cardName, mode.appendLast)
+        }
+        buttonsManager.createAddColumnButton(boardId);
+    },
+    createNewBoard: async function (name) {
+        const payload = {'title': name}
         const boardData = await dataHandler.createNewBoard(payload);
         if (boardData === 'error') {
             return;
         }
         const boardBuilder = htmlFactory(htmlTemplates.board);
-        const content = boardBuilder(boardData[0]);
+        const content = boardBuilder(boardData[0].id);
         domManager.insertFirstChild("#root", content);
-        domManager.addEventListener(
-            `#board-title-${boardData[0].id}`,
-            "click",
-            loadBoardDataToDOM
-        );
-        domManager.addEventListener(
-            `#rename-board-title-${boardData[0].id}`,
-            "click",
-            renameElement
-        );
-        domManager.addEventListener(
-            `#delete-board-title-${boardData[0].id}`,
-            "click",
-            deleteElement
-        );
+        buttonsManager.createBoardNameButtonGroup(boardData[0].id, boardData[0].title)
+        columnsManager.createPlaceholderColumns(boardData[0])
     },
-    changeBoardTitle: async function (newTitle, oldTitle, parent, target) {
-        const payload = {'id': parent.dataset.boardId, 'title': newTitle}
-        const boardData = await dataHandler.changeBoardTitle(payload);
-        const btnBuilder = htmlFactory(htmlTemplates.button)
-        parent.removeChild(target)
-        let content = null
+    changeBoardName: async function (newName, oldName, parent, formElement) {
+        const payload = {'id': parent.dataset.boardId, 'title': newName}
+        const boardData = await dataHandler.changeBoardName(payload);
+        formElement.remove()
         if (boardData === 'error') {
-            content = btnBuilder(buttonTypes.boardTitleBtnGroup, 'secondary', 'none', parent.dataset.boardId, oldTitle);
+            buttonsManager.createBoardNameButtonGroup(parent.dataset.boardId, oldName)
         } else {
-            content = btnBuilder(buttonTypes.boardTitleBtnGroup, 'secondary', 'none', parent.dataset.boardId, newTitle);
+            buttonsManager.createBoardNameButtonGroup(parent.dataset.boardId, newName)
         }
-        domManager.insertFirstChild(`#${parent.id}`, content);
-        domManager.addEventListener(
-            `#board-title-${parent.dataset.boardId}`,
-            "click",
-            loadBoardDataToDOM
-        );
-        domManager.addEventListener(
-            `#rename-board-title-${parent.dataset.boardId}`,
-            "click",
-            renameElement
-        );
-        domManager.addEventListener(
-            `#delete-board-title-${parent.dataset.boardId}`,
-            "click",
-            deleteElement
-        );
     },
-    loadBoardData: async function (currentTarget, targetParent) {
-        const boardId = currentTarget.dataset.boardId;
-        const boardData = await dataHandler.getBoardDataById(boardId);
-        const columnOrder = boardData[0];
-        const columns = boardData[1];
-        const cards = boardData[2];
-        const boardColumnContainer = targetParent.children[1].children[0];
-
-        currentTarget.removeEventListener('click', loadBoardDataToDOM)
-        targetParent.setAttribute('data-loaded', 'true')
-        boardColumnContainer.innerHTML = "";
-
-        for (let i in columnOrder) {
-            let columnTitle = ''
-            const columnId = columnOrder[i]
-            for (let j in columns) {
-                if (columns[j]['id'] === columnId) {
-                    columnTitle = columns[j]['title'];
-                }
-            }
-            columnsManager.loadColumn(columnId, boardId, columnTitle, boardColumnContainer, mode.appendLast)
-            const cardsContainer = boardColumnContainer.children[i].children[0].children[1]
-
-            for (let card of cards){
-                if (card['status_id'] === columnId){
-                    cardsManager.loadCard(card['id'], columnId, boardId, card['title'], cardsContainer, mode.appendLast)
-                }
-            }
-        }
-        buttonsManager.createAddColumnButton(boardId)
+    deleteBoard: async function (boardId) {
+        const payload = {'board_id': boardId}
+        await dataHandler.deleteBoard(payload);
+        domManager.removeElement(`#board-${boardId}-container`)
     }
 };
 
-function loadBoardDataToDOM(clickEvent) {
-    const currentTarget = clickEvent.currentTarget
-    const targetParent = clickEvent.currentTarget.parentElement.parentElement
-    if (targetParent.dataset.loaded !== 'true') {
-        boardsManager.loadBoardData(currentTarget, targetParent);
-        currentTarget.removeEventListener('click', loadBoardDataToDOM)
+export function loadBoardDataToDOM(clickEvent) {
+    const eventTarget = clickEvent.currentTarget
+    const targetElement = eventTarget.parentElement.parentElement
+    if (targetElement.dataset.loaded !== 'true') {
+        boardsManager.loadBoardContent(eventTarget)
+        eventTarget.removeEventListener('click', loadBoardDataToDOM)
     } else {
-        currentTarget.removeEventListener('click', loadBoardDataToDOM)
+        eventTarget.removeEventListener('click', loadBoardDataToDOM)
     }
-}
-
-export function renameElement(clickEvent) {
-    const currentTarget = clickEvent.currentTarget
-    const targetId = currentTarget.dataset.targetId
-    const renamedElement = document.querySelector(`#${targetId}`)
-    const currentTitle = renamedElement.innerHTML
-    const renamedElementParent = renamedElement.parentElement.parentElement
-    const elementType = renamedElement.dataset.elementType;
-
-    renamedElementParent.removeChild(renamedElement.parentElement);
-    if (elementType === "board-title") {
-        formManager.createChangeBoardTitleForm(currentTitle, elementType, renamedElementParent);
-    } else if (elementType === "column-title") {
-        formManager.createChangeColumnTitleForm(currentTitle, elementType, renamedElementParent);
-    }
-}
-
-export function deleteElement(clickEvent) {
-    const currentTarget = clickEvent.currentTarget
-    const targetId = currentTarget.dataset.targetId
-    const selectedElement = document.querySelector(`#${targetId}`)
-    const parentElement = selectedElement.parentElement.parentElement.parentElement
-    columnsManager.deleteColumn(parentElement)
 }

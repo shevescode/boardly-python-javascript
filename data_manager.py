@@ -51,7 +51,7 @@ def execute_select(statement, variables=None, fetchall=True):
     > execute_select('SELECT %(title)s; FROM shows', variables={'title': 'Codecool'})
     statement: SELECT statement
     variables:  optional parameter dict, optional parameter fetchall"""
-    result_set = []
+
     with establish_connection() as conn:
         with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
             cursor.execute(statement, variables)

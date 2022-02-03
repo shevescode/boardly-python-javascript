@@ -32,12 +32,16 @@ export let dataHandler = {
         const response = await apiPost(`/api/card/new`, payload);
         return response;
     },
-    changeBoardTitle: async function (payload) {
+    changeBoardName: async function (payload) {
         const response = await apiPut(`/api/board/updateTitle`, payload)
         return response
     },
-    changeColumnTitle: async function (payload) {
+    changeColumnName: async function (payload) {
         const response = await apiPut(`/api/column/updateTitle`, payload)
+        return response
+    },
+    deleteBoard: async function (payload) {
+        const response = await apiDelete(`/api/board/delete`, payload)
         return response
     },
     deleteColumn: async function (payload) {
@@ -69,18 +73,18 @@ async function apiPost(url, payload) {
     }
 }
 
-// async function apiDelete(url, payload) {
-//     let response = await fetch(url, {
-//         method: "DELETE",
-//         body: JSON.stringify(payload),
-//         headers: {'Content-Type': 'application/json'}
-//     });
-//     if (response.status === 200) {
-//         return response.json();
-//     } else if (response.status === 499) {
-//         return 'error'
-//     }
-// }
+async function apiDelete(url, payload) {
+    let response = await fetch(url, {
+        method: "DELETE",
+        body: JSON.stringify(payload),
+        headers: {'Content-Type': 'application/json'}
+    });
+    if (response.status === 200) {
+        return response.json();
+    } else if (response.status === 498) {
+        return 'error: board not found in database'
+    }
+}
 
 async function apiPut(url, payload) {
     let response = await fetch(url, {
