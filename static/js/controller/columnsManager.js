@@ -16,8 +16,8 @@ export let columnsManager = {
             domManager.insertAtPosition(`#board-${boardId}-column-container`, loadedColumn, position);
         }
     },
-    loadColumnContent: function (boardId, columnId, columnName, selectedMode){
-        this.loadColumnTemplate(boardId, columnId, selectedMode);
+    loadColumnContent: function (boardId, columnId, columnName, selectedMode, position){
+        this.loadColumnTemplate(boardId, columnId, selectedMode, position);
         buttonsManager.createAddCardButton(boardId, columnId)
         buttonsManager.createColumnNameButtonGroup(boardId, columnId, "")
         domManager.setInnerHTML(`#board-${boardId}-column-${columnId}-name`, columnName);
@@ -28,7 +28,7 @@ export let columnsManager = {
             this.loadColumnTemplate(boardId, columnId, mode.appendLast)
             buttonsManager.createAddCardButton(boardId, columnId, true)
             buttonsManager.createColumnNameButtonGroup(boardId, columnId, true)
-            domManager.disableButton(`#settings-board-${boardId}-column-${columnId}-name`)
+            domManager.disableButton(`#settings-board-${boardId}-column-${columnId}`)
             cardsManager.createPlaceholderCards(boardId, columnId)
         }
         buttonsManager.createAddColumnButton(boardId, true)
@@ -37,7 +37,7 @@ export let columnsManager = {
         const boardId = columnContainer.parentElement.dataset.boardId
         const payload = {'title': name, 'board_id': boardId}
         const boardData = await dataHandler.createNewColumn(payload);
-        formContainer.remove();
+        domManager.removeElement(`#${formContainer}`);
         buttonsManager.createAddColumnButton(boardId)
         if (boardData === 'error') {
             return;
@@ -46,44 +46,34 @@ export let columnsManager = {
         const columnName = boardData[0]['title']
         this.loadColumnContent(boardId, columnId, columnName, mode.insertBeforeLast)
     },
-    changeColumnName: async function (newName, oldName, parent, target) {
+    changeColumnName: async function (newName, oldName, parent, targetForm) {
         const boardId = parent.dataset.boardId;
         const columnId = parent.dataset.columnId;
         const payload = {'column_id': columnId, 'board_id': boardId, 'title': newName}
         const boardData = await dataHandler.changeColumnName(payload);
-        const btnBuilder = htmlFactory(htmlTemplates.button)
 
-        parent.removeChild(target);
-        const colTittleGroup = btnBuilder('btn-antracite', 'btn-size-medium', [boardId, columnId])
+        parent.removeChild(targetForm);
+        buttonsManager.createColumnNameButtonGroup(boardId, columnId);
 
         if (boardData === 'error') {
-            colTittleGroup.children[0].innerHTML = oldName;
-            parent.insertBefore(colTittleGroup, parent.children[0]);
-            // addColumnSettingsButtonEventListeners(boardId, columnId)
+            domManager.setInnerHTML(`#board-${boardId}-column-${columnId}-name`, oldName);
 
         } else if (boardData['ok'] === 'ok'){
-            colTittleGroup.children[0].innerHTML = newName;
-            parent.insertBefore(colTittleGroup, parent.children[0]);
-            // addColumnSettingsButtonEventListeners(boardId, columnId)
+            domManager.setInnerHTML(`#board-${boardId}-column-${columnId}-name`, newName);
 
         } else {
-            const columnContainer = parent.parentElement.parentElement
             const cards = boardData['cards']
-            columnContainer.removeChild(parent.parentElement)
-            this.loadColumnContent(boardData['column_id'], boardId, newName, columnContainer,
-                            mode.insertAtPosition, boardData['position'])
-            const cardsContainer = document.querySelector(`#board-${boardId}-column-${boardData['column_id']}-card-container`)
+            domManager.removeElement(`#board-${boardId}-column-${columnId}-container`)
+            this.loadColumnContent(boardId, boardData['column_id'], newName, mode.insertAtPosition, boardData['position'])
             for (let card of cards) {
-                cardsManager.loadCardTemplate(card['id'], boardData['column_id'], boardId, card['title'], cardsContainer, mode.appendLast)
+                cardsManager.loadCardContent(boardId, boardData['column_id'], card['id'], card['title'], mode.appendLast)
             }
         }
     },
-    deleteColumn: async function (parent) {
-        const boardId = parent.dataset.boardId;
-        const columnId = parent.dataset.columnId;
+    deleteColumn: async function (boardId, columnId) {
         const payload = {'column_id': columnId, 'board_id': boardId}
+        console.log(payload)
         await dataHandler.deleteColumn(payload);
-
-        parent.remove();
+        domManager.removeElement(`#board-${boardId}-column-${columnId}-container`)
     }
 }

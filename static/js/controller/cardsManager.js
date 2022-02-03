@@ -15,8 +15,8 @@ export let cardsManager = {
             domManager.insertBeforeLast(`#board-${boardId}-column-${columnId}-card-container`, content)
         }
     },
-    loadCardContent: function (boardId, columnId, cardId, cardName, selectedMode) {
-        this.loadCardTemplate(boardId, columnId, cardId, selectedMode);
+    loadCardContent: function (boardId, columnId, cardId, cardName, selectedMode, position) {
+        this.loadCardTemplate(boardId, columnId, cardId, selectedMode, position);
         buttonsManager.createCardNameButtonGroup(boardId, columnId, cardId)
         domManager.setInnerHTML(`#board-${boardId}-column-${columnId}-card-${cardId}-name`, cardName);
     },
@@ -24,24 +24,25 @@ export let cardsManager = {
         for (let i = 0; i < 2; i++) {
             cardsManager.loadCardTemplate(boardId, columnId, i, mode.appendLast)
             buttonsManager.createCardNameButtonGroup(boardId, columnId, i, true)
+            domManager.disableButton(`#settings-board-${boardId}-column-${columnId}-card-${i}`)
         }
     },
-    createNewCard: async function (name, formContainer, cardContainer) {
-        const boardId = cardContainer.parentElement.dataset.boardId
-        const columnId = cardContainer.parentElement.dataset.columnId
+    createNewCard: async function (name, formElement, cardContainer) {
+        const boardId = cardContainer.dataset.boardId
+        const columnId = cardContainer.dataset.columnId
         const payload = {'title': name, 'board_id': boardId, 'column_id': columnId}
         const boardData = await dataHandler.createNewCard(payload);
-        cardContainer.parentElement.removeChild(formContainer);
+        domManager.removeElement(`#${formElement.id}`)
         buttonsManager.createAddCardButton(boardId, columnId)
         if (boardData !== 'error') {
-            this.loadCardContent(boardData.id, columnId, boardId, boardData.title, cardContainer, mode.appendLast)
+            this.loadCardContent(boardId, columnId, boardData.id, boardData.title, mode.appendLast)
         }
     },
     changeCardName: async function (name, formContainer, cardContainer) {
-
+        // TODO need implementation
     },
     deleteCard: function (name, formContainer, cardContainer) {
-
+        // TODO need implementation
     }
 };
 

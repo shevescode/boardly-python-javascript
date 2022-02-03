@@ -2,7 +2,7 @@ import {dataHandler} from "../data/dataHandler.js";
 import {htmlFactory, htmlTemplates, buttonTypes} from "../view/htmlFactory.js";
 import {domManager} from "../view/domManager.js";
 import {cardsManager} from "./cardsManager.js";
-import {loadBoardDataToDOM} from "./boardsManager.js";
+import {boardsManager, loadBoardDataToDOM} from "./boardsManager.js";
 import {formManager, replaceBoardNameWithForm, replaceColumnNameWithForm, replaceCardNameWithForm} from "./formManager.js";
 import {columnsManager} from "./columnsManager.js";
 
@@ -82,7 +82,7 @@ function addBoardNameBtnGroupEventListeners(boardId){
         renameElement
     );
     domManager.addEventListener(
-        `#delete-board-${boardId}-name`,
+        `#delete-board-${boardId}-container`,
         "click",
         deleteElement
     );
@@ -95,7 +95,7 @@ function addColumnNameBtnGroupEventListeners(boardId, columnId){
         renameElement
     );
     domManager.addEventListener(
-        `#delete-board-${boardId}-column-${columnId}-name`,
+        `#delete-board-${boardId}-column-${columnId}-container`,
         "click",
         deleteElement
     );
@@ -108,7 +108,7 @@ function addCardNameBtnGroupEventListeners(boardId, columnId, cardId){
         renameElement
     );
     domManager.addEventListener(
-        `#delete-board-${boardId}-column-${columnId}-card-${cardId}-name`,
+        `#delete-board-${boardId}-column-${columnId}-card-${cardId}-container`,
         "click",
         deleteElement
     );
@@ -138,9 +138,17 @@ function renameElement(clickEvent) {
 }
 
 function deleteElement(clickEvent) {
-    const currentTarget = clickEvent.currentTarget
-    const targetId = currentTarget.dataset.targetId
-    const selectedElement = document.querySelector(`#${targetId}`)
-    const parentElement = selectedElement.parentElement.parentElement
-    columnsManager.deleteColumn(parentElement)
+    const targetId = clickEvent.currentTarget.dataset.targetId;
+    const targetElement = document.querySelector(`#${targetId}`);
+    const elementType = targetElement.dataset.elementType;
+    const boardId = targetElement.dataset.boardId
+    const columnId = targetElement.dataset.columnId
+    const cardId = targetElement.dataset.cardId
+    if (elementType === "board-container") {
+        boardsManager.deleteBoard(boardId);
+    } else if (elementType === "column-container") {
+        columnsManager.deleteColumn(boardId, columnId);
+    } else if (elementType === "card-container") {
+        cardsManager.deleteCard(boardId, columnId, cardId);
+    }
 }

@@ -71,6 +71,14 @@ export let domManager = {
             console.error("could not find such html element: " + elementIdentifier);
         }
     },
+    removeElement(elementIdentifier){
+        const element = document.querySelector(elementIdentifier);
+        if (element) {
+            element.remove()
+        } else {
+            console.error("could not find such html element: " + elementIdentifier);
+        }
+    },
     setInnerHTML(elementIdentifier, content){
         const element = document.querySelector(elementIdentifier);
         if (element) {

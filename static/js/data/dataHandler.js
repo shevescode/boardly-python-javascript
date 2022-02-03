@@ -69,18 +69,18 @@ async function apiPost(url, payload) {
     }
 }
 
-// async function apiDelete(url, payload) {
-//     let response = await fetch(url, {
-//         method: "DELETE",
-//         body: JSON.stringify(payload),
-//         headers: {'Content-Type': 'application/json'}
-//     });
-//     if (response.status === 200) {
-//         return response.json();
-//     } else if (response.status === 499) {
-//         return 'error'
-//     }
-// }
+async function apiDelete(url, payload) {
+    let response = await fetch(url, {
+        method: "DELETE",
+        body: JSON.stringify(payload),
+        headers: {'Content-Type': 'application/json'}
+    });
+    if (response.status === 200) {
+        return response.json();
+    } else if (response.status === 499) {
+        return 'error'
+    }
+}
 
 async function apiPut(url, payload) {
     let response = await fetch(url, {

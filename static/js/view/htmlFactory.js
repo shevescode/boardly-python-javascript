@@ -48,6 +48,7 @@ function boardBuilder(boardId) {
     boardContainer.classList.add('bg-secondary', 'border-secondary', 'board-container', 'my-5')
     boardContainer.appendChild(boardCollapsibleContainer);
     boardContainer.setAttribute('data-board-id', boardId);
+    boardContainer.setAttribute('data-element-type', 'board-container')
 
     boardCollapsibleContainer.id = `board-${boardId}-collapsible-container`;
     boardCollapsibleContainer.classList.add("collapse", "board-collapsible-container");
@@ -70,6 +71,7 @@ function columnBuilder(boardId, columnId) {
     columnContainer.classList.add('card', 'card-body', 'column-container', 'text-light', 'bg-dark',
                                   'bg-antracite', 'mx-1', 'my-1', 'px-2', 'py-2', 'shadow', 'rounded');
     columnContainer.setAttribute('aria-hidden', 'false');
+    columnContainer.setAttribute('data-element-type', 'column-container')
     columnContainer.setAttribute('data-board-id', boardId);
     columnContainer.setAttribute('data-column-id', columnId);
     columnContainer.appendChild(cardsContainer);
@@ -92,6 +94,7 @@ function cardBuilder(boardId, columnId, cardId) {
     cardContainer.id = `board-${boardId}-column-${columnId}-card-${cardId}-container`
     cardContainer.classList.add('card', 'card-body', 'card-container', 'text-dark', 'bg-light', 'mx-2', 'my-3', 'px-2', 'py-2', 'shadow', 'rounded');
     cardContainer.setAttribute('aria-hidden', 'false');
+    cardContainer.setAttribute('data-element-type', 'card-container')
     cardContainer.setAttribute('data-board-id', boardId);
     cardContainer.setAttribute('data-column-id', columnId)
     cardContainer.setAttribute('data-card-id', cardId)
@@ -148,34 +151,48 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             const listActionDelete = document.createElement('a');
             const icon = document.createElement('i');
 
+            let parentIdPrefix = ""
+            if (parentId.length >= 1) {
+                parentIdPrefix += `board-${parentId[0]}`;
+                if (parentId.length >= 2) {
+                    parentIdPrefix += `-column-${parentId[1]}`
+                    if (parentId.length === 3) {
+                        parentIdPrefix += `-card-${parentId[2]}`
+                    }
+                }
+            }
+
+
             dropDownWrapper.classList.add('d-flex', 'dropdown', 'align-content-center');
             dropDownWrapper.appendChild(button);
             dropDownWrapper.appendChild(dropDownMenu);
 
             dropDownMenu.classList.add('dropdown-menu', 'bg-warning');
-            dropDownMenu.setAttribute('aria-labelledby', `settings-${parentId}`);
+            dropDownMenu.setAttribute('aria-labelledby', `settings-${parentIdPrefix}-container`);
             dropDownMenu.appendChild(menuListItem1);
             dropDownMenu.appendChild(menuListItem2);
 
             menuListItem1.appendChild(listActionRename);
             menuListItem2.appendChild(listActionDelete);
 
-            listActionRename.id = `change-${parentId}`
+            listActionRename.id = `change-${parentIdPrefix}-name`
             listActionRename.classList.add("dropdown-item");
-            listActionRename.setAttribute('data-target-id', parentId)
+            listActionRename.setAttribute('data-target-id', `${parentIdPrefix}-name`)
+            listActionRename.onclick = function () {return false}
             listActionRename.href = "#";
             listActionRename.innerHTML = "Rename";
 
-            listActionDelete.id = `delete-${parentId}`
+            listActionDelete.id = `delete-${parentIdPrefix}-container`
             listActionDelete.classList.add("dropdown-item");
-            listActionDelete.setAttribute('data-target-id', parentId)
+            listActionDelete.setAttribute('data-target-id', `${parentIdPrefix}-container`);
+            listActionDelete.setAttribute("onclick" ,"return false");
+            listActionRename.onclick = function () {return false}
             listActionDelete.href = "#";
             listActionDelete.innerHTML = "Delete";
 
-            button.id = `settings-${parentId}`
+            button.id = `settings-${parentIdPrefix}`
             button.classList.add('dropdown-toggle', 'caret-off')
             button.setAttribute('type', 'button');
-            button.setAttribute('data-target-id', parentId);
             button.setAttribute('data-bs-toggle','dropdown')
             button.setAttribute('aria-expanded', 'false')
             button.appendChild(icon);
@@ -202,12 +219,12 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             const showBoardButton = buttonBuilder(buttonTypes.showBoardBtn,
                                                 'btn-secondary',
                                                 'board-name',
-                                                parentId,
+                                                [parentId],
                                                 name)
             const settingsButton = buttonBuilder(buttonTypes.settingsBtn,
                                                 'btn-secondary',
                                                 'btn-size-medium',
-                                                `board-${parentId}-name`)
+                                                [parentId])
 
             boardNameGroup.classList.add("btn-group", 'd-flex', 'bg-secondary');
             boardNameGroup.setAttribute('data-board-id', parentId);
@@ -222,7 +239,7 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             const colSettingsButton = buttonBuilder(buttonTypes.settingsBtn,
                                     'btn-antracite',
                                     'btn-size-medium',
-                                    `board-${parentId[0]}-column-${parentId[1]}-name`)
+                                    [parentId[0], parentId[1]])
 
             colNameGroup.classList.add("btn-group", 'd-flex');
             colNameGroup.setAttribute('data-board-id', parentId[0]);
@@ -245,7 +262,7 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             const cardSettingsButton = buttonBuilder(buttonTypes.settingsBtn,
                                     'btn-light',
                                     'btn-size-small',
-                                    `board-${parentId[0]}-column-${parentId[1]}-card-${parentId[2]}-name`)
+                                    [parentId[0], parentId[1], parentId[2]])
 
             cardNameGroup.classList.add("btn-group", 'd-flex');
             cardNameGroup.setAttribute('data-board-id', parentId[0]);

@@ -65,7 +65,7 @@ export let boardsManager = {
         }
     },
     deleteBoard: function (){
-
+        // TODO need implementation
     }
 };
 

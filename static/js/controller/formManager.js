@@ -42,22 +42,17 @@ export let formManager = {
         );
     },
     createChangeColumnNameForm: function (crntName, nameClass, parent) {
-        const boardId = parent.dataset.boardId;
-        const columnId = parent.dataset.columnId;
         const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
         const content = rowFormBuilder(crntName, 'btn-warning', nameClass, parent);
-        domManager.insertFirstChild(`#board-${boardId}-column-${columnId}-body`, content);
+        domManager.insertFirstChild(`#${parent.id}`, content);
         domManager.addEventListener(`#change-${nameClass}-form-${parent.id}`,
                                     "submit", changeColumnName
         );
     },
     createChangeCardNameForm: function (crntName, nameClass, parent) {
-        const boardId = parent.dataset.boardId;
-        const columnId = parent.dataset.columnId;
-        const cardId = parent.dataset.cardId;
         const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
         const content = rowFormBuilder(crntName, 'btn-warning', nameClass, parent);
-        domManager.insertFirstChild(`#board-${boardId}-column-${columnId}-body`, content); //TODO need to check selector
+        domManager.insertFirstChild(`#${parent.id}`, content);
         domManager.addEventListener(`#change-${nameClass}-form-${parent.id}`,
                                     "submit", changeColumnName
         );
@@ -103,10 +98,9 @@ function setColumnName(event){
 
 function setCardName(event){
     const target = event.currentTarget
-    const parent = target.parentElement
-    const container = parent.parentElement.children[1]
+    const container = target.parentElement.parentElement
     const newName = target.children[0].children[0].value
-    cardsManager.createNewCard(newName, parent, container)
+    cardsManager.createNewCard(newName, target, container)
 }
 
 function changeBoardName(event){
@@ -126,5 +120,5 @@ function changeColumnName(event){
 }
 
 function changeCardName(event){
-
+    // TODO need implementation
 }
