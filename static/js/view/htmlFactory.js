@@ -4,7 +4,8 @@ export const htmlTemplates = {
     card: 2,
     button: 3,
     rowForm: 4,
-    placeholder: 5
+    placeholder: 5,
+    dropzone: 6
 }
 
 export const buttonTypes = {
@@ -17,6 +18,11 @@ export const buttonTypes = {
     boardNameBtnGroup: "Board Name Group",
     columnNameBtnGroup: "Column Name Group",
     cardNameBtnGroup: "Card Name Group"
+}
+
+export const zoneTypes = {
+    cardDropZone: "Card Drop Zone",
+    columnDropZone: "Column Drop Zone"
 }
 
 export function htmlFactory(template) {
@@ -33,6 +39,8 @@ export function htmlFactory(template) {
             return rowFormBuilder
         case htmlTemplates.placeholder:
             return placeholderBuilder
+        case htmlTemplates.dropzone:
+            return dropZoneBuilder
         default:
             console.error("Undefined template: " + template)
             return () => { return "" }
@@ -94,10 +102,10 @@ function cardBuilder(boardId, columnId, cardId) {
     cardContainer.id = `board-${boardId}-column-${columnId}-card-${cardId}-container`
     cardContainer.classList.add('card', 'card-body', 'card-container', 'text-dark', 'bg-light', 'mx-2', 'my-3', 'px-2', 'py-2', 'shadow', 'rounded');
     cardContainer.setAttribute('aria-hidden', 'false');
-    cardContainer.setAttribute('data-element-type', 'card-container')
+    cardContainer.setAttribute('data-element-type', 'card-container');
     cardContainer.setAttribute('data-board-id', boardId);
-    cardContainer.setAttribute('data-column-id', columnId)
-    cardContainer.setAttribute('data-card-id', cardId)
+    cardContainer.setAttribute('data-column-id', columnId);
+    cardContainer.setAttribute('data-card-id', cardId);
     return cardContainer;
 }
 
@@ -335,4 +343,16 @@ function placeholderBuilder(){
     namePlaceholder2.classList.add('placeholder', 'col-3');
 
     return nameWrapper
+}
+
+function dropZoneBuilder(type) {
+    switch (type) {
+        case zoneTypes.cardDropZone:
+            const cardDropZone = document.createElement('div');
+            cardDropZone.id = `card-drop-zone`;
+            cardDropZone.classList.add('bg-antracite', 'card-drop-zone', 'mx-2', 'my-3');
+            return cardDropZone;
+        case zoneTypes.columnDropZone:
+            return null;
+    }
 }

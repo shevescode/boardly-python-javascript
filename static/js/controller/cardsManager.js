@@ -2,6 +2,7 @@ import { dataHandler } from "../data/dataHandler.js";
 import { htmlFactory, htmlTemplates} from "../view/htmlFactory.js";
 import {domManager, mode} from "../view/domManager.js";
 import {buttonsManager} from "./buttonsManager.js";
+import {dragDropManager} from "./dragDropManager.js";
 
 export let cardsManager = {
     loadCardTemplate: function (boardId, columnId, cardId, selectedMode, position) {
@@ -17,7 +18,8 @@ export let cardsManager = {
     },
     loadCardContent: function (boardId, columnId, cardId, cardName, selectedMode, position) {
         this.loadCardTemplate(boardId, columnId, cardId, selectedMode, position);
-        buttonsManager.createCardNameButtonGroup(boardId, columnId, cardId)
+        buttonsManager.createCardNameButtonGroup(boardId, columnId, cardId);
+        dragDropManager.setDraggableCard(boardId, columnId, cardId);
         domManager.setInnerHTML(`#board-${boardId}-column-${columnId}-card-${cardId}-name`, cardName);
     },
     createPlaceholderCards: function (boardId, columnId){

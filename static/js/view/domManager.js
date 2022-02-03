@@ -95,6 +95,30 @@ export let domManager = {
             console.error("could not find such html element: " + elementIdentifier);
         }
     },
+    setDraggable(elementIdentifier) {
+        const parent = document.querySelector(elementIdentifier);
+        if (parent) {
+            parent.setAttribute('draggable', "true");
+        } else {
+            console.error("could not find such html element: " + elementIdentifier);
+        }
+    },
+    setOnDragStartHandler(elementIdentifier, onDragStartHandler) {
+        const parent = document.querySelector(elementIdentifier);
+        if (parent) {
+            parent.ondragstart = onDragStartHandler;
+        } else {
+            console.error("could not find such html element: " + elementIdentifier);
+        }
+    },
+    setOnDragEndHandler(elementIdentifier, onDragEndHandler) {
+        const parent = document.querySelector(elementIdentifier);
+        if (parent) {
+            parent.ondragend = onDragEndHandler;
+        } else {
+            console.error("could not find such html element: " + elementIdentifier);
+        }
+    },
 };
 
 export const mode = {
