@@ -60,7 +60,7 @@ def create_new_board():
     title = request.json['title']
 
     if title == "":
-        return Response(status=499)
+        return Response(status=422)
     else:
         return jsonify(queries.create_new_board(title))
 
@@ -74,7 +74,7 @@ def create_new_column():
     board_id = request.json['board_id']
 
     if title == "":
-        return Response(status=499)
+        return Response(status=422)
     else:
         return jsonify(queries.create_new_column(title, board_id))
 
@@ -89,7 +89,7 @@ def create_new_card():
     column_id = request.json['column_id']
 
     if title == "":
-        return Response(status=499)
+        return Response(status=422)
     else:
         return jsonify(queries.create_new_card(title, board_id, column_id))
 
@@ -103,7 +103,7 @@ def update_board_title():
     board_id = request.json['id']
 
     if title == "":
-        return Response(status=499)
+        return Response(status=422)
     else:
         queries.update_board_title(title, board_id)
         return Response(response=b'{"ok": "ok"}', status=200)
@@ -119,7 +119,7 @@ def update_column_title():
     title = request.json['title']
 
     if title == "":
-        return Response(status=499)
+        return Response(status=422)
     else:
         data = queries.update_column_title(title, board_id, column_id)
         return data
