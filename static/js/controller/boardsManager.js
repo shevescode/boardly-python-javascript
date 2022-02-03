@@ -59,9 +59,7 @@ export let boardsManager = {
     changeBoardName: async function (newName, oldName, parent, formElement) {
         const payload = {'id': parent.dataset.boardId, 'title': newName}
         const boardData = await dataHandler.changeBoardName(payload);
-
         domManager.removeElement(`#${formElement.id}`);
-
         if (boardData === 'error') {
             buttonsManager.createBoardNameButtonGroup(parent.dataset.boardId, oldName)
         } else {
