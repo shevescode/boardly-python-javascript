@@ -40,6 +40,10 @@ export let dataHandler = {
         const response = await apiPut(`/api/column/updateTitle`, payload)
         return response
     },
+    deleteBoard: async function (payload) {
+        const response = await apiDelete(`/api/board/delete`, payload)
+        return response
+    },
     deleteColumn: async function (payload) {
         const response = await apiPut(`/api/column/deleteColumn`, payload)
         return response
@@ -77,8 +81,8 @@ async function apiDelete(url, payload) {
     });
     if (response.status === 200) {
         return response.json();
-    } else if (response.status === 499) {
-        return 'error'
+    } else if (response.status === 498) {
+        return 'error: board not found in database'
     }
 }
 

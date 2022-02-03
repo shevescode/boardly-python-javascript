@@ -125,6 +125,17 @@ def update_column_title():
         return data
 
 
+@app.route("/api/board/delete", methods=["DELETE"])
+def delete_board():
+    """
+    Removes column from board
+    """
+    board_id = request.json['board_id']
+
+    queries.delete_board(board_id)
+    return Response(response=b'{"ok": "ok"}', status=200)
+
+
 @app.route("/api/column/deleteColumn", methods=["PUT"])
 def delete_column():
     """

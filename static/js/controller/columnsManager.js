@@ -37,7 +37,7 @@ export let columnsManager = {
         const boardId = columnContainer.parentElement.dataset.boardId
         const payload = {'title': name, 'board_id': boardId}
         const boardData = await dataHandler.createNewColumn(payload);
-        domManager.removeElement(`#${formContainer}`);
+        domManager.removeElement(`#${formContainer.id}`);
         buttonsManager.createAddColumnButton(boardId)
         if (boardData === 'error') {
             return;

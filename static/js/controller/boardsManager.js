@@ -64,8 +64,10 @@ export let boardsManager = {
             buttonsManager.createBoardNameButtonGroup(parent.dataset.boardId, newName)
         }
     },
-    deleteBoard: function (){
-        // TODO need implementation
+    deleteBoard: async function (boardId) {
+        const payload = {'board_id': boardId}
+        await dataHandler.deleteBoard(payload);
+        domManager.removeElement(`#board-${boardId}-container`)
     }
 };
 
