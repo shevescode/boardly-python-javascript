@@ -34,7 +34,7 @@ export let boardsManager = {
                 }
             }
         }
-        for (const card of cards){
+        for (const card of cards) {
             const columnId = card['status_id']
             const cardId = card['id']
             const cardName = card['title']
@@ -42,9 +42,11 @@ export let boardsManager = {
         }
         buttonsManager.createAddColumnButton(boardId);
     },
-    createNewBoard: async function (name) {
+    createNewBoard: async function (name, target) {
         const payload = {'title': name}
         const boardData = await dataHandler.createNewBoard(payload);
+        domManager.removeElement(`#${target.id}`);
+        buttonsManager.createAddBoardButton()
         if (boardData === 'error') {
             return;
         }
@@ -57,7 +59,9 @@ export let boardsManager = {
     changeBoardName: async function (newName, oldName, parent, formElement) {
         const payload = {'id': parent.dataset.boardId, 'title': newName}
         const boardData = await dataHandler.changeBoardName(payload);
-        formElement.remove()
+
+        domManager.removeElement(`#${formElement.id}`);
+
         if (boardData === 'error') {
             buttonsManager.createBoardNameButtonGroup(parent.dataset.boardId, oldName)
         } else {

@@ -38,11 +38,26 @@ export let cardsManager = {
             this.loadCardContent(boardId, columnId, boardData.id, boardData.title, mode.appendLast)
         }
     },
-    changeCardName: async function (name, formContainer, cardContainer) {
-        // TODO need implementation
+    changeCardName: async function (newName, oldName, parent, targetForm) {
+        const boardId = parent.dataset.boardId;
+        const columnId = parent.dataset.columnId;
+        const cardId = parent.dataset.cardId;
+        const payload = {'title': newName, 'card_id': cardId}
+        const boardData = await dataHandler.changeCardName(payload);
+
+        domManager.removeElement(`#${targetForm.id}`);
+        buttonsManager.createCardNameButtonGroup(boardId, columnId, cardId)
+
+        if (boardData === 'error') {
+            domManager.setInnerHTML(`#board-${boardId}-column-${columnId}-card-${cardId}-name`, oldName);
+        } else if (boardData['ok'] === 'ok'){
+            domManager.setInnerHTML(`#board-${boardId}-column-${columnId}-card-${cardId}-name`, newName);
+        }
     },
-    deleteCard: function (name, formContainer, cardContainer) {
-        // TODO need implementation
+    deleteCard: async function (cardId, boardId, columnId) {
+        const payload = {'card_id': cardId}
+        await dataHandler.deleteCard(payload);
+        domManager.removeElement(`#board-${boardId}-column-${columnId}-card-${cardId}-container`)
     }
 };
 

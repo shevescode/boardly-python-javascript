@@ -100,6 +100,18 @@ def update_board_title(title, board_id):
         , {"title": title, "id": board_id})
 
 
+def update_card_title(title, card_id):
+    data_manager.execute_update(
+        """
+        UPDATE cards
+        SET title = (%(title)s)
+        WHERE id=%(card_id)s
+        """
+        , {"title": title, "card_id": card_id})
+
+    return {"ok": "ok"}
+
+
 def update_column_title(title, board_id, column_id):
     if int(column_id) in _DEFAULT_COLUMNS_ARRAY:
         new_id = data_manager.execute_insert(
@@ -206,7 +218,7 @@ def delete_board(board_id):
         , {"board_id": board_id})
 
     column_ids = list(set(column_ids) - set(_DEFAULT_COLUMNS_ARRAY))
-    data_manager.execute_update(
+    data_manager.execute_delete(
         """
         DELETE FROM statuses
         WHERE id = ANY(%(column_ids)s::int[])
@@ -226,10 +238,19 @@ def delete_column(board_id, column_id):
         , {"board_id": board_id, "column_id": column_id})
     if not (int(column_id) in _DEFAULT_COLUMNS_ARRAY):
 
-        data_manager.execute_update(
+        data_manager.execute_delete(
             """
             DELETE FROM statuses
             WHERE id=%(column_id)s;
             """
             , {"board_id": board_id, "column_id": column_id})
+
+
+def delete_card(card_id):
+    data_manager.execute_delete(
+            """
+            DELETE FROM cards
+            WHERE id=%(card_id)s;
+            """
+            , {"card_id": card_id})
 

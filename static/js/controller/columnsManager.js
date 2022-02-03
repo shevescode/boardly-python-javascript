@@ -52,7 +52,7 @@ export let columnsManager = {
         const payload = {'column_id': columnId, 'board_id': boardId, 'title': newName}
         const boardData = await dataHandler.changeColumnName(payload);
 
-        parent.removeChild(targetForm);
+        domManager.removeElement(`#${targetForm.id}`);
         buttonsManager.createColumnNameButtonGroup(boardId, columnId);
 
         if (boardData === 'error') {
@@ -72,7 +72,6 @@ export let columnsManager = {
     },
     deleteColumn: async function (boardId, columnId) {
         const payload = {'column_id': columnId, 'board_id': boardId}
-        console.log(payload)
         await dataHandler.deleteColumn(payload);
         domManager.removeElement(`#board-${boardId}-column-${columnId}-container`)
     }

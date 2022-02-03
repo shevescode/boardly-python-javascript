@@ -40,12 +40,20 @@ export let dataHandler = {
         const response = await apiPut(`/api/column/updateTitle`, payload)
         return response
     },
+    changeCardName: async function (payload) {
+        const response = await apiPut(`/api/card/updateTitle`, payload)
+        return response
+    },
     deleteBoard: async function (payload) {
         const response = await apiDelete(`/api/board/delete`, payload)
         return response
     },
     deleteColumn: async function (payload) {
         const response = await apiPut(`/api/column/deleteColumn`, payload)
+        return response
+    },
+    deleteCard: async function (payload) {
+        const response = await apiDelete(`/api/card/deleteCard`, payload)
         return response
     }
 };

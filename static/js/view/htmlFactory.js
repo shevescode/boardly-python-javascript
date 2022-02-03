@@ -225,7 +225,7 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
                                                 'btn-secondary',
                                                 'btn-size-medium',
                                                 [parentId])
-
+            boardNameGroup.id = `board-${parentId}-btn-group`;
             boardNameGroup.classList.add("btn-group", 'd-flex', 'bg-secondary');
             boardNameGroup.setAttribute('data-board-id', parentId);
             boardNameGroup.setAttribute( 'role',"group")
@@ -241,6 +241,7 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
                                     'btn-size-medium',
                                     [parentId[0], parentId[1]])
 
+            colNameGroup.id = `board-${parentId[0]}-column-${parentId[1]}-btn-group`;
             colNameGroup.classList.add("btn-group", 'd-flex');
             colNameGroup.setAttribute('data-board-id', parentId[0]);
             colNameGroup.setAttribute('data-status-column-id', parentId[1])
@@ -264,6 +265,7 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
                                     'btn-size-small',
                                     [parentId[0], parentId[1], parentId[2]])
 
+            cardNameGroup.id = `board-${parentId[0]}-column-${parentId[1]}-card-${parentId[2]}-btn-group`;
             cardNameGroup.classList.add("btn-group", 'd-flex');
             cardNameGroup.setAttribute('data-board-id', parentId[0]);
             cardNameGroup.setAttribute('data-column-id', parentId[1]);
