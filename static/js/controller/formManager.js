@@ -44,21 +44,21 @@ export let formManager = {
 export function replaceBoardNameWithForm(clickEvent) {
     const target = clickEvent.currentTarget;
     const parent = target.parentElement;
-    domManager.removeElement(`#${parent.id}`);
+    domManager.removeElement(`#${target.id}`);
     formManager.createSetBoardNameForm(target.dataset.elementType, parent);
 }
 
 export function replaceColumnNameWithForm(clickEvent) {
     const target = clickEvent.currentTarget;
     const parent = target.parentElement;
-    domManager.removeElement(`#${parent.id}`);
+    domManager.removeElement(`#${target.id}`);
     formManager.createSetColumnNameForm(target.dataset.elementType, parent);
 }
 
 export function replaceCardNameWithForm(clickEvent) {
     const target = clickEvent.currentTarget;
     const parent = target.parentElement;
-    domManager.removeElement(`#${parent.id}`);
+    domManager.removeElement(`#${target.id}`);
     formManager.createSetCardNameForm(target.dataset.elementType, parent);
 }
 
