@@ -72,7 +72,6 @@ export let columnsManager = {
     },
     deleteColumn: async function (boardId, columnId) {
         const payload = {'column_id': columnId, 'board_id': boardId}
-        console.log(payload)
         await dataHandler.deleteColumn(payload);
         domManager.removeElement(`#board-${boardId}-column-${columnId}-container`)
     }

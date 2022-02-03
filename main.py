@@ -125,6 +125,21 @@ def update_column_title():
         return data
 
 
+@app.route("/api/card/updateTitle", methods=["PUT"])
+def update_card_title():
+    """
+    Updates card title
+    """
+    card_id = request.json['card_id']
+    title = request.json['title']
+
+    if title == "":
+        return Response(status=422)
+    else:
+        data = queries.update_card_title(title, card_id)
+        return data
+
+
 @app.route("/api/board/delete", methods=["DELETE"])
 def delete_board():
     """

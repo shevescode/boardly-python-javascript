@@ -100,6 +100,18 @@ def update_board_title(title, board_id):
         , {"title": title, "id": board_id})
 
 
+def update_card_title(title, card_id):
+    data_manager.execute_update(
+        """
+        UPDATE cards
+        SET title = (%(title)s)
+        WHERE id=%(card_id)s
+        """
+        , {"title": title, "card_id": card_id})
+
+    return {"ok": "ok"}
+
+
 def update_column_title(title, board_id, column_id):
     if int(column_id) in _DEFAULT_COLUMNS_ARRAY:
         new_id = data_manager.execute_insert(

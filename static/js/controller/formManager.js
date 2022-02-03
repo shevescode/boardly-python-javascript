@@ -54,9 +54,10 @@ export let formManager = {
         const content = rowFormBuilder(crntName, 'btn-warning', nameClass, parent);
         domManager.insertFirstChild(`#${parent.id}`, content);
         domManager.addEventListener(`#change-${nameClass}-form-${parent.id}`,
-                                    "submit", changeColumnName
+                                    "submit", changeCardName
         );
     },
+
 };
 
 export function replaceBoardNameWithForm(clickEvent) {
@@ -120,5 +121,9 @@ function changeColumnName(event){
 }
 
 function changeCardName(event){
-    // TODO need implementation
+    const target = event.currentTarget;
+    const parent = target.parentElement;
+    const oldName = document.querySelector(`#new-name-${parent.id}`).placeholder;
+    const newName = target.children[0].children[0].value;
+    cardsManager.changeCardName(newName, oldName, parent, target)
 }
