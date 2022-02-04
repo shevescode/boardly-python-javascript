@@ -54,8 +54,8 @@ function boardBuilder(boardId) {
     const boardCollapsibleContainer = document.createElement('div');
     const boardColumnContainer = document.createElement('div');
 
-    boardContainer.id = `board-${boardId}-container`
-    boardContainer.classList.add('bg-secondary', 'border-secondary', 'board-container', 'my-5')
+    boardContainer.id = `board-${boardId}-container`;
+    boardContainer.classList.add('bg-secondary', 'border-secondary', 'board-container', 'my-5');
     boardContainer.appendChild(boardCollapsibleContainer);
     boardContainer.setAttribute('data-board-id', boardId);
     boardContainer.setAttribute('data-element-type', 'board-container')
@@ -92,9 +92,9 @@ function columnBuilder(boardId, columnId) {
     cardsContainer.setAttribute('data-board-id', boardId);
     cardsContainer.setAttribute('data-column-id', columnId);
 
-    addCardBtnWrapper.id = `board-${boardId}-column-${columnId}-add-new-card-button-wrapper`
+    addCardBtnWrapper.id = `board-${boardId}-column-${columnId}-add-new-card-button-wrapper`;
     addCardBtnWrapper.classList.add('card', 'text-light', 'bg-dark', 'bg-antracite', 'mx-2', 'my-1', 'add-card-btn');
-    addCardBtnWrapper.setAttribute('data-create-content', "true")
+    addCardBtnWrapper.setAttribute('data-create-content', "true");
 
     return columnContainer;
 }
@@ -120,7 +120,7 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             button.id = 'add-new-board-button';
             button.innerText = buttonTypes.newBoardBtn;
             button.classList.add('col-12', 'board-name');
-            button.setAttribute('data-element-type', 'board-name')
+            button.setAttribute('data-element-type', 'board-name');
             button.setAttribute('type', 'button');
             return button;
 
@@ -134,7 +134,7 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             button.id = `board-${parentId}-add-new-column-button`;
             button.innerText = buttonTypes.newColumnBtn;
             button.classList.add('column-name');
-            button.setAttribute('data-element-type', 'column-name')
+            button.setAttribute('data-element-type', 'column-name');
             button.setAttribute('type', 'button');
             return addColBtnWrapper;
 
@@ -142,7 +142,7 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             button.id = `board-${parentId[0]}-column-${parentId[1]}-add-new-card-button`;
             button.innerText = buttonTypes.newCardBtn;
             button.classList.add('card-name');
-            button.setAttribute('data-element-type', 'card-name')
+            button.setAttribute('data-element-type', 'card-name');
             button.setAttribute('type', 'button');
             return button;
 
@@ -161,13 +161,13 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             const listActionDelete = document.createElement('a');
             const icon = document.createElement('i');
 
-            let parentIdPrefix = ""
+            let parentIdPrefix = "";
             if (parentId.length >= 1) {
                 parentIdPrefix += `board-${parentId[0]}`;
                 if (parentId.length >= 2) {
-                    parentIdPrefix += `-column-${parentId[1]}`
+                    parentIdPrefix += `-column-${parentId[1]}`;
                     if (parentId.length === 3) {
-                        parentIdPrefix += `-card-${parentId[2]}`
+                        parentIdPrefix += `-card-${parentId[2]}`;
                     }
                 }
             }
@@ -185,14 +185,14 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             menuListItem1.appendChild(listActionRename);
             menuListItem2.appendChild(listActionDelete);
 
-            listActionRename.id = `change-${parentIdPrefix}-name`
+            listActionRename.id = `change-${parentIdPrefix}-name`;
             listActionRename.classList.add("dropdown-item");
-            listActionRename.setAttribute('data-target-id', `${parentIdPrefix}-name`)
+            listActionRename.setAttribute('data-target-id', `${parentIdPrefix}-name`);
             listActionRename.onclick = function () {return false}
             listActionRename.href = "#";
             listActionRename.innerHTML = "Rename";
 
-            listActionDelete.id = `delete-${parentIdPrefix}-container`
+            listActionDelete.id = `delete-${parentIdPrefix}-container`;
             listActionDelete.classList.add("dropdown-item");
             listActionDelete.setAttribute('data-target-id', `${parentIdPrefix}-container`);
             listActionDelete.setAttribute("onclick" ,"return false");
@@ -200,16 +200,16 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             listActionDelete.href = "#";
             listActionDelete.innerHTML = "Delete";
 
-            button.id = `settings-${parentIdPrefix}`
-            button.classList.add('dropdown-toggle', 'caret-off')
+            button.id = `settings-${parentIdPrefix}`;
+            button.classList.add('dropdown-toggle', 'caret-off');
             button.setAttribute('type', 'button');
-            button.setAttribute('data-bs-toggle','dropdown')
-            button.setAttribute('aria-expanded', 'false')
+            button.setAttribute('data-bs-toggle','dropdown');
+            button.setAttribute('aria-expanded', 'false');
             button.appendChild(icon);
 
             icon.classList.add('bi', 'bi-gear-fill', buttonClass);
 
-            return dropDownWrapper
+            return dropDownWrapper;
 
         case buttonTypes.showBoardBtn:
             button.innerHTML = name;
@@ -221,8 +221,8 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
             button.setAttribute('data-bs-target',`#board-${parentId}-collapsible-container`);
             button.setAttribute('aria-expanded', "false");
             button.setAttribute('aria-controls',`board-${parentId}-collapsible-container`);
-            button.setAttribute('data-element-type', buttonClass)
-            return button
+            button.setAttribute('data-element-type', buttonClass);
+            return button;
 
         case buttonTypes.boardNameBtnGroup:
             const boardNameGroup = document.createElement('div');
@@ -230,71 +230,71 @@ function buttonBuilder(type, buttonStyle, buttonClass, parentId, name) {
                                                 'btn-secondary',
                                                 'board-name',
                                                 [parentId],
-                                                name)
+                                                name);
             const settingsButton = buttonBuilder(buttonTypes.settingsBtn,
                                                 'btn-secondary',
                                                 'btn-size-medium',
-                                                [parentId])
+                                                [parentId]);
             boardNameGroup.id = `board-${parentId}-btn-group`;
             boardNameGroup.classList.add("btn-group", 'd-flex', 'bg-secondary');
             boardNameGroup.setAttribute('data-board-id', parentId);
-            boardNameGroup.setAttribute( 'role',"group")
+            boardNameGroup.setAttribute( 'role',"group");
             boardNameGroup.appendChild(showBoardButton);
             boardNameGroup.appendChild(settingsButton);
             return boardNameGroup;
 
         case buttonTypes.columnNameBtnGroup:
-            const colNameGroup = document.createElement('div')
-            const nameWrapper = document.createElement('div')
+            const colNameGroup = document.createElement('div');
+            const nameWrapper = document.createElement('div');
             const colSettingsButton = buttonBuilder(buttonTypes.settingsBtn,
                                     'btn-antracite',
                                     'btn-size-medium',
-                                    [parentId[0], parentId[1]])
+                                    [parentId[0], parentId[1]]);
 
             colNameGroup.id = `board-${parentId[0]}-column-${parentId[1]}-btn-group`;
             colNameGroup.classList.add("btn-group", 'd-flex');
             colNameGroup.setAttribute('data-board-id', parentId[0]);
-            colNameGroup.setAttribute('data-status-column-id', parentId[1])
-            colNameGroup.setAttribute('role', "group")
+            colNameGroup.setAttribute('data-status-column-id', parentId[1]);
+            colNameGroup.setAttribute('role', "group");
             colNameGroup.appendChild(nameWrapper);
             colNameGroup.appendChild(colSettingsButton);
 
-            nameWrapper.id = `board-${parentId[0]}-column-${parentId[1]}-name`
+            nameWrapper.id = `board-${parentId[0]}-column-${parentId[1]}-name`;
             nameWrapper.classList.add('card-text', 'column-name', 'flex-grow-1', 'hstack');
             nameWrapper.setAttribute('data-board-id', parentId[0]);
-            nameWrapper.setAttribute('data-status-column-id', parentId[1])
-            nameWrapper.setAttribute('data-element-type', 'column-name')
+            nameWrapper.setAttribute('data-status-column-id', parentId[1]);
+            nameWrapper.setAttribute('data-element-type', 'column-name');
 
-            return colNameGroup
+            return colNameGroup;
 
         case buttonTypes.cardNameBtnGroup:
-            const cardNameGroup = document.createElement('div')
-            const cardNameWrapper = document.createElement('div')
+            const cardNameGroup = document.createElement('div');
+            const cardNameWrapper = document.createElement('div');
             const cardSettingsButton = buttonBuilder(buttonTypes.settingsBtn,
                                     'btn-light',
                                     'btn-size-small',
-                                    [parentId[0], parentId[1], parentId[2]])
+                                    [parentId[0], parentId[1], parentId[2]]);
 
             cardNameGroup.id = `board-${parentId[0]}-column-${parentId[1]}-card-${parentId[2]}-btn-group`;
             cardNameGroup.classList.add("btn-group", 'd-flex');
             cardNameGroup.setAttribute('data-board-id', parentId[0]);
             cardNameGroup.setAttribute('data-column-id', parentId[1]);
-            cardNameGroup.setAttribute('data-card-id', parentId[2])
-            cardNameGroup.setAttribute('role', "group")
+            cardNameGroup.setAttribute('data-card-id', parentId[2]);
+            cardNameGroup.setAttribute('role', "group");
             cardNameGroup.appendChild(cardNameWrapper);
             cardNameGroup.appendChild(cardSettingsButton);
 
             cardNameWrapper.id = `board-${parentId[0]}-column-${parentId[1]}-card-${parentId[2]}-name`;
             cardNameWrapper.classList.add('card-text', 'card-name', 'flex-grow-1', 'hstack', 'mb-0');
             cardNameWrapper.setAttribute('data-board-id', parentId[0]);
-            cardNameWrapper.setAttribute('data-column-id', parentId[1])
-            cardNameWrapper.setAttribute('data-card-id', parentId[2])
-            cardNameWrapper.setAttribute('data-element-type', 'card-name')
+            cardNameWrapper.setAttribute('data-column-id', parentId[1]);
+            cardNameWrapper.setAttribute('data-card-id', parentId[2]);
+            cardNameWrapper.setAttribute('data-element-type', 'card-name');
 
             return cardNameGroup
 
         default:
-            console.error("Undefined button: " + type)
+            console.error("Undefined button: " + type);
             return () => { return "" }
     }
 }
@@ -332,19 +332,19 @@ function rowFormBuilder(defaultText, btnStyle, elementClass, parent) {
 }
 
 function placeholderBuilder(){
-    const nameWrapper = document.createElement('div')
-    const namePlaceholder1 = document.createElement('span')
-    const namePlaceholder2 = document.createElement('span')
+    const nameWrapper = document.createElement('div');
+    const namePlaceholder1 = document.createElement('span');
+    const namePlaceholder2 = document.createElement('span');
 
-    nameWrapper.classList.add('placeholder-wave', 'hstack', 'flex-grow-1')
-    nameWrapper.appendChild(namePlaceholder1)
+    nameWrapper.classList.add('placeholder-wave', 'hstack', 'flex-grow-1');
+    nameWrapper.appendChild(namePlaceholder1);
     nameWrapper.append("\u00A0");
-    nameWrapper.appendChild(namePlaceholder2)
+    nameWrapper.appendChild(namePlaceholder2);
 
     namePlaceholder1.classList.add('placeholder', 'col-6');
     namePlaceholder2.classList.add('placeholder', 'col-3');
 
-    return nameWrapper
+    return nameWrapper;
 }
 
 function zoneBuilder(type, size, offset, parentId) {
@@ -361,7 +361,7 @@ function zoneBuilder(type, size, offset, parentId) {
 
         case zoneTypes.cardHoverHalfZoneTop:
             const halfCardHoverAreaTop = document.createElement('div');
-            halfCardHoverAreaTop.id = `card-${parentId}-hover-half-zone-top`
+            halfCardHoverAreaTop.id = `card-${parentId}-hover-half-zone-top`;
             halfCardHoverAreaTop.classList.add('position-absolute', 'card-hover-half-zone', 'top-zone');
             halfCardHoverAreaTop.style.cssText = `width: ${size[0]}px; height: ${size[1]}px`;
             halfCardHoverAreaTop.style.left = `${offset[0]}px`;
@@ -370,7 +370,7 @@ function zoneBuilder(type, size, offset, parentId) {
 
         case zoneTypes.cardHoverHalfZoneBottom:
             const halfCardHoverAreaBottom = document.createElement('div');
-            halfCardHoverAreaBottom.id = `card-${parentId}-hover-half-zone-bottom`
+            halfCardHoverAreaBottom.id = `card-${parentId}-hover-half-zone-bottom`;
             halfCardHoverAreaBottom.classList.add('position-absolute', 'card-hover-half-zone', 'bottom-zone');
             halfCardHoverAreaBottom.style.cssText = `width: ${size[0]}px; height: ${size[1]}px`;
             halfCardHoverAreaBottom.style.left = `${offset[0]}px`;

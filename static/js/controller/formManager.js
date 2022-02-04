@@ -12,32 +12,28 @@ export let formManager = {
         const content = rowFormBuilder('Enter new title...', 'btn-warning', nameClass, parent);
         domManager.addChild(`#${parent.id}`, content);
         domManager.addEventListener(`#set-${nameClass}-form-${parent.id}`,
-                                    "submit", setBoardName
-        );
+                                    "submit", setBoardName);
     },
     createSetColumnNameForm: function (nameClass, parent) {
         const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
         const content = rowFormBuilder('Enter new title...', 'btn-warning', nameClass, parent);
         domManager.addChild(`#${parent.id}`, content);
         domManager.addEventListener(`#set-${nameClass}-form-${parent.id}`,
-                                    "submit", setColumnName
-        );
+                                    "submit", setColumnName);
     },
     createSetCardNameForm: function (nameClass, parent) {
         const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
         const content = rowFormBuilder('Enter card name...', 'btn-warning', nameClass, parent);
         domManager.addChild(`#${parent.id}`, content);
         domManager.addEventListener(`#set-${nameClass}-form-${parent.id}`,
-                                    "submit", setCardName
-        );
+                                    "submit", setCardName);
     },
     createChangeNameForm: async function (crntName, nameClass, parent) {
         const rowFormBuilder = htmlFactory(htmlTemplates.rowForm);
         const content = rowFormBuilder(crntName, 'btn-warning', nameClass, parent);
         domManager.insertFirstChild(`#${parent.id}`, content);
         domManager.addEventListener(`#change-${nameClass}-form-${parent.id}`,
-                                    "submit", changeName
-        );
+                                    "submit", changeName);
     },
 };
 
@@ -63,25 +59,25 @@ export function replaceCardNameWithForm(clickEvent) {
 }
 
 function setBoardName(event){
-    const target = event.currentTarget
-    const newName = target.children[0].children[0].value
-    boardsManager.createNewBoard(newName, target)
+    const target = event.currentTarget;
+    const newName = target.children[0].children[0].value;
+    boardsManager.createNewBoard(newName, target);
 
 }
 
 function setColumnName(event){
-    const target = event.currentTarget
-    const parent = target.parentElement
-    const container = parent.parentElement
-    const newName = target.children[0].children[0].value
-    columnsManager.createNewColumn(newName, parent, container)
+    const target = event.currentTarget;
+    const parent = target.parentElement;
+    const container = parent.parentElement;
+    const newName = target.children[0].children[0].value;
+    columnsManager.createNewColumn(newName, parent, container);
 }
 
 function setCardName(event){
-    const target = event.currentTarget
-    const container = target.parentElement.parentElement
-    const newName = target.children[0].children[0].value
-    cardsManager.createNewCard(newName, target, container)
+    const target = event.currentTarget;
+    const container = target.parentElement.parentElement;
+    const newName = target.children[0].children[0].value;
+    cardsManager.createNewCard(newName, target, container);
 }
 
 function changeName(event){

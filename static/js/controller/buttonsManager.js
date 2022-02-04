@@ -20,7 +20,7 @@ export let buttonsManager = {
     createAddColumnButton: function (boardId, disabled = false) {
         const btnBuilder = htmlFactory(htmlTemplates.button);
         const content = btnBuilder(buttonTypes.newColumnBtn, 'btn-antracite', 'add-column-btn', boardId);
-        domManager.addChild(`#board-${boardId}-column-container`, content)
+        domManager.addChild(`#board-${boardId}-column-container`, content);
         if (disabled) {
             domManager.disableButton(`#board-${boardId}-add-new-column-button`, content)
         }
@@ -33,9 +33,9 @@ export let buttonsManager = {
     createAddCardButton: function (boardId, columnId, disabled = false) {
         const btnBuilder = htmlFactory(htmlTemplates.button);
         const content = btnBuilder(buttonTypes.newCardBtn, 'btn-antracite', 'add-card-btn', [boardId, columnId]);
-        domManager.addChild(`#board-${boardId}-column-${columnId}-add-new-card-button-wrapper`, content)
+        domManager.addChild(`#board-${boardId}-column-${columnId}-add-new-card-button-wrapper`, content);
         if (disabled) {
-            domManager.disableButton(`#board-${boardId}-column-${columnId}-add-new-card-button`, content)
+            domManager.disableButton(`#board-${boardId}-column-${columnId}-add-new-card-button`, content);
         }
         domManager.addEventListener(
             `#board-${boardId}-column-${columnId}-add-new-card-button`,
@@ -44,33 +44,32 @@ export let buttonsManager = {
         );
     },
     createBoardNameButtonGroup: function (boardId, boardName) {
-        const btnBuilder = htmlFactory(htmlTemplates.button)
-        const content = btnBuilder(buttonTypes.boardNameBtnGroup, 'secondary', 'board-name', boardId, boardName)
-        domManager.insertFirstChild(`#board-${boardId}-container`, content)
-        addBoardNameBtnGroupEventListeners(boardId)
+        const btnBuilder = htmlFactory(htmlTemplates.button);
+        const content = btnBuilder(buttonTypes.boardNameBtnGroup, 'secondary', 'board-name', boardId, boardName);
+        domManager.insertFirstChild(`#board-${boardId}-container`, content);
+        addBoardNameBtnGroupEventListeners(boardId);
     },
     createColumnNameButtonGroup: function (boardId, columnId, placeholder = false) {
-        const btnBuilder = htmlFactory(htmlTemplates.button)
-        const content = btnBuilder(buttonTypes.columnNameBtnGroup, 'btn-antracite', 'btn-size-medium',
-            [boardId, columnId])
-        domManager.insertFirstChild(`#board-${boardId}-column-${columnId}-container`, content)
+        const btnBuilder = htmlFactory(htmlTemplates.button);
+        const content = btnBuilder(buttonTypes.columnNameBtnGroup, 'btn-antracite', 'btn-size-medium', [boardId, columnId]);
+        domManager.insertFirstChild(`#board-${boardId}-column-${columnId}-container`, content);
         addColumnNameBtnGroupEventListeners(boardId, columnId);
         if (placeholder) {
             this.setPlaceholderContent(content);
         }
     },
     createCardNameButtonGroup: function (boardId, columnId, cardId, placeholder = false) {
-        const btnBuilder = htmlFactory(htmlTemplates.button)
-        const content = btnBuilder(buttonTypes.cardNameBtnGroup, 'light', 'card-name', [boardId, columnId, cardId])
-        domManager.addChild(`#board-${boardId}-column-${columnId}-card-${cardId}-container`, content)
+        const btnBuilder = htmlFactory(htmlTemplates.button);
+        const content = btnBuilder(buttonTypes.cardNameBtnGroup, 'light', 'card-name', [boardId, columnId, cardId]);
+        domManager.addChild(`#board-${boardId}-column-${columnId}-card-${cardId}-container`, content);
         addCardNameBtnGroupEventListeners(boardId, columnId, cardId);
         if (placeholder) {
             this.setPlaceholderContent(content);
         }
     },
     setPlaceholderContent: function (content) {
-        const placeholderBuilder = htmlFactory(htmlTemplates.placeholder)
-        domManager.addChild(`#${content.children[0].id}`, placeholderBuilder())
+        const placeholderBuilder = htmlFactory(htmlTemplates.placeholder);
+        domManager.addChild(`#${content.children[0].id}`, placeholderBuilder());
     }
 };
 
@@ -119,11 +118,11 @@ function addCardNameBtnGroupEventListeners(boardId, columnId, cardId) {
 }
 
 function renameElement(clickEvent) {
-    const currentTarget = clickEvent.currentTarget
-    const targetId = currentTarget.dataset.targetId
-    const renamedElement = document.querySelector(`#${targetId}`)
-    const currentName = renamedElement.innerHTML
-    const renamedElementParent = renamedElement.parentElement.parentElement
+    const currentTarget = clickEvent.currentTarget;
+    const targetId = currentTarget.dataset.targetId;
+    const renamedElement = document.querySelector(`#${targetId}`);
+    const currentName = renamedElement.innerHTML;
+    const renamedElementParent = renamedElement.parentElement.parentElement;
     const elementType = renamedElement.dataset.elementType;
 
     domManager.removeElement(`#${renamedElement.parentElement.id}`);
@@ -135,9 +134,9 @@ function deleteElement(clickEvent) {
     const targetId = clickEvent.currentTarget.dataset.targetId;
     const targetElement = document.querySelector(`#${targetId}`);
     const elementType = targetElement.dataset.elementType;
-    const boardId = targetElement.dataset.boardId
-    const columnId = targetElement.dataset.columnId
-    const cardId = targetElement.dataset.cardId
+    const boardId = targetElement.dataset.boardId;
+    const columnId = targetElement.dataset.columnId;
+    const cardId = targetElement.dataset.cardId;
     if (elementType === "board-container") {
         boardsManager.deleteBoard(boardId);
     } else if (elementType === "column-container") {

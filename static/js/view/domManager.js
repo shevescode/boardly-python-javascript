@@ -131,6 +131,14 @@ export let domManager = {
             console.error("could not find such html element: " + elementIdentifier);
         }
     },
+    unsetOnDragEnterHandler(elementIdentifier) {
+        const parent = document.querySelector(elementIdentifier);
+        if (parent) {
+            parent.ondragenter = null;
+        } else {
+            console.error("could not find such html element: " + elementIdentifier);
+        }
+    },
     setOnDragEndHandler(elementIdentifier, onDragEndHandler) {
         const parent = document.querySelector(elementIdentifier);
         if (parent) {
@@ -186,5 +194,5 @@ export let domManager = {
 export const mode = {
     appendLast: 'append',
     insertBeforeLast: 'insert before last',
-    insertAtPosition: 'insert at position'
+    insertBeforePosition: 'insert at position'
 }

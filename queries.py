@@ -100,18 +100,6 @@ def update_board_title(title, board_id):
         , {"title": title, "id": board_id})
 
 
-def update_card_title(title, card_id):
-    data_manager.execute_update(
-        """
-        UPDATE cards
-        SET title = (%(title)s)
-        WHERE id=%(card_id)s
-        """
-        , {"title": title, "card_id": card_id})
-
-    return {"ok": "ok"}
-
-
 def update_column_title(title, board_id, column_id):
     if int(column_id) in _DEFAULT_COLUMNS_ARRAY:
         new_id = data_manager.execute_insert(
@@ -158,7 +146,38 @@ def update_column_title(title, board_id, column_id):
             """
             , {"title": title, "column_id": column_id})
 
-        return {"ok": "ok"}
+        return {"status": "ok"}
+
+
+def update_card_title(title, card_id):
+    data_manager.execute_update(
+        """
+        UPDATE cards
+        SET title = (%(title)s)
+        WHERE id=%(card_id)s
+        """
+        , {"title": title, "card_id": card_id})
+
+    return {"status": "ok"}
+
+
+def update_card_position(board_id, new_column_id, old_column_id, card_id, new_card_order, old_card_order):
+    data_manager.execute_update(
+        """
+        UPDATE cards
+        SET card_order = card_order+1
+        WHERE board_id=%(board_id)s AND status_id=%(new_column_id)s AND card_order>=%(new_card_order)s;
+        UPDATE cards
+        SET card_order = card_order-1
+        WHERE board_id=%(board_id)s AND status_id=%(old_column_id)s AND card_order>%(old_card_order)s;
+        UPDATE cards
+        SET card_order = %(new_card_order)s, status_id = %(new_column_id)s
+        WHERE id = %(card_id)s
+        """
+        , {"board_id": board_id, "new_column_id": new_column_id, "old_column_id": old_column_id, "card_id": card_id,
+           "new_card_order": new_card_order, "old_card_order": old_card_order})
+
+    return {"status": "ok"}
 
 
 def get_board_column_titles(board_column_order):

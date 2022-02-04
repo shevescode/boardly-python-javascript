@@ -140,6 +140,21 @@ def update_card_title():
         return data
 
 
+@app.route("/api/card/updatePosition", methods=["PUT"])
+def update_card_position():
+    """
+    Updates card title
+    """
+    board_id = request.json['boardId']
+    new_column_id = request.json['new_column_id']
+    old_column_id = request.json['old_column_id']
+    card_id = request.json['card_id']
+    new_card_order = request.json['new_card_order']
+    old_card_order = request.json['old_card_order']
+
+    return queries.update_card_position(board_id, new_column_id, old_column_id, card_id, new_card_order, old_card_order)
+
+
 @app.route("/api/board/delete", methods=["DELETE"])
 def delete_board():
     """
