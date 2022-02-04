@@ -5,7 +5,7 @@ export const htmlTemplates = {
     button: 3,
     rowForm: 4,
     placeholder: 5,
-    dropzone: 6
+    zone: 6
 }
 
 export const buttonTypes = {
@@ -22,7 +22,9 @@ export const buttonTypes = {
 
 export const zoneTypes = {
     cardDropZone: "Card Drop Zone",
-    columnDropZone: "Column Drop Zone"
+    columnDropZone: "Column Drop Zone",
+    cardHoverHalfZoneTop: "Half Card Hover Area Top",
+    cardHoverHalfZoneBottom: "Half Card Hover Area Bottom"
 }
 
 export function htmlFactory(template) {
@@ -39,8 +41,8 @@ export function htmlFactory(template) {
             return rowFormBuilder
         case htmlTemplates.placeholder:
             return placeholderBuilder
-        case htmlTemplates.dropzone:
-            return dropZoneBuilder
+        case htmlTemplates.zone:
+            return zoneBuilder
         default:
             console.error("Undefined template: " + template)
             return () => { return "" }
@@ -345,14 +347,33 @@ function placeholderBuilder(){
     return nameWrapper
 }
 
-function dropZoneBuilder(type) {
+function zoneBuilder(type, parentId, size, offset) {
     switch (type) {
         case zoneTypes.cardDropZone:
             const cardDropZone = document.createElement('div');
             cardDropZone.id = `card-drop-zone`;
             cardDropZone.classList.add('bg-antracite', 'card-drop-zone', 'mx-2', 'my-3');
             return cardDropZone;
+
         case zoneTypes.columnDropZone:
             return null;
+
+        case zoneTypes.cardHoverHalfZoneTop:
+            const halfCardHoverAreaTop = document.createElement('div');
+            halfCardHoverAreaTop.id = `card-${parentId}-hover-half-zone-top`
+            halfCardHoverAreaTop.classList.add('position-absolute');
+            halfCardHoverAreaTop.style.cssText = `width: ${size[0]}px; height: ${size[1]}px`;
+            halfCardHoverAreaTop.style.left = `${offset[0]}px`;
+            halfCardHoverAreaTop.style.top = `${offset[1]}px`;
+            return halfCardHoverAreaTop;
+
+        case zoneTypes.cardHoverHalfZoneBottom:
+            const halfCardHoverAreaBottom = document.createElement('div');
+            halfCardHoverAreaBottom.id = `card-${parentId}-hover-half-zone-bottom`
+            halfCardHoverAreaBottom.classList.add('position-absolute');
+            halfCardHoverAreaBottom.style.cssText = `width: ${size[0]}px; height: ${size[1]}px`;
+            halfCardHoverAreaBottom.style.left = `${offset[0]}px`;
+            halfCardHoverAreaBottom.style.top = `${size[1]+offset[1]}px`;
+            return halfCardHoverAreaBottom;
     }
 }

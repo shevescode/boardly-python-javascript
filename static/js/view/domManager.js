@@ -119,6 +119,25 @@ export let domManager = {
             console.error("could not find such html element: " + elementIdentifier);
         }
     },
+    setDraggedElement(elementIdentifier){
+        const draggedElement = document.querySelector(elementIdentifier);
+        if (draggedElement) {
+            draggedElement.style = `width: ${draggedElement.offsetWidth}px`;
+            draggedElement.style.top = "-1000px";
+            draggedElement.classList.add('position-absolute');
+        } else {
+            console.error("could not find such html element: " + elementIdentifier);
+        }
+    },
+    addCardHoverHalfZones(cardIdentifier, topHalfZone, bottomHalfZone){
+        const card = document.querySelector(cardIdentifier);
+        if (card) {
+            card.appendChild(topHalfZone)
+            card.appendChild(bottomHalfZone)
+        } else {
+            console.error("could not find such html element: " + cardIdentifier);
+        }
+    }
 };
 
 export const mode = {

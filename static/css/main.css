@@ -37,15 +37,15 @@
     height: 80vh
 }
 
-.cards-container {
-    max-height: 66vh;
-    min-height: 10rem;
-}
-
 .column-container {
     min-width: 20rem;
     max-width: 20rem;
     max-height: 77vh;
+}
+
+.cards-container {
+    max-height: 66vh;
+    min-height: 10rem;
 }
 
 .add-column-btn {
