@@ -115,6 +115,14 @@ export let domManager = {
             console.error("could not find such html element: " + elementIdentifier);
         }
     },
+    unsetDraggable(elementIdentifier) {
+                const parent = document.querySelector(elementIdentifier);
+        if (parent) {
+            parent.setAttribute('draggable', "false");
+        } else {
+            console.error("could not find such html element: " + elementIdentifier);
+        }
+    },
     setOnDragStartHandler(elementIdentifier, onDragStartHandler) {
         const parent = document.querySelector(elementIdentifier);
         if (parent) {

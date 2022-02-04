@@ -52,9 +52,10 @@ export let cardsManager = {
 
         if (boardData === 'error') {
             domManager.setInnerHTML(`#board-${boardId}-column-${columnId}-card-${cardId}-name`, oldName);
-        } else if (boardData['ok'] === 'ok'){
+        } else if (boardData['status'] === 'ok'){
             domManager.setInnerHTML(`#board-${boardId}-column-${columnId}-card-${cardId}-name`, newName);
         }
+        dragDropManager.setDraggableCard(boardId, columnId, cardId)
     },
     deleteCard: async function (cardId, boardId, columnId) {
         const payload = {'card_id': cardId};

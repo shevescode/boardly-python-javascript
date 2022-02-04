@@ -15,6 +15,9 @@ export let dragDropManager = {
         domManager.setOnDragStartHandler(`#board-${boardId}-column-${columnId}-card-${cardId}-container`, onCardDragStartHandler);
         domManager.setOnDragEndHandler(`#board-${boardId}-column-${columnId}-card-${cardId}-container`, onCardDragEndHandler);
     },
+    unsetDragableCard: function (boardId, columnId, cardId){
+        domManager.unsetDraggable(`#board-${boardId}-column-${columnId}-card-${cardId}-container`);
+    },
     createDropZone: function (elementContainer, position, draggedElement) {
         const zoneBuilder = htmlFactory(htmlTemplates.zone);
         let content;
