@@ -5,6 +5,7 @@ import { cardsManager } from "./cardsManager.js";
 import { columnsManager } from "./columnsManager.js";
 import { boardsManager } from "./boardsManager.js";
 import { buttonsManager } from "./buttonsManager.js";
+import {dragDropManager} from "./dragDropManager.js";
 
 export let formManager = {
     createSetBoardNameForm: function (nameClass, parent) {
@@ -34,6 +35,9 @@ export let formManager = {
         domManager.insertFirstChild(`#${parent.id}`, content);
         domManager.addEventListener(`#change-${nameClass}-form-${parent.id}`,
                                     "submit", changeName);
+        if (parent.dataset.elementType === 'card-container'){
+            dragDropManager.unsetDragableCard(parent.dataset.boardId, parent.dataset.columnId, parent.dataset.cardId)
+        }
     },
 };
 

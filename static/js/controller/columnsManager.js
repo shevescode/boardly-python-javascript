@@ -58,7 +58,7 @@ export let columnsManager = {
         if (boardData === 'error') {
             domManager.setInnerHTML(`#board-${boardId}-column-${columnId}-name`, oldName);
 
-        } else if (boardData['ok'] === 'ok'){
+        } else if (boardData['status'] === 'ok'){
             domManager.setInnerHTML(`#board-${boardId}-column-${columnId}-name`, newName);
 
         } else {
