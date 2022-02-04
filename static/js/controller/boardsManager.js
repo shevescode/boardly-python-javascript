@@ -13,8 +13,8 @@ export let boardsManager = {
             const boardBuilder = htmlFactory(htmlTemplates.board);
             const content = boardBuilder(boardData.id);
             domManager.addChild("#root", content);
-            buttonsManager.createBoardNameButtonGroup(boardData.id, boardData.title)
-            columnsManager.createPlaceholderColumns(boardData)
+            buttonsManager.createBoardNameButtonGroup(boardData.id, boardData.title);
+            columnsManager.createPlaceholderColumns(boardData);
         }
     },
     loadBoardContent: async function (eventTarget) {
@@ -29,57 +29,57 @@ export let boardsManager = {
             for (let column of columns) {
                 if (column['id'] === columnId) {
                     const columnName = column['title'];
-                    columnsManager.loadColumnContent(boardId, columnId, columnName, mode.appendLast)
+                    columnsManager.loadColumnContent(boardId, columnId, columnName, mode.appendLast);
                     break;
                 }
             }
         }
         for (const card of cards) {
-            const columnId = card['status_id']
-            const cardId = card['id']
-            const cardName = card['title']
-            cardsManager.loadCardContent(boardId, columnId, cardId, cardName, mode.appendLast)
+            const columnId = card['status_id'];
+            const cardId = card['id'];
+            const cardName = card['title'];
+            cardsManager.loadCardContent(boardId, columnId, cardId, cardName, mode.appendLast);
         }
         buttonsManager.createAddColumnButton(boardId);
     },
     createNewBoard: async function (name, target) {
-        const payload = {'title': name}
+        const payload = {'title': name};
         const boardData = await dataHandler.createNewBoard(payload);
         domManager.removeElement(`#${target.id}`);
-        buttonsManager.createAddBoardButton()
+        buttonsManager.createAddBoardButton();
         if (boardData === 'error') {
             return;
         }
         const boardBuilder = htmlFactory(htmlTemplates.board);
         const content = boardBuilder(boardData[0].id);
         domManager.insertFirstChild("#root", content);
-        buttonsManager.createBoardNameButtonGroup(boardData[0].id, boardData[0].title)
-        columnsManager.createPlaceholderColumns(boardData[0])
+        buttonsManager.createBoardNameButtonGroup(boardData[0].id, boardData[0].title);
+        columnsManager.createPlaceholderColumns(boardData[0]);
     },
     changeBoardName: async function (newName, oldName, parent, formElement) {
-        const payload = {'id': parent.dataset.boardId, 'title': newName}
+        const payload = {'id': parent.dataset.boardId, 'title': newName};
         const boardData = await dataHandler.changeBoardName(payload);
         domManager.removeElement(`#${formElement.id}`);
         if (boardData === 'error') {
-            buttonsManager.createBoardNameButtonGroup(parent.dataset.boardId, oldName)
+            buttonsManager.createBoardNameButtonGroup(parent.dataset.boardId, oldName);
         } else {
-            buttonsManager.createBoardNameButtonGroup(parent.dataset.boardId, newName)
+            buttonsManager.createBoardNameButtonGroup(parent.dataset.boardId, newName);
         }
     },
     deleteBoard: async function (boardId) {
-        const payload = {'board_id': boardId}
+        const payload = {'board_id': boardId};
         await dataHandler.deleteBoard(payload);
-        domManager.removeElement(`#board-${boardId}-container`)
+        domManager.removeElement(`#board-${boardId}-container`);
     }
 };
 
 export function loadBoardDataToDOM(clickEvent) {
-    const eventTarget = clickEvent.currentTarget
-    const targetElement = eventTarget.parentElement.parentElement
+    const eventTarget = clickEvent.currentTarget;
+    const targetElement = eventTarget.parentElement.parentElement;
     if (targetElement.dataset.loaded !== 'true') {
-        boardsManager.loadBoardContent(eventTarget)
-        eventTarget.removeEventListener('click', loadBoardDataToDOM)
+        boardsManager.loadBoardContent(eventTarget);
+        eventTarget.removeEventListener('click', loadBoardDataToDOM);
     } else {
-        eventTarget.removeEventListener('click', loadBoardDataToDOM)
+        eventTarget.removeEventListener('click', loadBoardDataToDOM);
     }
 }

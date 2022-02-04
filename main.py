@@ -106,7 +106,7 @@ def update_board_title():
         return Response(status=422)
     else:
         queries.update_board_title(title, board_id)
-        return Response(response=b'{"ok": "ok"}', status=200)
+        return Response(response=b'{"status": "ok"}', status=200)
 
 
 @app.route("/api/column/updateTitle", methods=["PUT"])
@@ -140,6 +140,21 @@ def update_card_title():
         return data
 
 
+@app.route("/api/card/updatePosition", methods=["PUT"])
+def update_card_position():
+    """
+    Updates card title
+    """
+    board_id = request.json['boardId']
+    new_column_id = request.json['new_column_id']
+    old_column_id = request.json['old_column_id']
+    card_id = request.json['card_id']
+    new_card_order = request.json['new_card_order']
+    old_card_order = request.json['old_card_order']
+
+    return queries.update_card_position(board_id, new_column_id, old_column_id, card_id, new_card_order, old_card_order)
+
+
 @app.route("/api/board/delete", methods=["DELETE"])
 def delete_board():
     """
@@ -148,7 +163,7 @@ def delete_board():
     board_id = request.json['board_id']
 
     queries.delete_board(board_id)
-    return Response(response=b'{"ok": "ok"}', status=200)
+    return Response(response=b'{"status": "ok"}', status=200)
 
 
 @app.route("/api/column/deleteColumn", methods=["PUT"])
@@ -160,7 +175,7 @@ def delete_column():
     board_id = request.json['board_id']
 
     queries.delete_column(board_id, column_id)
-    return Response(response=b'{"ok": "ok"}', status=200)
+    return Response(response=b'{"status": "ok"}', status=200)
 
 
 @app.route("/api/card/deleteCard", methods=["DELETE"])
@@ -171,7 +186,7 @@ def delete_card():
     card_id = request.json['card_id']
 
     queries.delete_card(card_id)
-    return Response(response=b'{"ok": "ok"}', status=200)
+    return Response(response=b'{"status": "ok"}', status=200)
 
 
 def main():
