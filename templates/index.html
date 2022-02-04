@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>ProMan</title>
+        <title>board.ly</title>
 
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
         <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
@@ -21,7 +21,11 @@
         <header class="py-3 bg-secondary text-white fixed-top border-bottom border-dark">
             <div class="container-fluid">
                 <div class="d-flex align-items-center justify-content-between mx-5">
-                    <a href="/" class="brand-logo text-light">PRO HUMAN</a>
+                    <div style="max-width: 10rem">
+                        <a href="/" class="brand-logo text-light">
+                            <img src="static/img/logo.png" style="max-width: 100%; height: auto">
+                        </a>
+                    </div>
                     <div id="new-board-button-container" data-create-content="true" class="mx-3"></div>
                     <div class="text-end">
                         {% block menu %}
