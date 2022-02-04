@@ -106,7 +106,7 @@ def update_board_title():
         return Response(status=422)
     else:
         queries.update_board_title(title, board_id)
-        return Response(response=b'{"ok": "ok"}', status=200)
+        return Response(response=b'{"status": "ok"}', status=200)
 
 
 @app.route("/api/column/updateTitle", methods=["PUT"])
@@ -148,7 +148,7 @@ def delete_board():
     board_id = request.json['board_id']
 
     queries.delete_board(board_id)
-    return Response(response=b'{"ok": "ok"}', status=200)
+    return Response(response=b'{"status": "ok"}', status=200)
 
 
 @app.route("/api/column/deleteColumn", methods=["PUT"])
@@ -160,7 +160,7 @@ def delete_column():
     board_id = request.json['board_id']
 
     queries.delete_column(board_id, column_id)
-    return Response(response=b'{"ok": "ok"}', status=200)
+    return Response(response=b'{"status": "ok"}', status=200)
 
 
 @app.route("/api/card/deleteCard", methods=["DELETE"])
@@ -171,7 +171,7 @@ def delete_card():
     card_id = request.json['card_id']
 
     queries.delete_card(card_id)
-    return Response(response=b'{"ok": "ok"}', status=200)
+    return Response(response=b'{"status": "ok"}', status=200)
 
 
 def main():

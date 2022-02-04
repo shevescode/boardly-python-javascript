@@ -347,12 +347,13 @@ function placeholderBuilder(){
     return nameWrapper
 }
 
-function zoneBuilder(type, parentId, size, offset) {
+function zoneBuilder(type, size, offset, parentId) {
     switch (type) {
         case zoneTypes.cardDropZone:
             const cardDropZone = document.createElement('div');
             cardDropZone.id = `card-drop-zone`;
             cardDropZone.classList.add('bg-antracite', 'card-drop-zone', 'mx-2', 'my-3');
+            cardDropZone.style.cssText = `height: ${size[1]}px`;
             return cardDropZone;
 
         case zoneTypes.columnDropZone:
@@ -361,7 +362,7 @@ function zoneBuilder(type, parentId, size, offset) {
         case zoneTypes.cardHoverHalfZoneTop:
             const halfCardHoverAreaTop = document.createElement('div');
             halfCardHoverAreaTop.id = `card-${parentId}-hover-half-zone-top`
-            halfCardHoverAreaTop.classList.add('position-absolute');
+            halfCardHoverAreaTop.classList.add('position-absolute', 'card-hover-half-zone', 'top-zone');
             halfCardHoverAreaTop.style.cssText = `width: ${size[0]}px; height: ${size[1]}px`;
             halfCardHoverAreaTop.style.left = `${offset[0]}px`;
             halfCardHoverAreaTop.style.top = `${offset[1]}px`;
@@ -370,7 +371,7 @@ function zoneBuilder(type, parentId, size, offset) {
         case zoneTypes.cardHoverHalfZoneBottom:
             const halfCardHoverAreaBottom = document.createElement('div');
             halfCardHoverAreaBottom.id = `card-${parentId}-hover-half-zone-bottom`
-            halfCardHoverAreaBottom.classList.add('position-absolute');
+            halfCardHoverAreaBottom.classList.add('position-absolute', 'card-hover-half-zone', 'bottom-zone');
             halfCardHoverAreaBottom.style.cssText = `width: ${size[0]}px; height: ${size[1]}px`;
             halfCardHoverAreaBottom.style.left = `${offset[0]}px`;
             halfCardHoverAreaBottom.style.top = `${size[1]+offset[1]}px`;

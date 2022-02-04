@@ -13,7 +13,7 @@ export let columnsManager = {
         } else if (selectedMode === mode.insertBeforeLast) {
             domManager.insertBeforeLast(`#board-${boardId}-column-container`, loadedColumn);
         } else if (selectedMode === mode.insertAtPosition) {
-            domManager.insertAtPosition(`#board-${boardId}-column-container`, loadedColumn, position);
+            domManager.insertBeforePosition(`#board-${boardId}-column-container`, loadedColumn, position);
         }
     },
     loadColumnContent: function (boardId, columnId, columnName, selectedMode, position){

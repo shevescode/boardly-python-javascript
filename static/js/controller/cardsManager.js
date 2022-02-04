@@ -11,7 +11,7 @@ export let cardsManager = {
         if (selectedMode === mode.appendLast) {
             domManager.addChild(`#board-${boardId}-column-${columnId}-card-container`, content)
         } else if (selectedMode === mode.insertAtPosition) {
-            domManager.insertAtPosition(`#board-${boardId}-column-${columnId}-card-container`, content, position)
+            domManager.insertBeforePosition(`#board-${boardId}-column-${columnId}-card-container`, content, position)
         } else if (selectedMode === mode.insertBeforeLast){
             domManager.insertBeforeLast(`#board-${boardId}-column-${columnId}-card-container`, content)
         }
