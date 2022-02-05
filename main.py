@@ -106,7 +106,7 @@ def update_board_title():
         return Response(status=422)
     else:
         queries.update_board_title(title, board_id)
-        return Response(response=b'{"status": "ok"}', status=200)
+        return Response(response=b'{"status": "ok"}', status=200)  # FIXME
 
 
 @app.route("/api/column/updateTitle", methods=["PUT"])
@@ -121,7 +121,7 @@ def update_column_title():
     if title == "":
         return Response(status=422)
     else:
-        data = queries.update_column_title(title, board_id, column_id)
+        data = queries.update_column_title(title, board_id, column_id)  # FIXME
         return data
 
 
@@ -136,7 +136,7 @@ def update_card_title():
     if title == "":
         return Response(status=422)
     else:
-        data = queries.update_card_title(title, card_id)
+        data = queries.update_card_title(title, card_id)  # FIXME
         return data
 
 

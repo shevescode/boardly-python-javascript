@@ -53,7 +53,7 @@ def create_new_column(title, board_id):
         WHERE id=%(board_id)s
         """
         , {"new_column_id": new_column_id, "board_id": board_id})
-
+    # TODO - remove this?
     return data_manager.execute_select(
         """
         SELECT * FROM statuses
@@ -135,7 +135,7 @@ def update_column_title(title, board_id, column_id):
         cards = convert_to_dict_list(updated_cards)
         position = board_columns.index(new_id)
         data = {'column_id': new_id, 'position': position, 'cards': cards}
-        return jsonify(data)
+        return jsonify(data)  # FIXME
 
     else:
         data_manager.execute_update(
