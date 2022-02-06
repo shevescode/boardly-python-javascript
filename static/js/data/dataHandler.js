@@ -78,10 +78,15 @@ async function apiPost(url, payload) {
         headers: {'Content-Type': 'application/json'}
     });
     if (response.status === 200) {
-        return response.json();
-    } else if (response.status === 422) {
-        console.error('Server received empty title!')
-        return 'error'
+        response.json().then(function (val){
+            if (val['status'] === 'ok'){
+                console.log(val)
+                return val;
+            } else if (val['status'] === 'empty title'){
+                console.error('Server received empty title!')
+                return 'error'
+        }
+        })
     }
 }
 
@@ -92,9 +97,13 @@ async function apiDelete(url, payload) {
         headers: {'Content-Type': 'application/json'}
     });
     if (response.status === 200) {
-        return response.json();
-    } else if (response.status === 422) {
-        return 'error: item not in database'
+        const json = response.json()
+        if (json['status'] === 'ok') {
+            return json;
+        } else if (json['status'] === 'not in db') {
+            console.error('Item does not exist in database!')
+            return 'error'
+        }
     }
 }
 
@@ -105,10 +114,13 @@ async function apiPut(url, payload) {
         headers: {'Content-Type': 'application/json'}
     });
     if (response.status === 200) {
-        return response.json();
-    } else if (response.status === 422) {
-        console.error('Server received empty title!')
-        return 'error'
+        const json = response.json()
+        if (json['status'] === 'ok') {
+            return json;
+        } else if (json['status'] === 'empty title'){
+            console.error('Server received empty title!')
+            return 'error'
+        }
     }
 }
 

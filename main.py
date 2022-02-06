@@ -31,15 +31,15 @@ def get_boards():
     return queries.get_boards()
 
 
-# TODO - remove this?
-@app.route("/api/boards/<int:board_id>/cards/")
-@json_response
-def get_cards_for_board(board_id: int):
-    """
-    All cards that belongs to a board
-    :param board_id: id of the parent board
-    """
-    return queries.get_cards_for_board(board_id)
+# # TODO - remove this?
+# @app.route("/api/boards/<int:board_id>/cards/")
+# @json_response
+# def get_cards_for_board(board_id: int):
+#     """
+#     All cards that belongs to a board
+#     :param board_id: id of the parent board
+#     """
+#     return queries.get_cards_for_board(board_id)
 
 
 @app.route("/api/boards/<int:board_id>/data/")
@@ -53,6 +53,7 @@ def get_board_data(board_id: int):
 
 
 @app.route("/api/boards/new", methods=["POST"])
+@json_response
 def create_new_board():
     """
     New board creation
@@ -60,12 +61,13 @@ def create_new_board():
     title = request.json['title']
 
     if title == "":
-        return Response(status=422)
+        return {'status': 'empty title'}
     else:
-        return jsonify(queries.create_new_board(title))
+        return queries.create_new_board(title)
 
 
 @app.route("/api/columns/new", methods=["POST"])
+@json_response
 def create_new_column():
     """
     New board creation
@@ -74,12 +76,13 @@ def create_new_column():
     board_id = request.json['board_id']
 
     if title == "":
-        return Response(status=422)
+        return {'status': 'empty title'}
     else:
-        return jsonify(queries.create_new_column(title, board_id))
+        return queries.create_new_column(title, board_id)
 
 
 @app.route("/api/card/new", methods=["POST"])
+@json_response
 def create_new_card():
     """
     New card creation
@@ -89,12 +92,13 @@ def create_new_card():
     column_id = request.json['column_id']
 
     if title == "":
-        return Response(status=422)
+        return {'status': 'empty title'}
     else:
-        return jsonify(queries.create_new_card(title, board_id, column_id))
+        return queries.create_new_card(title, board_id, column_id)
 
 
 @app.route("/api/board/updateTitle", methods=["PUT"])
+@json_response
 def update_board_title():
     """
     Updates board title
@@ -103,13 +107,13 @@ def update_board_title():
     board_id = request.json['id']
 
     if title == "":
-        return Response(status=422)
+        return {'status': 'empty title'}
     else:
-        queries.update_board_title(title, board_id)
-        return Response(response=b'{"status": "ok"}', status=200)
+        return queries.update_board_title(title, board_id)
 
 
 @app.route("/api/column/updateTitle", methods=["PUT"])
+@json_response
 def update_column_title():
     """
     Updates board title
@@ -119,13 +123,13 @@ def update_column_title():
     title = request.json['title']
 
     if title == "":
-        return Response(status=422)
+        return {'status': 'empty title'}
     else:
-        data = queries.update_column_title(title, board_id, column_id)
-        return data
+        return queries.update_column_title(title, board_id, column_id)
 
 
 @app.route("/api/card/updateTitle", methods=["PUT"])
+@json_response
 def update_card_title():
     """
     Updates card title
@@ -134,13 +138,13 @@ def update_card_title():
     title = request.json['title']
 
     if title == "":
-        return Response(status=422)
+        return {'status': 'empty title'}
     else:
-        data = queries.update_card_title(title, card_id)
-        return data
+        return queries.update_card_title(title, card_id)
 
 
 @app.route("/api/card/updatePosition", methods=["PUT"])
+@json_response
 def update_card_position():
     """
     Updates card title
@@ -156,17 +160,18 @@ def update_card_position():
 
 
 @app.route("/api/board/delete", methods=["DELETE"])
+@json_response
 def delete_board():
     """
     Removes column from board
     """
     board_id = request.json['board_id']
 
-    queries.delete_board(board_id)
-    return Response(response=b'{"status": "ok"}', status=200)
+    return queries.delete_board(board_id)
 
 
 @app.route("/api/column/deleteColumn", methods=["PUT"])
+@json_response
 def delete_column():
     """
     Removes column from board
@@ -174,19 +179,18 @@ def delete_column():
     column_id = request.json['column_id']
     board_id = request.json['board_id']
 
-    queries.delete_column(board_id, column_id)
-    return Response(response=b'{"status": "ok"}', status=200)
+    return queries.delete_column(board_id, column_id)
 
 
 @app.route("/api/card/deleteCard", methods=["DELETE"])
+@json_response
 def delete_card():
     """
     Removes card from column
     """
     card_id = request.json['card_id']
 
-    queries.delete_card(card_id)
-    return Response(response=b'{"status": "ok"}', status=200)
+    return queries.delete_card(card_id)
 
 
 def main():

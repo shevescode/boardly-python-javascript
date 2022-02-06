@@ -29,12 +29,7 @@ def create_new_board(title):
         """
         , {"title": title, "def_cols": _DEFAULT_COLUMNS})
 
-    return data_manager.execute_select(
-        """
-        SELECT * FROM boards
-        WHERE id = %(new_board_id)s
-        """
-        , {"new_board_id": new_board_id})
+    return {'id': new_board_id, 'title': title, 'statuses': _DEFAULT_COLUMNS_ARRAY, 'status': 'ok'}
 
 
 def create_new_column(title, board_id):
@@ -54,12 +49,7 @@ def create_new_column(title, board_id):
         """
         , {"new_column_id": new_column_id, "board_id": board_id})
 
-    return data_manager.execute_select(
-        """
-        SELECT * FROM statuses
-        WHERE id = %(new_column_id)s
-        """
-        , {"new_column_id": new_column_id})
+    return {'id': new_column_id, 'title': title, 'status': 'ok'}
 
 
 def create_new_card(title, board_id, column_id):
@@ -87,7 +77,7 @@ def create_new_card(title, board_id, column_id):
         , {"title": title, "board_id": board_id, "column_id": column_id, "card_order": last_card_index + 1})
 
     return {"id": new_card_id, "board_id": board_id, "status_id": column_id, "title": title,
-            "card_order": last_card_index}
+            "card_order": last_card_index, 'status': 'ok'}
 
 
 def update_board_title(title, board_id):
@@ -98,6 +88,8 @@ def update_board_title(title, board_id):
         WHERE id=%(id)s
         """
         , {"title": title, "id": board_id})
+
+    return {'status': 'ok'}
 
 
 def update_column_title(title, board_id, column_id):
@@ -134,8 +126,7 @@ def update_column_title(title, board_id, column_id):
 
         cards = convert_to_dict_list(updated_cards)
         position = board_columns.index(new_id)
-        data = {'column_id': new_id, 'position': position, 'cards': cards}
-        return jsonify(data)
+        return {'column_id': new_id, 'position': position, 'cards': cards, 'status': 'ok'}
 
     else:
         data_manager.execute_update(
@@ -244,6 +235,8 @@ def delete_board(board_id):
         """
         , {"column_ids": column_ids})
 
+    return {'status': 'ok'}
+
 
 def delete_column(board_id, column_id):
     data_manager.execute_update(
@@ -264,6 +257,8 @@ def delete_column(board_id, column_id):
             """
             , {"board_id": board_id, "column_id": column_id})
 
+    return {'status': 'ok'}
+
 
 def delete_card(card_id):
     data_manager.execute_delete(
@@ -272,4 +267,6 @@ def delete_card(card_id):
             WHERE id=%(card_id)s;
             """
             , {"card_id": card_id})
+
+    return {'status': 'ok'}
 

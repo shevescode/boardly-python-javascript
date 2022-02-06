@@ -45,16 +45,17 @@ export let boardsManager = {
     createNewBoard: async function (name, target) {
         const payload = {'title': name};
         const boardData = await dataHandler.createNewBoard(payload);
+        // console.log(boardData)
         domManager.removeElement(`#${target.id}`);
         buttonsManager.createAddBoardButton();
         if (boardData === 'error') {
             return;
         }
         const boardBuilder = htmlFactory(htmlTemplates.board);
-        const content = boardBuilder(boardData[0].id);
+        const content = boardBuilder(boardData.id);
         domManager.insertFirstChild("#root", content);
-        buttonsManager.createBoardNameButtonGroup(boardData[0].id, boardData[0].title);
-        columnsManager.createPlaceholderColumns(boardData[0]);
+        buttonsManager.createBoardNameButtonGroup(boardData.id, boardData.title);
+        columnsManager.createPlaceholderColumns(boardData);
     },
     changeBoardName: async function (newName, oldName, parent, formElement) {
         const payload = {'id': parent.dataset.boardId, 'title': newName};

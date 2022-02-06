@@ -55,7 +55,7 @@ export let cardsManager = {
         } else if (boardData['status'] === 'ok'){
             domManager.setInnerHTML(`#board-${boardId}-column-${columnId}-card-${cardId}-name`, newName);
         }
-        dragDropManager.setDraggableCard(boardId, columnId, cardId)
+        dragDropManager.setDraggableCard(boardId, columnId, cardId);
     },
     deleteCard: async function (cardId, boardId, columnId) {
         const payload = {'card_id': cardId};
