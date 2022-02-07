@@ -42,8 +42,8 @@ export let columnsManager = {
         if (boardData['status'] !== 'ok') {
             return;
         }
-        const columnId = boardData[0]['id'];
-        const columnName = boardData[0]['title'];
+        const columnId = boardData['id'];
+        const columnName = boardData['title'];
         this.loadColumnContent(boardId, columnId, columnName, mode.insertBeforeLast);
     },
     changeColumnName: async function (newName, oldName, parent, targetForm) {

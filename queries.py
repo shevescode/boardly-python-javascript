@@ -6,7 +6,7 @@ _DEFAULT_COLUMNS = "{1, 2, 3, 4}"
 _DEFAULT_COLUMNS_ARRAY = [1, 2, 3, 4]
 
 
-def get_boards():
+def get_boards(user_id):
     """
     Gather all boards
     :return:
@@ -14,13 +14,14 @@ def get_boards():
     return data_manager.execute_select(
         """
         SELECT * FROM boards
-        ORDER BY id DESC 
+        WHERE private = false OR %(user_id)s = ANY(user_ids)
+        ORDER BY id DESC
         ;
-        """
+        """, {'user_id': user_id}
     )
 
 
-def create_new_board(title):
+def create_new_board(title, user_id):
     new_board_id = data_manager.execute_insert(
         """
         INSERT INTO boards (title, statuses)
@@ -181,7 +182,7 @@ def get_board_column_titles(board_column_order):
         , {"board_column_order": board_column_order})
 
 
-def get_board_column_order(board_id):
+def get_board_column_order(board_id, user_id):         # TODO Implement user privelage verification
     return data_manager.execute_select(
         """
         SELECT statuses 
@@ -202,8 +203,8 @@ def get_cards_for_board(board_id):
     return matching_cards
 
 
-def get_board_data(board_id):
-    board_column_ids = get_board_column_order(board_id)[0]['statuses']
+def get_board_data(board_id, user_id):
+    board_column_ids = get_board_column_order(board_id, user_id)[0]['statuses']
     board_column_titles = get_board_column_titles(board_column_ids)
     board_cards = get_cards_for_board(board_id)
 

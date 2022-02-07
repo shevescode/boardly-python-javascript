@@ -20,6 +20,7 @@ SET default_with_oids = false;
 DROP TABLE IF EXISTS statuses CASCADE;
 DROP TABLE IF EXISTS boards CASCADE;
 DROP TABLE IF EXISTS cards;
+DROP TABLE IF EXISTS users;
 
 ---
 --- create tables
@@ -33,7 +34,9 @@ CREATE TABLE statuses (
 CREATE TABLE boards (
     id          SERIAL PRIMARY KEY  NOT NULL,
     title       VARCHAR(200)        NOT NULL,
-    statuses    INTEGER[]           NOT NULL
+    statuses    INTEGER[]           NOT NULL,
+    private     BOOLEAN             NOT NULL,
+    user_ids    INTEGER[]
 );
 
 CREATE TABLE cards (
@@ -42,6 +45,13 @@ CREATE TABLE cards (
     status_id   INTEGER             NOT NULL,
     title       VARCHAR (200)       NOT NULL,
     card_order  INTEGER             NOT NULL
+);
+
+CREATE TABLE users (
+    id          SERIAL PRIMARY KEY  NOT NULL,
+    user_name   VARCHAR (200)       NOT NULL,
+    user_email  VARCHAR (200)       NOT NULL,
+    hashed_pass VARCHAR (200)       NOT NULL
 );
 
 ---
@@ -53,8 +63,8 @@ INSERT INTO statuses(title) VALUES ('in progress');
 INSERT INTO statuses(title) VALUES ('testing');
 INSERT INTO statuses(title) VALUES ('done');
 
-INSERT INTO boards(title, statuses) VALUES ('Board 1', ARRAY [1, 2, 3, 4]);
-INSERT INTO boards(title, statuses) VALUES ('Board 2', ARRAY [1, 2, 3, 4]);
+INSERT INTO boards(title, statuses, private, user_ids) VALUES ('Board 1', ARRAY [1, 2, 3, 4], false, '{}');
+INSERT INTO boards(title, statuses, private, user_ids) VALUES ('Board 2', ARRAY [1, 2, 3, 4], false, '{}');
 
 INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, 1, 'new card 1', 1);
 INSERT INTO cards VALUES (nextval('cards_id_seq'), 1, 1, 'new card 2', 2);

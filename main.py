@@ -25,21 +25,13 @@ def index():
 @app.route("/api/boards")
 @json_response
 def get_boards():
+    user_id = None
+    if 'logged_user' in session:
+        user_id = session['user_id']
     """
     All the boards
     """
-    return queries.get_boards()
-
-
-# # TODO - remove this?
-# @app.route("/api/boards/<int:board_id>/cards/")
-# @json_response
-# def get_cards_for_board(board_id: int):
-#     """
-#     All cards that belongs to a board
-#     :param board_id: id of the parent board
-#     """
-#     return queries.get_cards_for_board(board_id)
+    return queries.get_boards(user_id)
 
 
 @app.route("/api/boards/<int:board_id>/data/")
@@ -49,7 +41,11 @@ def get_board_data(board_id: int):
     Get all columns, column order and cards
     :param board_id: id of the parent board
     """
-    return queries.get_board_data(board_id)
+    user_id = None
+    if 'logged_user' in session:
+        user_id = session['user_id']
+
+    return queries.get_board_data(board_id, user_id)
 
 
 @app.route("/api/boards/new", methods=["POST"])
