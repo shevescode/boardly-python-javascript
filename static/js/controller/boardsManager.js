@@ -48,7 +48,7 @@ export let boardsManager = {
         // console.log(boardData)
         domManager.removeElement(`#${target.id}`);
         buttonsManager.createAddBoardButton();
-        if (boardData === 'error') {
+        if (boardData['status'] !== 'ok') {
             return;
         }
         const boardBuilder = htmlFactory(htmlTemplates.board);
@@ -61,9 +61,9 @@ export let boardsManager = {
         const payload = {'id': parent.dataset.boardId, 'title': newName};
         const boardData = await dataHandler.changeBoardName(payload);
         domManager.removeElement(`#${formElement.id}`);
-        if (boardData === 'error') {
+        if (boardData['status'] === 'empty_title') {
             buttonsManager.createBoardNameButtonGroup(parent.dataset.boardId, oldName);
-        } else {
+        } else if (boardData['status'] === 'ok') {
             buttonsManager.createBoardNameButtonGroup(parent.dataset.boardId, newName);
         }
     },

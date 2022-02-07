@@ -36,7 +36,7 @@ export let cardsManager = {
         const boardData = await dataHandler.createNewCard(payload);
         domManager.removeElement(`#${formElement.id}`);
         buttonsManager.createAddCardButton(boardId, columnId);
-        if (boardData !== 'error') {
+        if (boardData['status'] === 'ok') {
             this.loadCardContent(boardId, columnId, boardData.id, boardData.title, mode.appendLast);
         }
     },
@@ -50,7 +50,7 @@ export let cardsManager = {
         domManager.removeElement(`#${targetForm.id}`);
         buttonsManager.createCardNameButtonGroup(boardId, columnId, cardId);
 
-        if (boardData === 'error') {
+        if (boardData['status'] === 'empty_title') {
             domManager.setInnerHTML(`#board-${boardId}-column-${columnId}-card-${cardId}-name`, oldName);
         } else if (boardData['status'] === 'ok'){
             domManager.setInnerHTML(`#board-${boardId}-column-${columnId}-card-${cardId}-name`, newName);

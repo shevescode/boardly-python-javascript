@@ -39,7 +39,7 @@ export let columnsManager = {
         const boardData = await dataHandler.createNewColumn(payload);
         domManager.removeElement(`#${formContainer.id}`);
         buttonsManager.createAddColumnButton(boardId);
-        if (boardData === 'error') {
+        if (boardData['status'] !== 'ok') {
             return;
         }
         const columnId = boardData[0]['id'];
@@ -55,13 +55,13 @@ export let columnsManager = {
         domManager.removeElement(`#${targetForm.id}`);
         buttonsManager.createColumnNameButtonGroup(boardId, columnId);
 
-        if (boardData === 'error') {
+        if (boardData['status'] === 'empty_title') {
             domManager.setInnerHTML(`#board-${boardId}-column-${columnId}-name`, oldName);
 
         } else if (boardData['status'] === 'ok'){
             domManager.setInnerHTML(`#board-${boardId}-column-${columnId}-name`, newName);
 
-        } else {
+        } else if (boardData['status'] === 'id_change'){
             const cards = boardData['cards'];
             domManager.removeElement(`#board-${boardId}-column-${columnId}-container`);
             this.loadColumnContent(boardId, boardData['column_id'], newName, mode.insertBeforePosition, boardData['position']);

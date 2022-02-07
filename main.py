@@ -61,7 +61,7 @@ def create_new_board():
     title = request.json['title']
 
     if title == "":
-        return {'status': 'empty title'}
+        return {'status': 'empty_title'}
     else:
         return queries.create_new_board(title)
 
@@ -76,7 +76,7 @@ def create_new_column():
     board_id = request.json['board_id']
 
     if title == "":
-        return {'status': 'empty title'}
+        return {'status': 'empty_title'}
     else:
         return queries.create_new_column(title, board_id)
 
@@ -92,7 +92,7 @@ def create_new_card():
     column_id = request.json['column_id']
 
     if title == "":
-        return {'status': 'empty title'}
+        return {'status': 'empty_title'}
     else:
         return queries.create_new_card(title, board_id, column_id)
 
@@ -107,7 +107,7 @@ def update_board_title():
     board_id = request.json['id']
 
     if title == "":
-        return {'status': 'empty title'}
+        return {'status': 'empty_title'}
     else:
         return queries.update_board_title(title, board_id)
 
@@ -123,7 +123,7 @@ def update_column_title():
     title = request.json['title']
 
     if title == "":
-        return {'status': 'empty title'}
+        return {'status': 'empty_title'}
     else:
         return queries.update_column_title(title, board_id, column_id)
 
@@ -138,7 +138,7 @@ def update_card_title():
     title = request.json['title']
 
     if title == "":
-        return {'status': 'empty title'}
+        return {'status': 'empty_title'}
     else:
         return queries.update_card_title(title, card_id)
 

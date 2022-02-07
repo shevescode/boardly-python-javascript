@@ -3,45 +3,38 @@ export let dataHandler = {
         const response = await apiGet("/api/boards");
         return response;
     },
-    getStatuses: async function () {
-        // the statuses are retrieved and then the callback function is called with the statuses
-    },
-    getStatus: async function (statusId) {
-        // the status is retrieved and then the callback function is called with the status
-    },
     getBoardDataById: async function (boardId) {
         const response = await apiGet(`/api/boards/${boardId}/data/`);
         return response;
     },
-    getCardsByBoardId: async function (boardId) {
-        const response = await apiGet(`/api/boards/${boardId}/cards/`);
-        return response;
-    },
-    getCard: async function (cardId) {
-        // the card is retrieved and then the callback function is called with the card
-    },
     createNewBoard: async function (payload) {
         const response = await apiPost(`/api/boards/new`, payload);
+        logResponseStatus(response)
         return response;
     },
     createNewColumn: async function (payload) {
         const response = await apiPost(`/api/columns/new`, payload);
+        logResponseStatus(response)
         return response;
     },
     createNewCard: async function (payload) {
         const response = await apiPost(`/api/card/new`, payload);
+        logResponseStatus(response)
         return response;
     },
     changeBoardName: async function (payload) {
         const response = await apiPut(`/api/board/updateTitle`, payload)
+        logResponseStatus(response)
         return response
     },
     changeColumnName: async function (payload) {
         const response = await apiPut(`/api/column/updateTitle`, payload)
+        logResponseStatus(response)
         return response
     },
     changeCardName: async function (payload) {
         const response = await apiPut(`/api/card/updateTitle`, payload)
+        logResponseStatus(response)
         return response
     },
     changeCardPosition: async function (payload) {
@@ -78,15 +71,7 @@ async function apiPost(url, payload) {
         headers: {'Content-Type': 'application/json'}
     });
     if (response.status === 200) {
-        response.json().then(function (val){
-            if (val['status'] === 'ok'){
-                console.log(val)
-                return val;
-            } else if (val['status'] === 'empty title'){
-                console.error('Server received empty title!')
-                return 'error'
-        }
-        })
+        return response.json();
     }
 }
 
@@ -97,13 +82,7 @@ async function apiDelete(url, payload) {
         headers: {'Content-Type': 'application/json'}
     });
     if (response.status === 200) {
-        const json = response.json()
-        if (json['status'] === 'ok') {
-            return json;
-        } else if (json['status'] === 'not in db') {
-            console.error('Item does not exist in database!')
-            return 'error'
-        }
+        return response.json();
     }
 }
 
@@ -114,13 +93,15 @@ async function apiPut(url, payload) {
         headers: {'Content-Type': 'application/json'}
     });
     if (response.status === 200) {
-        const json = response.json()
-        if (json['status'] === 'ok') {
-            return json;
-        } else if (json['status'] === 'empty title'){
-            console.error('Server received empty title!')
-            return 'error'
-        }
+        return response.json();
+    }
+}
+
+function logResponseStatus(response){
+    if (response['status'] === 'empty_title') {
+        console.error('Server received empty title!');
+    } else if (response['status'] === 'id_change') {
+        console.info('Default column name change -> generated new column.');
     }
 }
 

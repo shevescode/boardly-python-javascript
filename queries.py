@@ -126,7 +126,7 @@ def update_column_title(title, board_id, column_id):
 
         cards = convert_to_dict_list(updated_cards)
         position = board_columns.index(new_id)
-        return {'column_id': new_id, 'position': position, 'cards': cards, 'status': 'ok'}
+        return {'column_id': new_id, 'position': position, 'cards': cards, 'status': 'id_change'}
 
     else:
         data_manager.execute_update(
