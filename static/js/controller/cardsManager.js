@@ -44,7 +44,7 @@ export let cardsManager = {
         const boardId = parent.dataset.boardId;
         const columnId = parent.dataset.columnId;
         const cardId = parent.dataset.cardId;
-        const payload = {'title': newName, 'card_id': cardId};
+        const payload = {'title': newName, 'board_id': boardId, 'card_id': cardId};
         const boardData = await dataHandler.changeCardName(payload);
 
         domManager.removeElement(`#${targetForm.id}`);
@@ -58,7 +58,7 @@ export let cardsManager = {
         dragDropManager.setDraggableCard(boardId, columnId, cardId);
     },
     deleteCard: async function (cardId, boardId, columnId) {
-        const payload = {'card_id': cardId};
+        const payload = {'board_id': boardId, 'card_id': cardId};
         await dataHandler.deleteCard(payload);
         domManager.removeElement(`#board-${boardId}-column-${columnId}-card-${cardId}-container`)
     }

@@ -26,7 +26,7 @@ def index():
 @json_response
 def get_boards():
     user_id = None
-    if 'logged_user' in session:
+    if 'user_id' in session:
         user_id = session['user_id']
     """
     All the boards
@@ -35,17 +35,15 @@ def get_boards():
 
 
 @app.route("/api/boards/<int:board_id>/data/")
-@json_response
 def get_board_data(board_id: int):
     """
     Get all columns, column order and cards
     :param board_id: id of the parent board
     """
-    user_id = None
-    if 'logged_user' in session:
-        user_id = session['user_id']
-
-    return queries.get_board_data(board_id, user_id)
+    if user_has_board_access(board_id):
+        return jsonify(queries.get_board_data(board_id))
+    else:
+        return jsonify({"status": "access_denied"}), 403
 
 
 @app.route("/api/boards/new", methods=["POST"])
@@ -56,14 +54,22 @@ def create_new_board():
     """
     title = request.json['title']
 
+    user_id = None
+    if 'user_id' in session:
+        user_id = session['user_id']
+
     if title == "":
         return {'status': 'empty_title'}
+    elif user_id:
+        new_board_data = queries.create_new_board(title)
+        queries.make_board_private(new_board_data['id'], user_id)
+        new_board_data['private'] = True
+        return new_board_data
     else:
         return queries.create_new_board(title)
 
 
 @app.route("/api/columns/new", methods=["POST"])
-@json_response
 def create_new_column():
     """
     New board creation
@@ -72,13 +78,15 @@ def create_new_column():
     board_id = request.json['board_id']
 
     if title == "":
-        return {'status': 'empty_title'}
+        return jsonify({'status': 'empty_title'})
     else:
-        return queries.create_new_column(title, board_id)
+        if user_has_board_access(board_id):
+            return jsonify(queries.create_new_column(title, board_id))
+        else:
+            return jsonify({"status": "access_denied"}), 403
 
 
 @app.route("/api/card/new", methods=["POST"])
-@json_response
 def create_new_card():
     """
     New card creation
@@ -90,11 +98,13 @@ def create_new_card():
     if title == "":
         return {'status': 'empty_title'}
     else:
-        return queries.create_new_card(title, board_id, column_id)
+        if user_has_board_access(board_id):
+            return jsonify(queries.create_new_card(title, board_id, column_id))
+        else:
+            return jsonify({"status": "access_denied"}), 403
 
 
 @app.route("/api/board/updateTitle", methods=["PUT"])
-@json_response
 def update_board_title():
     """
     Updates board title
@@ -103,13 +113,15 @@ def update_board_title():
     board_id = request.json['id']
 
     if title == "":
-        return {'status': 'empty_title'}
+        return jsonify({'status': 'empty_title'})
     else:
-        return queries.update_board_title(title, board_id)
+        if user_has_board_access(board_id):
+            return jsonify(queries.update_board_title(title, board_id))
+        else:
+            return jsonify({"status": "access_denied"}), 403
 
 
 @app.route("/api/column/updateTitle", methods=["PUT"])
-@json_response
 def update_column_title():
     """
     Updates board title
@@ -119,28 +131,33 @@ def update_column_title():
     title = request.json['title']
 
     if title == "":
-        return {'status': 'empty_title'}
+        return jsonify({'status': 'empty_title'})
     else:
-        return queries.update_column_title(title, board_id, column_id)
+        if user_has_board_access(board_id):
+            return jsonify(queries.update_column_title(title, board_id, column_id))
+        else:
+            return jsonify({"status": "access_denied"}), 403
 
 
 @app.route("/api/card/updateTitle", methods=["PUT"])
-@json_response
 def update_card_title():
     """
     Updates card title
     """
+    board_id = request.json['board_id']
     card_id = request.json['card_id']
     title = request.json['title']
 
     if title == "":
-        return {'status': 'empty_title'}
+        return jsonify({'status': 'empty_title'})
     else:
-        return queries.update_card_title(title, card_id)
+        if user_has_board_access(board_id):
+            return jsonify(queries.update_card_title(title, board_id, card_id))
+        else:
+            return jsonify({"status": "access_denied"}), 403
 
 
 @app.route("/api/card/updatePosition", methods=["PUT"])
-@json_response
 def update_card_position():
     """
     Updates card title
@@ -152,41 +169,60 @@ def update_card_position():
     new_card_order = request.json['new_card_order']
     old_card_order = request.json['old_card_order']
 
-    return queries.update_card_position(board_id, new_column_id, old_column_id, card_id, new_card_order, old_card_order)
+    if user_has_board_access(board_id):
+        return jsonify(queries.update_card_position(board_id, new_column_id, old_column_id,
+                                                    card_id, new_card_order, old_card_order))
+    else:
+        return jsonify({"status": "access_denied"}), 403
 
 
 @app.route("/api/board/delete", methods=["DELETE"])
-@json_response
 def delete_board():
     """
     Removes column from board
     """
     board_id = request.json['board_id']
 
-    return queries.delete_board(board_id)
+    if user_has_board_access(board_id):
+        return jsonify(queries.delete_board(board_id))
+    else:
+        return jsonify({"status": "access_denied"}), 403
 
 
 @app.route("/api/column/deleteColumn", methods=["PUT"])
-@json_response
 def delete_column():
     """
     Removes column from board
     """
-    column_id = request.json['column_id']
     board_id = request.json['board_id']
+    column_id = request.json['column_id']
 
-    return queries.delete_column(board_id, column_id)
+    if user_has_board_access(board_id):
+        return jsonify(queries.delete_column(board_id, column_id))
+    else:
+        return jsonify({"status": "access_denied"}), 403
 
 
 @app.route("/api/card/deleteCard", methods=["DELETE"])
-@json_response
 def delete_card():
     """
     Removes card from column
     """
+    board_id = request.json['board_id']
     card_id = request.json['card_id']
 
-    return queries.delete_card(card_id)
+    if user_has_board_access(board_id):
+        return jsonify(queries.delete_card(board_id, card_id))
+    else:
+        return jsonify({"status": "access_denied"}), 403
+
+
+def user_has_board_access(board_id):
+    user_id = None
+    if 'user_id' in session:
+        user_id = session['user_id']
+
+    return queries.get_user_board_access(board_id, user_id)
 
 
 def main():

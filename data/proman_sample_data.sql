@@ -51,7 +51,7 @@ CREATE TABLE users (
     id          SERIAL PRIMARY KEY  NOT NULL,
     user_name   VARCHAR (200)       NOT NULL,
     user_email  VARCHAR (200)       NOT NULL,
-    hashed_pass VARCHAR (200)       NOT NULL
+    hashed_pass bytea               NOT NULL
 );
 
 ---

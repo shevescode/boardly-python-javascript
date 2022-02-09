@@ -6,6 +6,20 @@ _DEFAULT_COLUMNS = "{1, 2, 3, 4}"
 _DEFAULT_COLUMNS_ARRAY = [1, 2, 3, 4]
 
 
+def get_user_board_access(board_id, user_id):
+    access_data = data_manager.execute_select(
+        """
+        SELECT private, user_ids FROM boards
+        WHERE id = %(board_id)s
+        """, {'board_id': board_id}, fetchall=False)
+    if access_data['private']:
+        if user_id in access_data['user_ids']:
+            return True
+        return False
+    else:
+        return True
+
+
 def get_boards(user_id):
     """
     Gather all boards
@@ -16,21 +30,59 @@ def get_boards(user_id):
         SELECT * FROM boards
         WHERE private = false OR %(user_id)s = ANY(user_ids)
         ORDER BY id DESC
-        ;
         """, {'user_id': user_id}
     )
 
 
-def create_new_board(title, user_id):
+def get_board_column_titles(board_column_order):
+    return data_manager.execute_select(
+        """
+        SELECT *
+        FROM statuses
+        WHERE id = ANY(%(board_column_order)s::int[])
+        """
+        , {"board_column_order": board_column_order})
+
+
+def get_board_column_order(board_id):
+    return data_manager.execute_select(
+        """
+        SELECT statuses 
+        FROM boards WHERE id = %(board_id)s
+        """
+        , {"board_id": board_id})
+
+
+def get_cards_for_board(board_id):
+    matching_cards = data_manager.execute_select(
+        """
+        SELECT * FROM cards
+        WHERE cards.board_id = %(board_id)s
+        ORDER BY card_order
+        """
+        , {"board_id": board_id})
+
+    return matching_cards
+
+
+def get_board_data(board_id):
+    board_column_ids = get_board_column_order(board_id)[0]['statuses']
+    board_column_titles = get_board_column_titles(board_column_ids)
+    board_cards = get_cards_for_board(board_id)
+
+    return [board_column_ids, board_column_titles, board_cards]
+
+
+def create_new_board(title):
     new_board_id = data_manager.execute_insert(
         """
-        INSERT INTO boards (title, statuses)
-        VALUES (%(title)s, %(def_cols)s)
+        INSERT INTO boards (title, statuses, private, user_ids)
+        VALUES (%(title)s, %(def_cols)s, false, '{}')
         RETURNING id
         """
         , {"title": title, "def_cols": _DEFAULT_COLUMNS})
 
-    return {'id': new_board_id, 'title': title, 'statuses': _DEFAULT_COLUMNS_ARRAY, 'status': 'ok'}
+    return {'id': new_board_id, 'title': title, 'statuses': _DEFAULT_COLUMNS_ARRAY, 'private': False, 'status': 'ok'}
 
 
 def create_new_column(title, board_id):
@@ -79,6 +131,30 @@ def create_new_card(title, board_id, column_id):
 
     return {"id": new_card_id, "board_id": board_id, "status_id": column_id, "title": title,
             "card_order": last_card_index, 'status': 'ok'}
+
+
+def make_board_private(board_id, user_id):
+    data_manager.execute_update(
+        """
+        UPDATE boards
+        SET  private=true, user_ids=ARRAY [%(user_id)s]
+        WHERE id=%(board_id)s
+        """
+        , {"board_id": board_id, 'user_id': user_id})
+
+    return {'status': 'ok'}
+
+
+def make_board_public(board_id):
+    data_manager.execute_update(
+        """
+        UPDATE boards
+        SET  private=false, user_ids='{}'
+        WHERE id=%(board_id)s
+        """
+        , {"board_id": board_id})
+
+    return {'status': 'ok'}
 
 
 def update_board_title(title, board_id):
@@ -141,14 +217,14 @@ def update_column_title(title, board_id, column_id):
         return {"status": "ok"}
 
 
-def update_card_title(title, card_id):
+def update_card_title(title, board_id, card_id):
     data_manager.execute_update(
         """
         UPDATE cards
         SET title = (%(title)s)
-        WHERE id=%(card_id)s
+        WHERE id=%(card_id)s AND board_id=%(board_id)s
         """
-        , {"title": title, "card_id": card_id})
+        , {"title": title, "board_id": board_id, "card_id": card_id})
 
     return {"status": "ok"}
 
@@ -170,45 +246,6 @@ def update_card_position(board_id, new_column_id, old_column_id, card_id, new_ca
            "new_card_order": new_card_order, "old_card_order": old_card_order})
 
     return {"status": "ok"}
-
-
-def get_board_column_titles(board_column_order):
-    return data_manager.execute_select(
-        """
-        SELECT *
-        FROM statuses
-        WHERE id = ANY(%(board_column_order)s::int[])
-        """
-        , {"board_column_order": board_column_order})
-
-
-def get_board_column_order(board_id, user_id):         # TODO Implement user privelage verification
-    return data_manager.execute_select(
-        """
-        SELECT statuses 
-        FROM boards WHERE id = %(board_id)s
-        """
-        , {"board_id": board_id})
-
-
-def get_cards_for_board(board_id):
-    matching_cards = data_manager.execute_select(
-        """
-        SELECT * FROM cards
-        WHERE cards.board_id = %(board_id)s
-        ORDER BY card_order
-        """
-        , {"board_id": board_id})
-
-    return matching_cards
-
-
-def get_board_data(board_id, user_id):
-    board_column_ids = get_board_column_order(board_id, user_id)[0]['statuses']
-    board_column_titles = get_board_column_titles(board_column_ids)
-    board_cards = get_cards_for_board(board_id)
-
-    return [board_column_ids, board_column_titles, board_cards]
 
 
 def delete_board(board_id):
@@ -261,13 +298,12 @@ def delete_column(board_id, column_id):
     return {'status': 'ok'}
 
 
-def delete_card(card_id):
+def delete_card(board_id, card_id):
     data_manager.execute_delete(
             """
             DELETE FROM cards
-            WHERE id=%(card_id)s;
+            WHERE id=%(card_id)s AND board_id=%(board_id)s
             """
-            , {"card_id": card_id})
+            , {"card_id": card_id, "board_id": board_id})
 
     return {'status': 'ok'}
-
