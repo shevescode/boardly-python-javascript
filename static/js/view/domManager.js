@@ -126,7 +126,7 @@ export let domManager = {
     setOnDragStartHandler(elementIdentifier, onDragStartHandler) {
         const parent = document.querySelector(elementIdentifier);
         if (parent) {
-            parent.ondragstart = onDragStartHandler;
+            parent.addEventListener("dragstart", onDragStartHandler);
         } else {
             console.error("could not find such html element: " + elementIdentifier);
         }
@@ -134,15 +134,15 @@ export let domManager = {
     setOnDragEnterHandler(elementIdentifier, onDragEnterHandler) {
         const parent = document.querySelector(elementIdentifier);
         if (parent) {
-            parent.ondragenter = onDragEnterHandler;
+            parent.addEventListener("dragenter", onDragEnterHandler);
         } else {
             console.error("could not find such html element: " + elementIdentifier);
         }
     },
-    unsetOnDragEnterHandler(elementIdentifier) {
+    unsetOnDragEnterHandler(elementIdentifier, onDragEnterHandler) {
         const parent = document.querySelector(elementIdentifier);
         if (parent) {
-            parent.ondragenter = null;
+            parent.removeEventListener("dragenter", onDragEnterHandler);
         } else {
             console.error("could not find such html element: " + elementIdentifier);
         }
@@ -150,7 +150,7 @@ export let domManager = {
     setOnDragEndHandler(elementIdentifier, onDragEndHandler) {
         const parent = document.querySelector(elementIdentifier);
         if (parent) {
-            parent.ondragend = onDragEndHandler;
+            parent.addEventListener("dragend", onDragEndHandler);
         } else {
             console.error("could not find such html element: " + elementIdentifier);
         }

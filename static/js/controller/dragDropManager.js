@@ -29,7 +29,8 @@ export let dragDropManager = {
             let size = [draggedElement.offsetWidth, draggedElement.offsetHeight];
             content = zoneBuilder(zoneTypes.columnDropZone, size);
         }
-        domManager.insertBeforePosition(`#${elementContainer.id}`, content, position);
+        console.log(elementContainer)
+        domManager.insertAfterPosition(`#${elementContainer.id}`, content, position);
     },
     createCardsHoverHalfZones: function () {
         let columnsContainer = document.querySelector(`#board-${draggedElement.dataset.boardId}-column-container`);
@@ -64,7 +65,7 @@ export let dragDropManager = {
         let columnsContainer = document.querySelector(`#board-${draggedElement.dataset.boardId}-column-container`);
         for (let i = 0; i < columnsContainer.children.length-1; i++){
             let cardsContainer = columnsContainer.children[i].children[1];
-                domManager.unsetOnDragEnterHandler(`#${cardsContainer.id}`);
+                domManager.unsetOnDragEnterHandler(`#${cardsContainer.id}`, onDragEnterCardsContainerHandler);
         }
     },
     setGhostImage: function (event) {
@@ -100,7 +101,11 @@ function onCardDragStartHandler(event) {
     draggedElement = event.currentTarget;
     let elementContainer = draggedElement.parentElement;
     draggedElementLastPos = Array.prototype.indexOf.call(elementContainer.children, draggedElement);
-    dragDropManager.createDropZone(elementContainer, draggedElementLastPos, draggedElement);
+    domManager.setOnDragEnterHandler(`#${draggedElement.id}`, onDragEnterCurrentCardHandler)
+}
+
+function onDragEnterCurrentCardHandler(event){
+    dragDropManager.createDropZone(draggedElement.parentElement, draggedElementLastPos, draggedElement);
     domManager.setDraggedElement(`#${draggedElement.id}`);
     domManager.insertFirstChild('body', draggedElement);
     dragDropManager.createCardsHoverHalfZones();
