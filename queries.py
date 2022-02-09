@@ -65,12 +65,23 @@ def get_cards_for_board(board_id):
     return matching_cards
 
 
+def get_board_title(board_id):
+    return data_manager.execute_select(
+        """
+        SELECT title
+        FROM boards 
+        WHERE id = %(board_id)s
+        """
+        , {"board_id": board_id}, fetchall=False)
+
+
 def get_board_data(board_id):
     board_column_ids = get_board_column_order(board_id)[0]['statuses']
     board_column_titles = get_board_column_titles(board_column_ids)
     board_cards = get_cards_for_board(board_id)
+    board_title = get_board_title(board_id)
 
-    return [board_column_ids, board_column_titles, board_cards]
+    return [board_column_ids, board_column_titles, board_cards, board_title]
 
 
 def create_new_board(title):

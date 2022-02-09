@@ -23,6 +23,7 @@ export let boardsManager = {
         const columnOrder = boardData[0];
         const columns = boardData[1];
         const cards = boardData[2];
+        domManager.setInnerHTML(`#board-${boardId}-name`, boardData[3]['title'])
         domManager.setDataLoaded(`#board-${boardId}-column-container`);
         domManager.purgeContainer(`#board-${boardId}-column-container`);
         for (const columnId of columnOrder) {
@@ -74,13 +75,19 @@ export let boardsManager = {
     }
 };
 
+// function clearBoardData(clickEvent) {
+//     const eventTarget = clickEvent.currentTarget;
+//     const collapsibleContainerIdSelector = eventTarget.dataset.bsTarget
+//     const collapsibleContainer = document.querySelector(collapsibleContainerIdSelector)
+// }
+
 export function loadBoardDataToDOM(clickEvent) {
     const eventTarget = clickEvent.currentTarget;
     const targetElement = eventTarget.parentElement.parentElement;
-    if (targetElement.dataset.loaded !== 'true') {
-        boardsManager.loadBoardContent(eventTarget);
-        eventTarget.removeEventListener('click', loadBoardDataToDOM);
-    } else {
-        eventTarget.removeEventListener('click', loadBoardDataToDOM);
-    }
+    // if (targetElement.dataset.loaded !== 'true') {
+    boardsManager.loadBoardContent(eventTarget);
+        // domManager.addEventListener(`#${eventTarget.id}`, 'click', clearBoardData)
+//     } else {
+//         eventTarget.removeEventListener('click', loadBoardDataToDOM);
+//     }
 }
